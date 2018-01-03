@@ -1,0 +1,24 @@
+@using OnlineCourse.Panel
+@using System.Collections.Generic
+@using System.Linq
+@using OnlineCourse.Core
+@using OnlineCourse.Core.Extentions
+@using OnlineCourse.Core.Services
+@using OnlineCourse.Entity.Models
+@using OnlineCourse.Entity
+@using Microsoft.AspNetCore.Mvc.Rendering
+
+
+@using Microsoft.Extensions.Localization;
+
+@inject IStringLocalizer<OnlineCourse.Panel.Models.SharedResource> localizer
+
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@inject OnlineCourse.Core.Extentions.RtlCheck _rtlCheck
+@inject IUnitOfWork UnitOfWork
+@inject CurrentUser _user
+@inject PublicConfig _config
+
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, OnlineCourse.Panel

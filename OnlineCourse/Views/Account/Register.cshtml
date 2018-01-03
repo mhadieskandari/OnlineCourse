@@ -1,0 +1,87 @@
+﻿@model OnlineCourse.Panel.Utils.ViewModels.AccountViewModels.RegisterViewModel
+@{
+    ViewData["Title"] = localizer["Register"];
+}
+@*@Html.BuildBreadcrumbNavigation(localizer)*@
+
+<div class="row" style="margin-top:100px;">
+    <!-- REGISTER -->
+    <div class="col-md-8 col-md-offset-4 col-center-md">
+        <form asp-controller="Account" asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    @ViewData["Title"]
+                </div>
+                <div class="panel-body">
+                    @*<div asp-validation-summary="All" class="text-danger"></div>*@
+                    <div class="row">
+                        <div class="form-group col-sm-12">
+                            <label asp-for="FullName"></label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-female" aria-hidden="true"></i></span>
+                                <input asp-for="FullName" class="form-control" type="text" placeholder="@localizer["FullName"]">
+                            </div>
+                            <span asp-validation-for="FullName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <label asp-for="Mobile"></label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-mobile fa-lg" aria-hidden="true"></i></span>
+                                <input asp-for="Mobile" class="form-control" type="text" placeholder="@localizer["Mobile"]" style="text-align: left;">
+                            </div>
+                            <span asp-validation-for="Mobile" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <label asp-for="Email"></label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-envelope" aria-hidden="true"></i></span>
+                                <input asp-for="Email" class="form-control" type="text" placeholder="example@ex.com" style="text-align: left;">
+                            </div>
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <label asp-for="Password"></label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-key" aria-hidden="true"></i></span>
+                                <input asp-for="Password" type="password" class="form-control" placeholder="@localizer["Password"]" style="text-align: left;">
+                            </div>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group col-sm-12" hidden>
+                            <label asp-for="IsTeacher"></label>
+                            @Html.DropDownListFor(m => m.IsTeacher, new List<SelectListItem>
+                                    {
+                                        new SelectListItem {Text =localizer["Customer"], Value = "0"},
+                                        new SelectListItem {Text =localizer["Maman"], Value = "1"},
+                                    }, new Dictionary<string, object>
+                                    {
+                                        {"class", "form-control"},
+                                        {"data-rule-required", "true"},
+                                        {"data-msg-required", localizer["RequireField"]},
+                                        {"style", "padding:1px;"}
+                                    })
+
+                            @Html.ValidationMessageFor(model => model.IsTeacher, "", new { @class = "text-danger" })
+                        </div>
+
+                    </div>                 
+
+                </div>
+                <div class="panel-footer">
+                    <button type="submit" class="btn btn-success">@localizer["Register"]</button>
+                </div>
+                <!-- end: Widget -->
+            </div>
+        </form>
+        <!-- /REGISTER -->
+    </div>
+    <!-- WHY? -->
+    <!-- /WHY? -->
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
+

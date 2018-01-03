@@ -1,0 +1,386 @@
+﻿.content-header {
+    padding: 15px 15px 15px 15px;
+    /* border-bottom: 1px solid #eaeaea; */
+    background: white !important;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+}
+
+.control-sidebar.control-sidebar-open, .control-sidebar.control-sidebar-open + .control-sidebar-bg {
+    left: 0;
+    right: auto;
+}
+
+.navbar-custom-menu > .navbar-nav > li > .dropdown-menu {
+    right: auto;
+    left: 0;
+}
+
+.main-sidebar,
+.left-side {
+    right: 0;
+    left: auto;
+}
+
+.content-wrapper,
+.right-side,
+.main-footer {
+    margin-right: 230px;
+    margin-left: auto;
+}
+
+.main-header .navbar {
+    margin-right: 230px;
+    margin-left: auto;
+}
+
+.main-header .sidebar-toggle {
+    float: right;
+}
+
+.main-header .navbar-custom-menu,
+.main-header .navbar-right {
+    float: left;
+}
+
+.sidebar-menu li > a > .pull-right-container {
+    left: 10px;
+    right: auto;
+}
+
+.sidebar-menu .treeview-menu > li > a {
+    padding: 5px 15px 5px 5px;
+}
+
+.skin-blue .sidebar-menu > li:hover > a,
+.skin-blue .sidebar-menu > li.active > a {
+    border-right-color: #3c8dbc;
+    border-left-color: transparent;
+}
+
+.skin-blue .sidebar-menu > li > a {
+    border-right: 4px solid transparent;
+    border-left: 0px solid transparent;
+}
+
+.sidebar-menu > li > a {
+    padding: 12px 15px 12px 5px;
+}
+
+.content-header > h1 {
+    direction: rtl;
+    text-align: left;
+}
+
+@media (min-width: 768px) {
+    .sidebar-mini.sidebar-collapse .content-wrapper,
+    .sidebar-mini.sidebar-collapse .right-side,
+    .sidebar-mini.sidebar-collapse .main-footer {
+        margin-right: 50px !important;
+        margin-left: 0px !important;
+    }
+
+    .sidebar-mini.sidebar-collapse .sidebar-menu > li:hover > a > span:not(.pull-right),
+    .sidebar-mini.sidebar-collapse .sidebar-menu > li:hover > .treeview-menu {
+        right: 50px;
+        left: auto;
+    }
+
+    .sidebar-mini.sidebar-collapse .sidebar-menu > li:hover > a > .pull-right-container {
+        float: left;
+        right: 180px !important;
+        left: auto !important;
+    }
+
+    .content-header > .breadcrumb {
+        float: right;
+        right: 10px;
+        left: auto;
+        direction: rtl;
+    }
+
+    .sidebar-mini.sidebar-collapse .sidebar-menu > li:hover > a > span {
+        margin-right: -3px;
+        margin-left: 0px;
+    }
+
+    .navbar-nav {
+        float: left;
+    }
+
+    .main-header .logo {
+        float: right;
+    }
+
+    .sidebar-mini.sidebar-collapse .main-header .navbar {
+        margin-right: 50px;
+        margin-left: 0;
+    }
+}
+@media (max-width: 991px) {
+    .content-header > .breadcrumb {
+        float: none;
+        left: auto;
+        right: auto;
+    }
+}
+
+@media (max-width: 767px) {
+        
+
+    .content-wrapper,
+    .right-side,
+    .main-footer {
+        margin-right: 230px;
+        margin-left: auto;
+    }
+
+    .main-header .navbar {
+        margin-right: 0;
+        margin-left: auto;
+    }
+
+    .content-wrapper,
+    .right-side,
+    .main-footer {
+        margin-right: 0;
+    }
+
+    .main-sidebar,
+    .left-side {
+        -webkit-transform: translate(0px, 0);
+        -ms-transform: translate(0px, 0);
+        -o-transform: translate(0px, 0);
+        transform: translate(230px, 0);
+    }
+
+    .sidebar-open .content-wrapper,
+    .sidebar-open .right-side,
+    .sidebar-open .main-footer {
+        -webkit-transform: translate(-230px, 0);
+        -ms-transform: translate(-230px, 0);
+        -o-transform: translate(-230px, 0);
+        transform: translate(-230px, 0);
+    }
+}
+
+
+
+
+
+
+
+
+.box-header > .box-tools {
+    right: auto;
+    left: 10px;
+}
+
+.small-box .icon {
+    left: 10px;
+    right: auto;
+}
+
+.box-header > .fa, .box-header > .glyphicon, .box-header > .ion {
+    margin-right: auto;
+    margin-left: 5px;
+}
+
+
+
+
+.navbar-nav > .messages-menu > .dropdown-menu > li .menu > li > a > h4 {
+    margin: 0 45px 0 0px;
+}
+
+.navbar-nav > .messages-menu > .dropdown-menu > li .menu > li > a > h4 > small {
+    left: 0;
+    right: auto;
+}
+
+.navbar-nav > .messages-menu > .dropdown-menu > li .menu > li > a > p {
+    margin: 0 45px 0 0px;
+}
+
+
+
+.content-header > .breadcrumb > li > a > .fa, .content-header > .breadcrumb > li > a > .glyphicon, .content-header > .breadcrumb > li > a > .ion {
+    margin-right: auto;
+    margin-left: 5px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+    custom style
+*/
+
+
+
+
+
+.clearfix::after {
+    display: block;
+    content: "";
+    clear: both;
+}
+
+[class*="col-center"] {
+    float: none !important;
+    margin: 0 auto !important;
+}
+
+.col-center-xs {
+    max-width: 768px;
+}
+
+.col-center-sm {
+    max-width: 992px;
+}
+
+.col-center-md {
+    max-width: 1200px;
+}
+
+
+@font-face {
+    font-family: Vazir;
+    src: url('/lib/vazir-font/dist/Vazir.eot');
+    src: url('/lib/vazir-font/dist/Vazir.eot?#iefix') format('embedded-opentype'), url('/lib/vazir-font/dist/Vazir.woff') format('woff'), url('/lib/vazir-font/dist/Vazir.ttf') format('truetype');
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: Vazir;
+    src: url('/lib/vazir-font/dist/Vazir-Bold.eot');
+    src: url('/lib/vazir-font/dist/Vazir-Bold.eot?#iefix') format('embedded-opentype'), url('/lib/vazir-font/dist/Vazir-Bold.woff') format('woff'), url('/lib/vazir-font/dist/Vazir-Bold.ttf') format('truetype');
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: Vazir;
+    src: url('/lib/vazir-font/dist/Vazir-Light.eot');
+    src: url('/lib/vazir-font/dist/Vazir-Light.eot?#iefix') format('embedded-opentype'), url('/lib/vazir-font/dist/Vazir-Light.woff') format('woff'), url('/lib/vazir-font/dist/Vazir-Light.ttf') format('truetype');
+    font-weight: 300;
+}
+
+
+
+body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, .tooltip {
+    font-family: 'Vazir', 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+    font-weight: bold;
+}
+
+
+
+
+.box-footer, .box-header {
+    background: #fbfbfb;
+}
+
+.box-header>.fa, .box-header>.glyphicon, .box-header>.ion, .box-header .box-title {  
+    font-size: 16px;   
+}
+
+td,th {
+    vertical-align: middle;
+
+}
+/*.form-control {
+    padding: 2px 5px;
+    height: 36px;
+}*/
+
+
+
+/*after localization*/
+
+
+.box-title {
+    float: right !important;
+}
+
+.box-button, .table-action {
+    float: left !important;
+}
+
+/*.table-action {
+    float: left;
+}*/
+
+
+.card-rating {
+    float: left;
+    margin-left: 20px
+}
+
+.card-title {
+    float: right;
+    margin-right: 20px
+}
+
+
+.card-show {
+    float: right;
+    margin-bottom: 5px;
+}
+
+.card-cost{
+    float: left;
+}
+
+
+.card-maman-block  {
+    float: right;
+}
+
+.cart-count{
+    float:left;
+}
+.cart-food{
+    float:right;
+}
+.breadcrumb {
+    float: right !important;
+    margin-right: 0px !important;
+    right: 10px !important;
+}
+
+
+.portal-breadcrumb {
+    float: none !important;
+    margin-right: 0px !important;
+    right: 10px !important;
+}
+
+.main-block ul {
+    direction: rtl !important;
+    width: 100%;
+    margin-bottom: 0;
+    float: right !important;
+}
+
+
+.navbar-brand {
+    /*clear: both;*/
+    float: right;
+}
+
+.navbar-static{
+    float:right;
+
+}
+
+.navbar-dynamic{
+    float:left;
+}

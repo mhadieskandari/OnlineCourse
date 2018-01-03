@@ -1,0 +1,149 @@
+﻿@using OnlineCourse.Core
+@using OnlineCourse.Panel.Core.Extentions
+@model OnlineCourse.Entity.Models.User
+
+@{
+    ViewData["Title"] = localizer["UserSetting"];
+}
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 ">
+            <div class="box">
+                <div class="box-header with-border">
+                    <b>@ViewData["Title"]</b>
+
+                </div>
+                <div class="box-body">
+                    <div class="form-horizontal">
+                        <div class="row">
+                            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                                <label asp-for="UserName" class="col-md-3 control-label"></label>
+                                <div class="col-md-9">
+                                    <span class="form-control"> @Html.DisplayFor(model => model.UserName)</span>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                                <label asp-for="Email" class="col-md-3 control-label"></label>
+                                <div class="col-md-9">
+                                    <span class="form-control">@Html.DisplayFor(model => model.Email)</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                                <label asp-for="RegisterDate" class="col-md-3 control-label"></label>
+                                <div class="col-md-9">
+                                    <span class="form-control">@Html.DisplayFor(model => model.RegisterDate)</span>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                                <label asp-for="Mobile" class="col-md-3 control-label"></label>
+                                <div class="col-md-9">
+                                    <span class="form-control">@Html.DisplayFor(model => model.Mobile)</span>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                                <label asp-for="FullName" class="col-md-3 control-label"></label>
+                                <div class="col-md-9">
+                                    <span class="form-control">@Html.DisplayFor(model => model.FullName)</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                                <label asp-for="State" class="col-md-3 control-label"></label>
+                                <div class="col-md-9">
+                                    <span class="form-control">
+                                        @if (Model.State != null)
+                                        {
+                                            @EnumExtention.GetDescription((UserState)Model.State.Value)
+                                        }
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                                <label asp-for="AccessLevel" class="col-md-3 control-label"></label>
+                                <div class="col-md-9">
+                                    <span class="form-control">
+                                        @if (Model.AccessLevel != null)
+                                        {
+                                            @EnumExtention.GetDescription((UserAccessLevel)Model.AccessLevel.Value)
+                                        }
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                                <label asp-for="OnOff" class="col-md-3 control-label"></label>
+                                <div class="col-md-9">
+                                    <span class="form-control">
+                                        @if (Model.OnOff != null)
+                                        {
+                                            @EnumExtention.GetDescription((GeneralState)Model.OnOff.Value)
+                                        }
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                                <label asp-for="ExpireDate" class="col-md-3 control-label"></label>
+                                <div class="col-md-9">
+                                    <span class="form-control">@Html.DisplayFor(model => model.ExpireDate)</span>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                                <label asp-for="WorkDays" class="col-md-3 control-label"></label>
+                                <div class="col-md-9">
+                                    @*@Html.DisplayFor(model => model.WorkDays)*@
+                                    <input asp-for="WorkDays" class="form-control" type="hidden"/>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                                <label asp-for="Addrress" class="col-md-3 control-label"></label>
+                                <div class="col-md-9">
+                                    <textarea asp-for="Addrress" class="form-control" rows="5" disabled="disabled"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                                <label asp-for="Des" class="col-md-3 control-label"></label>
+                                <div class="col-md-9">
+                                    <textarea asp-for="Des" class="form-control" rows="5" disabled="disabled"></textarea>
+                                    <span asp-validation-for="Des" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="box-footer">
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-default  box-title"><i class="fa fa-edit"></i></a>
+                    <a asp-action="Index" class="btn btn-info  box-button"><i class="fa fa-backward"></i></a>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.row -->
+</section>
+<!-- /.content -->
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var wdays = $("#WorkLine").weekLine({
+                onChange: function () {
+                    var days = $(this).weekLine('getSelected', 'indexes');
+                    $("#WorkDays").val(days.toString());
+                }
+            });
+
+            wdays.weekLine("setSelected", $("#WorkDays").val());
+        });
+    </script>
+}

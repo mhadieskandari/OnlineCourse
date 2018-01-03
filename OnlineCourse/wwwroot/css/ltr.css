@@ -1,0 +1,141 @@
+﻿.box-title {
+    float: left !important;
+}
+
+.box-button, .table-action {
+    float: right !important;
+}
+
+.card-rating {
+    float: right;
+    margin-right: 20px
+}
+
+.card-title {
+    float: left !important;
+    margin-left: 20px
+}
+/*.table-action {
+    float: right;
+}*/
+.clearfix::after {
+    display: block;
+    content: "";
+    clear: both;
+}
+
+.breadcrumb {
+    float: left !important;
+    margin-left: 0px !important;
+    left: 10px !important;
+}
+
+.breadcrumb-sitename{
+    float:right;
+    margin-right:20px;
+}
+
+
+.portal-breadcrumb {
+    float: none !important;
+    margin-left: 0px !important;
+    left: 10px !important;
+}
+
+.card-show{
+    float:left;
+    margin-bottom:5px;
+}
+.card-cost {
+    float:right;
+
+}
+
+.card-maman-block{
+    float:left;
+}
+
+[class*="col-center"] {
+    float: none !important;
+    margin: 0 auto !important;
+}
+
+.col-center-xs {
+    max-width: 768px;
+}
+
+.col-center-sm {
+    max-width: 992px;
+}
+
+.col-center-md {
+    max-width: 1200px;
+}
+
+.cart-count {
+    float: right;
+}
+
+.cart-food {
+    float: left;
+}
+
+
+.main-block ul {
+    direction: ltr !important;
+    width: 100%;
+    margin-bottom: 0;
+    float: left !important;
+}
+
+
+.navbar-brand {
+    /*clear: both;*/
+    float: left;
+}
+
+
+.navbar-static {
+    float: left;
+}
+
+.navbar-dynamic {
+    float: right;
+}
+
+.step1:after {
+    position: absolute;
+    content: "";
+    left: 90% !important;
+    top: -20%;
+    width: 130px;
+    height: 32px;
+    background: url(../images/arrow-reverce.png) !important;
+}
+.step2:after {
+    position: absolute;
+    content: "";
+    left: 90% !important;
+    top: -20%;
+    width: 130px;
+    height: 32px;
+    background: url(../images/arrow-dotted-reverce.png) !important;
+}
+
+.profile p {
+    float: left !important;
+}
+
+.restaurant-entry .entry-dscr {
+     direction: ltr !important; 
+    text-align: left !important;
+}
+
+.restaurant-entry .entry-logo {
+    float: left !important;
+}
+
+.breadcrumb ul li:before {
+    right: unset !important;
+    left: -12px !important;
+}
