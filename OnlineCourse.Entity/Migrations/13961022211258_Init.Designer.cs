@@ -11,9 +11,10 @@ using System;
 namespace OnlineCourse.Entity.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("13961022211258_Init")]
+    partial class Init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -201,7 +202,7 @@ namespace OnlineCourse.Entity.Migrations
                     b.Property<string>("Addrress")
                         .HasMaxLength(200);
 
-                    b.Property<DateTime?>("BirthDate")
+                    b.Property<DateTime?>("Birthday")
                         .HasColumnType("datetime");
 
                     b.Property<string>("City")
@@ -260,7 +261,7 @@ namespace OnlineCourse.Entity.Migrations
 
                     b.Property<string>("SecuritySpan");
 
-                    b.Property<decimal?>("Sharj");
+                    b.Property<decimal>("Sharj");
 
                     b.Property<byte?>("State");
 

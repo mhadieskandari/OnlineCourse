@@ -107,7 +107,14 @@ namespace OnlineCourse.Entity.Models
 
         public string SecuritySpan { set; get; }
 
-        //public virtual IEnumerable<Food> Foods { set; get; }
+        [Column(TypeName = "datetime")]
+        [DataType(DataType.Date)]
+        public DateTime? BirthDate { get; set; }
+
+
+        public EducationDegree? Degree { get; set; }
+
+        public decimal? Sharj { get; set; }
     }
 
 
