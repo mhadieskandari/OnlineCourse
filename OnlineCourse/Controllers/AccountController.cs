@@ -15,6 +15,7 @@ using OnlineCourse.Panel.Models;
 using Microsoft.AspNetCore.Mvc.Localization;
 using OnlineCourse.Panel.Utils.ViewModels.AccountViewModels;
 using OnlineCourse.Panel.Utils.Extentions;
+using OnlineCourse.Entity;
 
 namespace OnlineCourse.Panel.Controllers
 {

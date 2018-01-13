@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineCourse.Core;
+using OnlineCourse.Entity;
 
 namespace OnlineCourse.Panel.Areas.Admin.Controllers
 {

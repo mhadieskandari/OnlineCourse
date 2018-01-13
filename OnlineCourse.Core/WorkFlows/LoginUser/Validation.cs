@@ -6,6 +6,7 @@ using OnlineCourse.Core.Dtos;
 using OnlineCourse.Core.Services;
 using OnlineCourse.Entity.Models;
 using OnlineCourse.Core.Extentions;
+using OnlineCourse.Entity;
 
 namespace OnlineCourse.Core.WorkFlows.LoginUser
 {

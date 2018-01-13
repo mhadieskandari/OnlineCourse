@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using OnlineCourse.Core.Extentions;
+using OnlineCourse.Entity;
 using OnlineCourse.Entity.Models;
 using System;
 

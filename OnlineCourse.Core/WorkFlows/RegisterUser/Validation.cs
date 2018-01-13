@@ -3,6 +3,7 @@ using OnlineCourse.Core.Services;
 using OnlineCourse.Entity.Models;
 using System.Text.RegularExpressions;
 using OnlineCourse.Core.Extentions;
+using OnlineCourse.Entity;
 
 namespace OnlineCourse.Core.WorkFlows.RegisterUser
 {

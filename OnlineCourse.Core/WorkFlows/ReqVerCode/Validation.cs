@@ -3,6 +3,7 @@ using System.Linq;
 using OnlineCourse.Core.Dtos;
 using OnlineCourse.Core.Services;
 using OnlineCourse.Core.Extentions;
+using OnlineCourse.Entity;
 
 namespace OnlineCourse.Core.WorkFlows.ReqVerCode
 {

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using OnlineCourse.Core.Services;
 using OnlineCourse.Entity.Models;
+using OnlineCourse.Entity;
 
 namespace OnlineCourse.Core.WorkFlows.RecoveryUser
 {

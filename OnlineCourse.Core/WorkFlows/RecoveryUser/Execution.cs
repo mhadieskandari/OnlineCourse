@@ -7,6 +7,7 @@ using OnlineCourse.Core.Services;
 using OnlineCourse.Core.WorkFlows.RecoveryUser;
 using OnlineCourse.Entity.Models;
 using OnlineCourse.Core.Extentions;
+using OnlineCourse.Entity;
 
 namespace OnlineCourse.Core.WorkFlows.RecoveryUser
 {
