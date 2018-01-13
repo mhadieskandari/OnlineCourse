@@ -112,7 +112,7 @@ namespace OnlineCourse.Entity.Models
         public DateTime? BirthDate { get; set; }
 
 
-        public EducationDegree? Degree { get; set; }
+        public EducationLevel? Degree { get; set; }
 
         public decimal? Sharj { get; set; }
     }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace OnlineCourse.Entity
+namespace OnlineCourse.Entity.Models
 {
     public class Course
     {

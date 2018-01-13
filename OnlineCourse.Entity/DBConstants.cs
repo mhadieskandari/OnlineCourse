@@ -4,12 +4,12 @@ using System.Text;
 
 namespace OnlineCourse.Entity
 {
-    public enum EducationDegree
-    {
-        Bachelor=0,
-        Master=1,
-        Phd=2
-    }
+    //public enum EducationDegree
+    //{
+    //    Bachelor=0,
+    //    Master=1,
+    //    Phd=2
+    //}
 
     public enum EducationLevel
     {
