@@ -6,6 +6,7 @@ using OnlineCourse.Core.Repositories.Interfaces;
 using OnlineCourse.Entity;
 using OnlineCourse.Core.Services;
 using OnlineCourse.Core.Repositories;
+using OnlineCourse.Entity.Models;
 
 namespace OnlineCourse.Core
 {
@@ -15,6 +16,7 @@ namespace OnlineCourse.Core
         private ApplicationDbContext _context;
         private readonly HistoryService _historyService;
         public IUserRepository Users { get; private set; }
+        public GenericRepository<User> userRepository { get; private set; }
 
         public UnitOfWork(ApplicationDbContext context, HistoryService historyService)
         {
@@ -23,11 +25,19 @@ namespace OnlineCourse.Core
             Users = new UserRepository(_context, _historyService);
             //Histories = new HistoryRepository(_context);
         }
-        
-
+               
         public int Complete()
         {
-            return _context.SaveChanges();
+            try
+            {
+                return _context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                //Console.WriteLine(e);
+                _historyService.LogError(e, HistoryErrorType.Core);
+                return -1;
+            }
         }
 
         public async Task<int> CompleteAsync()
@@ -44,9 +54,24 @@ namespace OnlineCourse.Core
             }
         }
 
+
         public void Dispose()
         {
             //throw new NotImplementedException();
         }
+
+        //private bool disposed = false;
+
+        //public void Dispose(bool disposing)
+        //{
+        //    if (!disposed)
+        //    {
+        //        if (disposing)
+        //        {
+        //            _context.Dispose();
+        //        }
+        //    }
+        //    disposed = true;
+        //}
     }
 }
