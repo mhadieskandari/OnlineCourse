@@ -74,10 +74,10 @@ namespace OnlineCourse
                 .AddCookie(options =>
                 {
                     options.SlidingExpiration = false;
-                    options.LoginPath = "/api/account/login";
-                    options.LogoutPath = "/api/account/logout";
+                    options.LoginPath = "/account/login";
+                    options.LogoutPath = "/account/logout";
                     //options.AccessDeniedPath = new PathString("/Home/Forbidden/");
-                    options.Cookie.Name = ".my.app1.cookie";
+                    options.Cookie.Name = "cookieAuthentication";
                     options.Cookie.HttpOnly = true;
                     options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
                     options.Cookie.SameSite = SameSiteMode.Lax;
