@@ -81,9 +81,9 @@
                                     <th>
                                         @Html.DisplayNameFor(model => model.State)
                                     </th>
-                                    <th>
+                                    @*<th>
                                         @Html.DisplayNameFor(model => model.OnOff)
-                                    </th>
+                                    </th>*@
                                     <th>
                                         @Html.DisplayNameFor(model => model.AccessLevel)
                                     </th>
@@ -116,17 +116,17 @@
                                             @Html.DisplayFor(modelItem => item.ExpireDate)
                                         </td>
                                         <td>
-                                            @if (item.State != null)
+                                            @*@if (item.State != null)
                                             {
                                                 @localizer[((UserState)item.State.Value).ToString()]
-                                            }
+                                            }*@
                                         </td>
-                                        <td>
+                                        @*<td>
                                             @if (item.OnOff != null)
                                             {
                                                @localizer[((GeneralState)item.OnOff).ToString()]
                                             }
-                                        </td>
+                                        </td>*@
                                         <td>
                                             @if (item.AccessLevel != null)
                                             {

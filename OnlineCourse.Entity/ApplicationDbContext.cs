@@ -11,7 +11,7 @@ namespace OnlineCourse.Entity
         {
         }
         public DbSet<User> Users { set; get; }
-
+        public DbSet<Gallery> Galleries { set; get; }
         public DbSet<History> Histories { get; set; }
         public DbSet<Term> Terms { get; set; }
         public DbSet<Section> Sections { get; set; }

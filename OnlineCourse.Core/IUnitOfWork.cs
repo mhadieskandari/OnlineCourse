@@ -9,8 +9,11 @@ namespace OnlineCourse.Core
     public interface IUnitOfWork : IDisposable
     {
         IUserRepository Users { get; }
-        GenericRepository<User> userRepository { get;}
-        
+        //GenericRepository<User> userRepository { get;}
+        //GenericRepository<Gallery> GalleryRepository { get; }
+
+        IGalleryRepository Galleries { get; }
+
         int Complete();
 
         Task<int> CompleteAsync();

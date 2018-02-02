@@ -109,4 +109,12 @@ namespace OnlineCourse.Entity
         Thursday=5,
         Friday=6
     }
+
+    public enum GalleryKind
+    {
+        [Description("UserProfile")]
+        UserProfile = 0,
+        [Description("UserGallery")]
+        UserGallery = 1,
+    }
 }

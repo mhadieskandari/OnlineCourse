@@ -17,6 +17,7 @@ using OnlineCourse.Core.Extentions;
 using System.Globalization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using OnlineCourse.Panel.Utils;
 
 namespace OnlineCourse
 {
@@ -52,6 +53,16 @@ namespace OnlineCourse
             {
                 options.DataAnnotationLocalizerProvider = (type, factory) => factory.Create(typeof(SharedResource));
             });
+
+
+
+            var config = new AutoMapper.MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new AutoMapperProfileConfiguration());
+            });
+
+            var mapper = config.CreateMapper();
+            services.AddSingleton(mapper);
 
             services.AddCookieTempData();
             services.AddTransient<IEmailSender, MessageService>();
@@ -131,11 +142,15 @@ namespace OnlineCourse
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
+                    name: "area",
+                    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+                routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
-                routes.MapRoute(
-                   name: "areas",
-                   template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+                //routes.MapRoute(
+                //   name: "areas",
+                //   template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
             });
 
 

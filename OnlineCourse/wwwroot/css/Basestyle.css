@@ -327,3 +327,13 @@ color:#fff;
 background-color:rgba(12,12,12,0.6);
 border-radius :30px;
 }
+
+
+.login-box {
+    background-color: whitesmoke;
+    padding: 30px;
+    padding-top: 10px;
+    border-radius: 5px;
+    margin-top: 90px;
+}
+

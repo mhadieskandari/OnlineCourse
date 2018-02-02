@@ -1,7 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Routing
-@{
-//var user=new CUser(HttpContextAccessor,UnitOfWork);
-}
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -226,7 +224,7 @@
                         <!-- User Account: style can be found in dropdown.less -->
                         <li class="dropdown user user-menu">
 
-                            <a asp-action="Logout" asp-controller="Account" asp-area=""><i class="fa fa-sign-out "></i>@localizer["LogOut"]</a>
+                            <a href="/admin/users"><i class="fa fa-sign-out "></i>@localizer["LogOut"]</a>
 
 
                         </li>
@@ -272,7 +270,7 @@
                     <li class="header" style="color: white"> @localizer["MainMenu"]</li>
                     <!-- Add new comment here (FR) -->
                     <li class="treeview">
-                        <a asp-action="Index" asp-controller="Users">
+                        <a asp-action="Index" asp-controller="Users" asp-area="Admin">
                             <i class="fa fa-user"></i> <span>@localizer["Users"]</span>
                         </a>
                     </li>

@@ -16,13 +16,17 @@ namespace OnlineCourse.Core
         private ApplicationDbContext _context;
         private readonly HistoryService _historyService;
         public IUserRepository Users { get; private set; }
-        public GenericRepository<User> userRepository { get; private set; }
+        //public GenericRepository<User> userRepository { get; private set; }
+        //public GenericRepository<Gallery> GalleryRepository { get; private set; }
+
+        public IGalleryRepository Galleries { get; }
 
         public UnitOfWork(ApplicationDbContext context, HistoryService historyService)
         {
             _context = context;
             _historyService = historyService;
             Users = new UserRepository(_context, _historyService);
+            Galleries = new GalleryRepository(_context, historyService);
             //Histories = new HistoryRepository(_context);
         }
                
