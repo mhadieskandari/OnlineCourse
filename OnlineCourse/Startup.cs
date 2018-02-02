@@ -123,8 +123,8 @@ namespace OnlineCourse
 
             var supportedCultures = new[]
             {
+                new CultureInfo("fa-IR"),
                 new CultureInfo("en-US"),
-                new CultureInfo("fa-IR")
             };
 
             app.UseRequestLocalization(new RequestLocalizationOptions
