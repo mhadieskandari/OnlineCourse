@@ -10,7 +10,6 @@ using OnlineCourse.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Razor;
 using OnlineCourse.Core.Services;
-using OnlineCourse.Panel.Models;
 using Microsoft.AspNetCore.Http;
 using OnlineCourse.Core;
 using OnlineCourse.Core.Extentions;

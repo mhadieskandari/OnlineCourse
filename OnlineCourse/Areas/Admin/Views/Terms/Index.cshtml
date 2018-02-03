@@ -1,0 +1,110 @@
+﻿@model IEnumerable<OnlineCourse.Entity.Models.Term>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    <b class="box-title">@ViewData["Title"] </b>
+                    <a asp-action="Create" class="btn btn-success btn-sm box-button" style="margin-bottom: 5px;"><i class="fa fa-plus"></i></a>
+                </div>
+                <div class="box-body">
+                    @if (!Model.Any())
+                    {
+                        <div>
+                            <hr />
+                            <p class="text-center">
+                                <i class="fa fa-frown-o fa-3x" aria-hidden="true"></i>
+                            </p>
+                            <h4 class="text-center">@localizer["NoThingForShow"]</h4>
+                            <hr />
+                        </div>
+                    }
+                    else
+                    {
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Year)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.YearTerm)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Description)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.StartDate)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.EndDate)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Type)
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Year)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.YearTerm)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Description)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.StartDate)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.EndDate)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Type)
+                                        </td>
+                                        <td>
+                                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                                            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+
+
+
+                </div>
+                <div class="box-footer">
+                    <div class="row">
+                        <div class="col-md-1 col-md-offset-11 col-center-md">
+
+                            <paginationag-helper count="@((Model == null || !Model.Any())?0:Model.Count())" pagination="@ViewBag.Pagination"></paginationag-helper>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+        </div>
+
+
+    </div>
+    <!-- /.row -->
+</section>
+<!-- /.content -->

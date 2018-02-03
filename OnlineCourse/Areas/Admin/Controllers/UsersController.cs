@@ -16,7 +16,6 @@ using OnlineCourse.Core.Services;
 using OnlineCourse.Core.WorkFlows;
 using OnlineCourse.Entity.Models;
 using Microsoft.AspNetCore.Mvc.Localization;
-using OnlineCourse.Panel.Models;
 using OnlineCourse.Core.Dtos;
 using OnlineCourse.Entity;
 using OnlineCourse.Panel.Utils.Extentions;

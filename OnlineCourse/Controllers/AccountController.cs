@@ -11,7 +11,6 @@ using OnlineCourse.Core.Extentions;
 using OnlineCourse.Core.Services;
 using OnlineCourse.Core.WorkFlows;
 using OnlineCourse.Entity.Models;
-using OnlineCourse.Panel.Models;
 using Microsoft.AspNetCore.Mvc.Localization;
 using OnlineCourse.Panel.Utils.ViewModels.AccountViewModels;
 using OnlineCourse.Panel.Utils.Extentions;
