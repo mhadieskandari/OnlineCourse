@@ -94,9 +94,12 @@ namespace OnlineCourse.Entity
 
     public enum TermType
     {
+        [Description("PluralInPlace")]
         PluralInPlace=0,
-        SingularInPlace=1,
-        SingularOutPlace=2
+        [Description("SingularInPlace")]
+        SingularInPlace =1,
+        [Description("SingularOutPlace")]
+        SingularOutPlace =2
     }
 
     public enum WeekDays
