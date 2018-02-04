@@ -1,0 +1,31 @@
+﻿@model OnlineCourse.Entity.Models.Section
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Section</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.TotalTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TotalTime)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.HourlyPrice)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.HourlyPrice)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

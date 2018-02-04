@@ -8,6 +8,8 @@ namespace OnlineCourse.Entity.Models
     {
         public int Id { get; set; }
         public User Student { get; set; }
+        public int StudentId { get; set; }
         public Term Term { get; set; }
+        public int TermId { get; set; }
     }
 }

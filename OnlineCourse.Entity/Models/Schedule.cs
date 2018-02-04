@@ -11,5 +11,6 @@ namespace OnlineCourse.Entity.Models
         public TimeSpan StartTime { get; set; }
         public TimeSpan EndTime { get; set; }
         public Section Section { get; set; }
+        public int SectionId { get; set; }
     }
 }

@@ -10,7 +10,10 @@ namespace OnlineCourse.Entity.Models
         public decimal TotalTime { get; set; }
         public decimal HourlyPrice { get; set; }
         public Course Course { get; set; }
+        public int CourseId { get; set; }
         public Term Term { get; set; }
+        public int TermId { get; set; }
         public User Teacher { get; set; }
+        public int TeacherId { get; set; }
     }
 }
