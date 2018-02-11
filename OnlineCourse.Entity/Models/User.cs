@@ -104,13 +104,11 @@ namespace OnlineCourse.Entity.Models
         [MaxLength(50)]
         public string City { set; get; }
 
-
         public string SecuritySpan { set; get; }
 
         [Column(TypeName = "datetime")]
         [DataType(DataType.Date)]
         public DateTime? BirthDate { get; set; }
-
 
         public EducationLevel? Degree { get; set; }
 

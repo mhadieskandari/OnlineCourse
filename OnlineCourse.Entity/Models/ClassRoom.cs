@@ -6,17 +6,18 @@ using System.Text;
 
 namespace OnlineCourse.Entity.Models
 {
-    public class EnrollmentDetails
+    public class ClassRoom
     {
         [Key]
         public int Id { get; set; }
-        public decimal Markdown { get; set; }
-        public int EnrollmentId { get; set; }
         public int PresentId { get; set; }
-        public ActiveState Activity { get; set; }
-
-        [ForeignKey("EnrollmentId")]
-        public Enrollment Enrollment { get; set; }
+        public TimeSpan StartedTime { get; set; }
+        public TimeSpan EndedTime { get; set; }
+        public DateTime Date { get; set; }
+        public string Description { get; set; }
+        public ClassStatus Status { get; set; }
+        public string Source { get; set; }
+        public byte? ChangeTimePermit { get; set; }  //ValidationState
 
         [ForeignKey("PresentId")]
         public Present Present { get; set; }

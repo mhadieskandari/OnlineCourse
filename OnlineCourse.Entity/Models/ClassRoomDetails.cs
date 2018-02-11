@@ -6,17 +6,19 @@ using System.Text;
 
 namespace OnlineCourse.Entity.Models
 {
-    public class Enrollment
+    public class ClassRoomDetails
     {
         [Key]
         public int Id { get; set; }
+        public int ClassRoomId { get; set; }
         public int StudentId { get; set; }
-        public int TermId { get; set; }
+        public string Source { get; set; }
+        public ClassDocKind Kind { get; set; }
 
         [ForeignKey("StudentId")]
         public User Student { get; set; }
 
-        [ForeignKey("TermId")]
-        public Term Term { get; set; }
+        [ForeignKey("ClassRoomId")]
+        public ClassRoom ClassRoom { get; set; }
     }
 }

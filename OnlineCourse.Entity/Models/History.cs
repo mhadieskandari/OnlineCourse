@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace OnlineCourse.Entity.Models
@@ -7,7 +8,7 @@ namespace OnlineCourse.Entity.Models
 
     public class History
     {
-
+        [Key]
         public int Id { get; set; }
         public string Url { get; set; }
         public int? UserId { get; set; }

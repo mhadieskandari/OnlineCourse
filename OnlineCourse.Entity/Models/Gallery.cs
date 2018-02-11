@@ -7,6 +7,7 @@ namespace OnlineCourse.Entity.Models
 {
     public class Gallery
     {
+        [Key]
         public int Id { set; get; }
 
         [Display(Name = "Title")]

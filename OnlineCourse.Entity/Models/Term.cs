@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace OnlineCourse.Entity.Models
 {
     public class Term
     {
+        [Key]
         public int Id { get; set; }
         public short Year { get; set; }
         public short YearTerm { get; set; }
