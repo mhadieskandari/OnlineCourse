@@ -1,39 +1,76 @@
 ﻿@model OnlineCourse.Entity.Models.Section
-
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Create</h2>
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-md-12 col-lg-10 col-sm-12 col-xs-12 col-center-md ">
+            @*@Html.Partial("/Views/Shared/_Notifications.cshtml")*@
+            <form asp-action="Create" method="Post" enctype="multipart/form-data">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <b>@ViewData["Title"]</b>
+                    </div>
+                    <div class="box-body">
+                        <div class="form-horizontal">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-12 col-xs-12">
+                                    <label asp-for="TotalTime" class="control-label"></label>
+                                    <input asp-for="TotalTime" class="form-control" />
+                                    <span asp-validation-for="TotalTime" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6 col-sm-12 col-xs-12">
+                                    <label asp-for="HourlyPrice" class="control-label"></label>
+                                    <input asp-for="HourlyPrice" class="form-control" />
+                                    <span asp-validation-for="HourlyPrice" class="text-danger"></span>
+                                </div>
 
-<h4>Section</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="TotalTime" class="control-label"></label>
-                <input asp-for="TotalTime" class="form-control" />
-                <span asp-validation-for="TotalTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="HourlyPrice" class="control-label"></label>
-                <input asp-for="HourlyPrice" class="form-control" />
-                <span asp-validation-for="HourlyPrice" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </form>
+                            </div>
+
+                        </div>
+                    </div>
+                        <div class="box-footer">
+                            <button type="submit" class="btn btn-success  pull-right"><i class="fa fa-save"></i></button>
+                            <a asp-action="Index" class="btn btn-info  pull-left"><i class="fa fa-backward"></i></a>
+
+                        </div>
+                    </div>
+
+            </form>
+
+
+
+
+        </div>
+
+
     </div>
-</div>
+    <!-- /.row -->
+</section>
+<!-- /.content -->
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function () {
+            $("[name=ExpireDate")
+                .datepicker({
+                    dateFormat: "yy/mm/dd",
+                    //minDate: "0",
+                    isRTL: true,
+                    //maxDate: "+30D"
+                });
+
+        });
+
+
+    </script>
 }

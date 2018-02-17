@@ -1,30 +1,73 @@
 ﻿@model IEnumerable<OnlineCourse.Entity.Models.Enrollment>
-
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    <b class="box-title">@ViewData["Title"] </b>
+                    <a asp-action="Create" class="btn btn-success btn-sm box-button" style="margin-bottom: 5px;"><i class="fa fa-plus"></i></a>
+                </div>
+                <div class="box-body">
+                    @if (!Model.Any())
+                    {
+                        <div>
+                            <hr />
+                            <p class="text-center">
+                                <i class="fa fa-frown-o fa-3x" aria-hidden="true"></i>
+                            </p>
+                            <h4 class="text-center">@localizer["NoThingForShow"]</h4>
+                            <hr />
+                        </div>
+                    }
+                    else
+                    {
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td class="table-action">
+                                            @*<a asp-action="Index" asp-controller="Galleries" asp-route-publicId="@item.Id" asp-route-kind="@((byte)GalleryKind.UserGallery)" class="btn btn-sm  btn-default" title="@localizer["Galleries"]"><i class="fa fa-picture-o"></i></a>*@
+                                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm  btn-default" title="@localizer["Detail"]"> <i class="fa fa-eye"></i></a>
+                                            @*<a asp-action="Index" asp-controller="Foods" asp-route-userId="@item.Id" class="btn btn-sm  btn-default" title="@localizer["ShowFoods"]"> <i class="fa fa-cutlery" aria-hidden="true"></i></a>*@
+                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm  btn-info" title="@localizer["Edit"]"><i class="fa fa-edit"></i></a>
+                                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger" title="@localizer["Remove"]"><i class="fa fa-remove"></i></a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
 
-<h2>Index</h2>
+                </div>
+                <div class="box-footer">
+                    <div class="row">
+                        <div class="col-md-1 col-md-offset-11 col-center-md">
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+                            <paginationag-helper count="@((Model == null || !Model.Any())?0:Model.Count())" pagination="@ViewBag.Pagination"></paginationag-helper>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+        </div>
+
+
+    </div>
+    <!-- /.row -->
+</section>
+<!-- /.content -->
