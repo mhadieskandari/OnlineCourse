@@ -11,7 +11,7 @@ using System;
 namespace OnlineCourse.Entity.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("13961128172002_Init")]
+    [Migration("13961128190840_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

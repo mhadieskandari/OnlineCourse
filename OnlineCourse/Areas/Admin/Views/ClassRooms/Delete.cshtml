@@ -1,0 +1,69 @@
+﻿@model OnlineCourse.Entity.Models.ClassRoom
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>ClassRoom</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.StartedTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.StartedTime)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.EndedTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.EndedTime)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Source)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Source)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ChangeTimePermit)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ChangeTimePermit)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Present)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Present.Id)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>

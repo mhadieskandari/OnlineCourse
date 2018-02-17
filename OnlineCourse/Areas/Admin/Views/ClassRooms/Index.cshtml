@@ -1,0 +1,150 @@
+﻿@model IEnumerable<OnlineCourse.Entity.Models.ClassRoom>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+            @Html.Partial("/Views/Shared/_Notifications.cshtml")
+            @*<div class="box box-solid">
+                    <div class="box-header with-border">
+                        <button type="button" title="@localizer["OpenClose"]" class="btn btn-default btn-sm box-button" data-toggle="collapse" data-target="#collapse" aria-expanded="false" aria-controls="collapse"><i class="fa fa-plus"></i></button>
+                        <p class="box-title" style="margin-bottom: 5px;"><i class="fa fa-search"></i> <b> @localizer["Search"]  </b></p>
+                    </div>
+                    <div class="box-body clearfix collapse" id="collapse">
+                        <form asp-action="Index">
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group">
+                                <label>ID</label>
+                                <input type="text" class="form-control pnum" value="" placeholder="" style="" id="id" name="id">
+                            </div>
+                            <div class="col-lg-3 col-md-3  col-sm-6 col-xs-12 form-group">
+                                <label>@localizer["FullName"]</label>
+                                <input type="text" class="form-control pnum" value="" placeholder="" style="" id="fullname" name="fullname">
+                            </div>
+                            <div class="col-lg-3 col-md-3  col-sm-6 col-xs-12 form-group">
+                                <label>@localizer["Email"]</label>
+                                <input type="text" class="form-control pnum" value="" placeholder="" style="" id="email" name="email">
+                            </div>
+                            <div class="col-lg-3 col-md-3  col-sm-6 col-xs-12 form-group">
+                                <label>@localizer["UserName"]</label>
+                                <input type="text" class="form-control pnum" value="" placeholder="" style="" id="username" name="username">
+                            </div>
+                            <button asp-action="Index" type="submit" class="btn btn-default btn-sm"><i class="fa fa-search"></i></button>
+                        </form>
+                    </div>
+                </div>*@
+            <div class="box">
+                <div class="box-header with-border">
+                    <b class="box-title">@ViewData["Title"] </b>
+                    <a asp-action="Create" class="btn btn-success btn-sm box-button" style="margin-bottom: 5px;"><i class="fa fa-plus"></i></a>
+                </div>
+                <div class="box-body">
+                    @if (!Model.Any())
+                    {
+                        <div>
+                            <hr />
+                            <p class="text-center">
+                                <i class="fa fa-frown-o fa-3x" aria-hidden="true"></i>
+                            </p>
+                            <h4 class="text-center">@localizer["NoThingForShow"]</h4>
+                            <hr />
+                        </div>
+                    }
+                    else
+                    {
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.StartedTime)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.EndedTime)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Date)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Description)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Status)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Source)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.ChangeTimePermit)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Present)
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.StartedTime)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.EndedTime)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Date)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Description)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Status)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Source)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ChangeTimePermit)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Present.Id)
+                                        </td>
+
+                                        <td class="table-action">
+                                            @*<a asp-action="Index" asp-controller="Galleries" asp-route-publicId="@item.Id" asp-route-kind="@((byte)GalleryKind.UserGallery)" class="btn btn-sm  btn-default" title="@localizer["Galleries"]"><i class="fa fa-picture-o"></i></a>*@
+                                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm  btn-default" title="@localizer["Detail"]"> <i class="fa fa-eye"></i></a>
+                                            @*<a asp-action="Index" asp-controller="Foods" asp-route-userId="@item.Id" class="btn btn-sm  btn-default" title="@localizer["ShowFoods"]"> <i class="fa fa-cutlery" aria-hidden="true"></i></a>*@
+                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm  btn-info" title="@localizer["Edit"]"><i class="fa fa-edit"></i></a>
+                                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger" title="@localizer["Remove"]"><i class="fa fa-remove"></i></a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+
+                </div>
+                <div class="box-footer">
+                    <div class="row">
+                        <div class="col-md-1 col-md-offset-11 col-center-md">
+
+                            <paginationag-helper count="@((Model == null || !Model.Any())?0:Model.Count())" pagination="@ViewBag.Pagination"></paginationag-helper>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+        </div>
+
+
+    </div>
+    <!-- /.row -->
+</section>
+<!-- /.content -->

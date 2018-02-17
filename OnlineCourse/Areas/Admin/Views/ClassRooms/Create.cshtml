@@ -1,0 +1,103 @@
+﻿@model OnlineCourse.Entity.Models.ClassRoom
+@{
+    ViewData["Title"] = "Create";
+}
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-md-12 col-lg-10 col-sm-12 col-xs-12 col-center-md ">
+            @*@Html.Partial("/Views/Shared/_Notifications.cshtml")*@
+            <form asp-action="Create" method="Post" enctype="multipart/form-data">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <b>@ViewData["Title"]</b>
+                    </div>
+                    <div class="box-body">
+                        <div class="form-horizontal">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                            <div class="col-md-6 col-sm-12 col-xs-12">
+                                <label asp-for="PresentId" class="control-label"></label>
+                                <select asp-for="PresentId" class="form-control" asp-items="ViewBag.PresentId"></select>
+                            </div>
+                            <div class="col-md-6 col-sm-12 col-xs-12">
+                                <label asp-for="StartedTime" class="control-label"></label>
+                                <input asp-for="StartedTime" class="form-control" />
+                                <span asp-validation-for="StartedTime" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 col-sm-12 col-xs-12">
+                                <label asp-for="EndedTime" class="control-label"></label>
+                                <input asp-for="EndedTime" class="form-control" />
+                                <span asp-validation-for="EndedTime" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 col-sm-12 col-xs-12">
+                                <label asp-for="Date" class="control-label"></label>
+                                <input asp-for="Date" class="form-control" />
+                                <span asp-validation-for="Date" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 col-sm-12 col-xs-12">
+                                <label asp-for="Description" class="control-label"></label>
+                                <input asp-for="Description" class="form-control" />
+                                <span asp-validation-for="Description" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 col-sm-12 col-xs-12">
+                                <label asp-for="Status" class="control-label"></label>
+                                <select asp-for="Status" class="form-control"></select>
+                                <span asp-validation-for="Status" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 col-sm-12 col-xs-12">
+                                <label asp-for="Source" class="control-label"></label>
+                                <input asp-for="Source" class="form-control" />
+                                <span asp-validation-for="Source" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 col-sm-12 col-xs-12">
+                                <label asp-for="ChangeTimePermit" class="control-label"></label>
+                                <input asp-for="ChangeTimePermit" class="form-control" />
+                                <span asp-validation-for="ChangeTimePermit" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-footer">
+
+                        <button type="submit" class="btn btn-success  pull-right"><i class="fa fa-save"></i></button>
+
+                        <a asp-action="Index" class="btn btn-info  pull-left"><i class="fa fa-backward"></i></a>
+
+                    </div>
+                </div>
+            </form>
+
+
+
+
+        </div>
+
+
+    </div>
+    <!-- /.row -->
+</section>
+<!-- /.content -->
+
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function () {
+            $("[name=ExpireDate")
+                .datepicker({
+                    dateFormat: "yy/mm/dd",
+                    //minDate: "0",
+                    isRTL: true,
+                    //maxDate: "+30D"
+                });
+
+        });
+
+
+    </script>
+}
+
