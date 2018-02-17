@@ -11,8 +11,8 @@ using System;
 namespace OnlineCourse.Entity.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("13961022211705_Init1")]
-    partial class Init1
+    [Migration("13961128172002_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,7 +21,57 @@ namespace OnlineCourse.Entity.Migrations
                 .HasAnnotation("ProductVersion", "2.0.1-rtm-125")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("OnlineCourse.Entity.Course", b =>
+            modelBuilder.Entity("OnlineCourse.Entity.Models.ClassRoom", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<byte?>("ChangeTimePermit");
+
+                    b.Property<DateTime>("Date");
+
+                    b.Property<string>("Description");
+
+                    b.Property<TimeSpan>("EndedTime");
+
+                    b.Property<int>("PresentId");
+
+                    b.Property<string>("Source");
+
+                    b.Property<TimeSpan>("StartedTime");
+
+                    b.Property<int>("Status");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PresentId");
+
+                    b.ToTable("ClassRooms");
+                });
+
+            modelBuilder.Entity("OnlineCourse.Entity.Models.ClassRoomDetails", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("ClassRoomId");
+
+                    b.Property<int>("Kind");
+
+                    b.Property<string>("Source");
+
+                    b.Property<int>("StudentId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClassRoomId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("ClassRoomDetails");
+                });
+
+            modelBuilder.Entity("OnlineCourse.Entity.Models.Course", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -40,9 +90,9 @@ namespace OnlineCourse.Entity.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("StudentId");
+                    b.Property<int>("StudentId");
 
-                    b.Property<int?>("TermId");
+                    b.Property<int>("TermId");
 
                     b.HasKey("Id");
 
@@ -58,19 +108,48 @@ namespace OnlineCourse.Entity.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("EnrollmentId");
+                    b.Property<int>("Activity");
+
+                    b.Property<int>("EnrollmentId");
 
                     b.Property<decimal>("Markdown");
 
-                    b.Property<int?>("SectionId");
+                    b.Property<int>("PresentId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("EnrollmentId");
 
-                    b.HasIndex("SectionId");
+                    b.HasIndex("PresentId");
 
                     b.ToTable("EnrollmentsDetails");
+                });
+
+            modelBuilder.Entity("OnlineCourse.Entity.Models.Gallery", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Des")
+                        .HasMaxLength(400);
+
+                    b.Property<string>("Ext")
+                        .HasMaxLength(4);
+
+                    b.Property<byte?>("Kind");
+
+                    b.Property<byte?>("POrder");
+
+                    b.Property<int>("PublicId");
+
+                    b.Property<byte?>("State");
+
+                    b.Property<string>("Title")
+                        .HasMaxLength(100);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Galleries");
                 });
 
             modelBuilder.Entity("OnlineCourse.Entity.Models.History", b =>
@@ -110,7 +189,7 @@ namespace OnlineCourse.Entity.Migrations
 
                     b.Property<DateTime>("Date");
 
-                    b.Property<int?>("EnrollmentId");
+                    b.Property<int>("EnrollmentId");
 
                     b.Property<int>("Type");
 
@@ -119,6 +198,22 @@ namespace OnlineCourse.Entity.Migrations
                     b.HasIndex("EnrollmentId");
 
                     b.ToTable("Payments");
+                });
+
+            modelBuilder.Entity("OnlineCourse.Entity.Models.Present", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("SectionId");
+
+                    b.Property<string>("Title");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SectionId");
+
+                    b.ToTable("Presents");
                 });
 
             modelBuilder.Entity("OnlineCourse.Entity.Models.Schedule", b =>
@@ -130,13 +225,13 @@ namespace OnlineCourse.Entity.Migrations
 
                     b.Property<TimeSpan>("EndTime");
 
-                    b.Property<int?>("SectionId");
+                    b.Property<int>("PresentId");
 
                     b.Property<TimeSpan>("StartTime");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SectionId");
+                    b.HasIndex("PresentId");
 
                     b.ToTable("Schedules");
                 });
@@ -146,13 +241,15 @@ namespace OnlineCourse.Entity.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("CourseId");
+                    b.Property<int?>("Activity");
+
+                    b.Property<int>("CourseId");
 
                     b.Property<decimal>("HourlyPrice");
 
-                    b.Property<int?>("TeacherId");
+                    b.Property<int>("TeacherId");
 
-                    b.Property<int?>("TermId");
+                    b.Property<int>("TermId");
 
                     b.Property<decimal>("TotalTime");
 
@@ -277,55 +374,93 @@ namespace OnlineCourse.Entity.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("OnlineCourse.Entity.Models.ClassRoom", b =>
+                {
+                    b.HasOne("OnlineCourse.Entity.Models.Present", "Present")
+                        .WithMany()
+                        .HasForeignKey("PresentId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("OnlineCourse.Entity.Models.ClassRoomDetails", b =>
+                {
+                    b.HasOne("OnlineCourse.Entity.Models.ClassRoom", "ClassRoom")
+                        .WithMany()
+                        .HasForeignKey("ClassRoomId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("OnlineCourse.Entity.Models.User", "Student")
+                        .WithMany("ClassRoomDetails")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
             modelBuilder.Entity("OnlineCourse.Entity.Models.Enrollment", b =>
                 {
                     b.HasOne("OnlineCourse.Entity.Models.User", "Student")
                         .WithMany()
-                        .HasForeignKey("StudentId");
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("OnlineCourse.Entity.Models.Term", "Term")
                         .WithMany()
-                        .HasForeignKey("TermId");
+                        .HasForeignKey("TermId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("OnlineCourse.Entity.Models.EnrollmentDetails", b =>
                 {
                     b.HasOne("OnlineCourse.Entity.Models.Enrollment", "Enrollment")
                         .WithMany()
-                        .HasForeignKey("EnrollmentId");
+                        .HasForeignKey("EnrollmentId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("OnlineCourse.Entity.Models.Section", "Section")
-                        .WithMany()
-                        .HasForeignKey("SectionId");
+                    b.HasOne("OnlineCourse.Entity.Models.Present", "Present")
+                        .WithMany("EnrollmentDetails")
+                        .HasForeignKey("PresentId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("OnlineCourse.Entity.Models.Payment", b =>
                 {
                     b.HasOne("OnlineCourse.Entity.Models.Enrollment", "Enrollment")
                         .WithMany()
-                        .HasForeignKey("EnrollmentId");
+                        .HasForeignKey("EnrollmentId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("OnlineCourse.Entity.Models.Present", b =>
+                {
+                    b.HasOne("OnlineCourse.Entity.Models.Section", "Section")
+                        .WithMany()
+                        .HasForeignKey("SectionId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("OnlineCourse.Entity.Models.Schedule", b =>
                 {
-                    b.HasOne("OnlineCourse.Entity.Models.Section", "Section")
+                    b.HasOne("OnlineCourse.Entity.Models.Present", "Present")
                         .WithMany()
-                        .HasForeignKey("SectionId");
+                        .HasForeignKey("PresentId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("OnlineCourse.Entity.Models.Section", b =>
                 {
-                    b.HasOne("OnlineCourse.Entity.Course", "Course")
+                    b.HasOne("OnlineCourse.Entity.Models.Course", "Course")
                         .WithMany()
-                        .HasForeignKey("CourseId");
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("OnlineCourse.Entity.Models.User", "Teacher")
                         .WithMany()
-                        .HasForeignKey("TeacherId");
+                        .HasForeignKey("TeacherId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("OnlineCourse.Entity.Models.Term", "Term")
                         .WithMany()
-                        .HasForeignKey("TermId");
+                        .HasForeignKey("TermId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

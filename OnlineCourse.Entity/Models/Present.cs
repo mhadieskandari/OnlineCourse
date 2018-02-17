@@ -15,5 +15,8 @@ namespace OnlineCourse.Entity.Models
 
         [ForeignKey("SectionId")]
         public Section Section { get; set; }
+
+        public ICollection<EnrollmentDetails> EnrollmentDetails { set; get; }
+
     }
 }

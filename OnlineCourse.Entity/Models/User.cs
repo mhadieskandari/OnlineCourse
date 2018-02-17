@@ -113,6 +113,8 @@ namespace OnlineCourse.Entity.Models
         public EducationLevel? Degree { get; set; }
 
         public decimal? Sharj { get; set; }
+
+        public ICollection<ClassRoomDetails> ClassRoomDetails { set; get; }
     }
 
 

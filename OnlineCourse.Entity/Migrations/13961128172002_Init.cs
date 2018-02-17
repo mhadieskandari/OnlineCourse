@@ -24,6 +24,25 @@ namespace OnlineCourse.Entity.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Galleries",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Des = table.Column<string>(maxLength: 400, nullable: true),
+                    Ext = table.Column<string>(maxLength: 4, nullable: true),
+                    Kind = table.Column<byte>(nullable: true),
+                    POrder = table.Column<byte>(nullable: true),
+                    PublicId = table.Column<int>(nullable: false),
+                    State = table.Column<byte>(nullable: true),
+                    Title = table.Column<string>(maxLength: 100, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Galleries", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Histories",
                 columns: table => new
                 {
@@ -71,7 +90,7 @@ namespace OnlineCourse.Entity.Migrations
                     AccessLevel = table.Column<byte>(nullable: true),
                     ActivationCode = table.Column<string>(maxLength: 20, nullable: true),
                     Addrress = table.Column<string>(maxLength: 200, nullable: true),
-                    Birthday = table.Column<DateTime>(type: "datetime", nullable: true),
+                    BirthDate = table.Column<DateTime>(type: "datetime", nullable: true),
                     City = table.Column<string>(maxLength: 50, nullable: false),
                     Degree = table.Column<int>(nullable: true),
                     Description = table.Column<string>(maxLength: 400, nullable: true),
@@ -92,7 +111,7 @@ namespace OnlineCourse.Entity.Migrations
                     RegisterAttemptFailure = table.Column<int>(nullable: true),
                     RegisterDate = table.Column<DateTime>(type: "datetime", nullable: true),
                     SecuritySpan = table.Column<string>(nullable: true),
-                    Sharj = table.Column<decimal>(nullable: false),
+                    Sharj = table.Column<decimal>(nullable: true),
                     State = table.Column<byte>(nullable: true),
                     UserName = table.Column<string>(maxLength: 100, nullable: true),
                     ValidEmail = table.Column<byte>(nullable: true),
@@ -109,8 +128,8 @@ namespace OnlineCourse.Entity.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    StudentId = table.Column<int>(nullable: true),
-                    TermId = table.Column<int>(nullable: true)
+                    StudentId = table.Column<int>(nullable: false),
+                    TermId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -120,13 +139,13 @@ namespace OnlineCourse.Entity.Migrations
                         column: x => x.StudentId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Enrollments_Terms_TermId",
                         column: x => x.TermId,
                         principalTable: "Terms",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -135,10 +154,11 @@ namespace OnlineCourse.Entity.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    CourseId = table.Column<int>(nullable: true),
+                    Activity = table.Column<int>(nullable: true),
+                    CourseId = table.Column<int>(nullable: false),
                     HourlyPrice = table.Column<decimal>(nullable: false),
-                    TeacherId = table.Column<int>(nullable: true),
-                    TermId = table.Column<int>(nullable: true),
+                    TeacherId = table.Column<int>(nullable: false),
+                    TermId = table.Column<int>(nullable: false),
                     TotalTime = table.Column<decimal>(nullable: false)
                 },
                 constraints: table =>
@@ -149,19 +169,19 @@ namespace OnlineCourse.Entity.Migrations
                         column: x => x.CourseId,
                         principalTable: "Courses",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Sections_Users_TeacherId",
                         column: x => x.TeacherId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Sections_Terms_TermId",
                         column: x => x.TermId,
                         principalTable: "Terms",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -172,7 +192,7 @@ namespace OnlineCourse.Entity.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Amount = table.Column<decimal>(nullable: false),
                     Date = table.Column<DateTime>(nullable: false),
-                    EnrollmentId = table.Column<int>(nullable: true),
+                    EnrollmentId = table.Column<int>(nullable: false),
                     Type = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -183,7 +203,53 @@ namespace OnlineCourse.Entity.Migrations
                         column: x => x.EnrollmentId,
                         principalTable: "Enrollments",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Presents",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    SectionId = table.Column<int>(nullable: false),
+                    Title = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Presents", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Presents_Sections_SectionId",
+                        column: x => x.SectionId,
+                        principalTable: "Sections",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ClassRooms",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ChangeTimePermit = table.Column<byte>(nullable: true),
+                    Date = table.Column<DateTime>(nullable: false),
+                    Description = table.Column<string>(nullable: true),
+                    EndedTime = table.Column<TimeSpan>(nullable: false),
+                    PresentId = table.Column<int>(nullable: false),
+                    Source = table.Column<string>(nullable: true),
+                    StartedTime = table.Column<TimeSpan>(nullable: false),
+                    Status = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClassRooms", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ClassRooms_Presents_PresentId",
+                        column: x => x.PresentId,
+                        principalTable: "Presents",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -192,9 +258,10 @@ namespace OnlineCourse.Entity.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    EnrollmentId = table.Column<int>(nullable: true),
+                    Activity = table.Column<int>(nullable: false),
+                    EnrollmentId = table.Column<int>(nullable: false),
                     Markdown = table.Column<decimal>(nullable: false),
-                    SectionId = table.Column<int>(nullable: true)
+                    PresentId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -204,11 +271,11 @@ namespace OnlineCourse.Entity.Migrations
                         column: x => x.EnrollmentId,
                         principalTable: "Enrollments",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_EnrollmentsDetails_Sections_SectionId",
-                        column: x => x.SectionId,
-                        principalTable: "Sections",
+                        name: "FK_EnrollmentsDetails_Presents_PresentId",
+                        column: x => x.PresentId,
+                        principalTable: "Presents",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -221,19 +288,62 @@ namespace OnlineCourse.Entity.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     DayOfWeek = table.Column<int>(nullable: false),
                     EndTime = table.Column<TimeSpan>(nullable: false),
-                    SectionId = table.Column<int>(nullable: true),
+                    PresentId = table.Column<int>(nullable: false),
                     StartTime = table.Column<TimeSpan>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Schedules", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Schedules_Sections_SectionId",
-                        column: x => x.SectionId,
-                        principalTable: "Sections",
+                        name: "FK_Schedules_Presents_PresentId",
+                        column: x => x.PresentId,
+                        principalTable: "Presents",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ClassRoomDetails",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ClassRoomId = table.Column<int>(nullable: false),
+                    Kind = table.Column<int>(nullable: false),
+                    Source = table.Column<string>(nullable: true),
+                    StudentId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClassRoomDetails", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ClassRoomDetails_ClassRooms_ClassRoomId",
+                        column: x => x.ClassRoomId,
+                        principalTable: "ClassRooms",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ClassRoomDetails_Users_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClassRoomDetails_ClassRoomId",
+                table: "ClassRoomDetails",
+                column: "ClassRoomId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClassRoomDetails_StudentId",
+                table: "ClassRoomDetails",
+                column: "StudentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClassRooms_PresentId",
+                table: "ClassRooms",
+                column: "PresentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Enrollments_StudentId",
@@ -251,9 +361,9 @@ namespace OnlineCourse.Entity.Migrations
                 column: "EnrollmentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EnrollmentsDetails_SectionId",
+                name: "IX_EnrollmentsDetails_PresentId",
                 table: "EnrollmentsDetails",
-                column: "SectionId");
+                column: "PresentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Payments_EnrollmentId",
@@ -261,9 +371,14 @@ namespace OnlineCourse.Entity.Migrations
                 column: "EnrollmentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Schedules_SectionId",
-                table: "Schedules",
+                name: "IX_Presents_SectionId",
+                table: "Presents",
                 column: "SectionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Schedules_PresentId",
+                table: "Schedules",
+                column: "PresentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Sections_CourseId",
@@ -284,7 +399,13 @@ namespace OnlineCourse.Entity.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "ClassRoomDetails");
+
+            migrationBuilder.DropTable(
                 name: "EnrollmentsDetails");
+
+            migrationBuilder.DropTable(
+                name: "Galleries");
 
             migrationBuilder.DropTable(
                 name: "Histories");
@@ -296,7 +417,13 @@ namespace OnlineCourse.Entity.Migrations
                 name: "Schedules");
 
             migrationBuilder.DropTable(
+                name: "ClassRooms");
+
+            migrationBuilder.DropTable(
                 name: "Enrollments");
+
+            migrationBuilder.DropTable(
+                name: "Presents");
 
             migrationBuilder.DropTable(
                 name: "Sections");

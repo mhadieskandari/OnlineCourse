@@ -20,8 +20,28 @@ namespace OnlineCourse.Entity
         public DbSet<Enrollment> Enrollments { get; set; }
         public DbSet<EnrollmentDetails> EnrollmentsDetails { get; set; }
         public DbSet<Course> Courses { get; set; }
-    }
 
+        public DbSet<ClassRoomDetails> ClassRoomDetails { get; set; }
+        public DbSet<ClassRoom> ClassRooms { get; set; }
+        public DbSet<Present> Presents { get; set; }
+
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<Present>()
+                .HasMany(c => c.EnrollmentDetails)
+                .WithOne(e => e.Present).OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<User>()
+                .HasMany(c => c.ClassRoomDetails)
+                .WithOne(e => e.Student).OnDelete(DeleteBehavior.Restrict);
+
+
+        }
+
+    }
 
 
 }
