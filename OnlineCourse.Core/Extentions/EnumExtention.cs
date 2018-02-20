@@ -167,6 +167,18 @@ namespace OnlineCourse.Core.Extentions
                 Text = v.ToString("d", null),
                 Value = Localizer[(v as Enum).ToString()].ToString(),
             });
+            return enumObj.HasValue? new SelectList(values, "Text", "Value", enumObj.Value.GetHashCode()) : new SelectList(values, "Text", "Value");             
+        }
+
+        public static SelectList GetEnumKeyValueSelectList<TEnum>(this IHtmlHelper htmlHelper, TEnum? enumObj)
+          where TEnum : struct, IComparable, IFormattable, IConvertible
+        {
+            var values = ((TEnum[])Enum.GetValues(typeof(TEnum))).Select(v => new SelectListItem
+            {
+
+                Text = v.ToString("d", null),
+                Value = (v as Enum).ToString()
+            });
             var ss = enumObj.Value.GetHashCode();
             return new SelectList(values, "Text", "Value", ss);
         }

@@ -11,5 +11,7 @@ namespace OnlineCourse.Entity.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public EducationLevel Level { get; set; }
+
+        public ICollection<Section> Sections { set; get; }
     }
 }

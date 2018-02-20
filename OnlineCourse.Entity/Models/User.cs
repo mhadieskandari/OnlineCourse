@@ -115,6 +115,8 @@ namespace OnlineCourse.Entity.Models
         public decimal? Sharj { get; set; }
 
         public ICollection<ClassRoomDetails> ClassRoomDetails { set; get; }
+
+        public ICollection<Section> Sections { set; get; }
     }
 
 

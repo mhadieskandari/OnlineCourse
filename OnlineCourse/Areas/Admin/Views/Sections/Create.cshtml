@@ -1,6 +1,6 @@
-﻿@model OnlineCourse.Entity.Models.Section
+﻿@model OnlineCourse.Panel.Utils.ViewModels.Areas.Admin.SectionViewModel
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "ایجاد ";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
@@ -9,36 +9,46 @@
     <div class="row">
         <div class="col-md-12 col-lg-10 col-sm-12 col-xs-12 col-center-md ">
             @*@Html.Partial("/Views/Shared/_Notifications.cshtml")*@
-            <form asp-action="Create" method="Post" enctype="multipart/form-data">
-                <div class="box">
+            <form asp-action="Create" method="Post">
+                <div class="box box-default">
                     <div class="box-header with-border">
                         <b>@ViewData["Title"]</b>
                     </div>
                     <div class="box-body">
-                        <div class="form-horizontal">
-                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                            <div class="row">
-                                <div class="col-md-6 col-sm-12 col-xs-12">
-                                    <label asp-for="TotalTime" class="control-label"></label>
-                                    <input asp-for="TotalTime" class="form-control" />
-                                    <span asp-validation-for="TotalTime" class="text-danger"></span>
-                                </div>
-                                <div class="col-md-6 col-sm-12 col-xs-12">
-                                    <label asp-for="HourlyPrice" class="control-label"></label>
-                                    <input asp-for="HourlyPrice" class="form-control" />
-                                    <span asp-validation-for="HourlyPrice" class="text-danger"></span>
-                                </div>
-
-                            </div>
-
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="col-md-6 col-sm-12 col-xs-12">
+                            <label asp-for="TotalTime" class="control-label"></label>
+                            <input asp-for="TotalTime" class="form-control" />
+                            <span asp-validation-for="TotalTime" class="text-danger"></span>
                         </div>
-                    </div>
-                        <div class="box-footer">
-                            <button type="submit" class="btn btn-success  pull-right"><i class="fa fa-save"></i></button>
-                            <a asp-action="Index" class="btn btn-info  pull-left"><i class="fa fa-backward"></i></a>
-
+                        <div class="col-md-6 col-sm-12 col-xs-12">
+                            <label asp-for="HourlyPrice" class="control-label"></label>
+                            <input asp-for="HourlyPrice" class="form-control" />
+                            <span asp-validation-for="HourlyPrice" class="text-danger"></span>
                         </div>
+                        <div class="col-md-6 col-sm-12 col-xs-12">
+                            <label asp-for="TeacherId" class="control-label"></label>
+                            <select asp-for="TeacherId" class="form-control" asp-items="Model.Teachers"  ></select>
+                            <span asp-validation-for="TeacherId" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 col-sm-12 col-xs-12">
+                            <label asp-for="TermId" class="control-label"></label>
+                            <select asp-for="TermId" class="form-control" asp-items="Model.Terms" ></select>
+                            <span asp-validation-for="TermId" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 col-sm-12 col-xs-12">
+                            <label asp-for="CourseId" class="control-label"></label>
+                            <select asp-for="CourseId" class="form-control" asp-items="Model.Courses" ></select>
+                            <span asp-validation-for="CourseId" class="text-danger"></span>
+                        </div>
+
                     </div>
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-success  box-button"><i class="fa fa-save"></i></button>
+                        <a asp-action="Index" class="btn btn-info  box-title"><i class="fa fa-backward"></i></a>
+
+                    </div>
+                </div>
 
             </form>
 
@@ -58,19 +68,4 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-
-    <script>
-        $(document).ready(function () {
-            $("[name=ExpireDate")
-                .datepicker({
-                    dateFormat: "yy/mm/dd",
-                    //minDate: "0",
-                    isRTL: true,
-                    //maxDate: "+30D"
-                });
-
-        });
-
-
-    </script>
 }

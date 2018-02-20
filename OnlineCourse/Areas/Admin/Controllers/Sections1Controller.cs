@@ -7,27 +7,27 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OnlineCourse.Entity;
 using OnlineCourse.Entity.Models;
-using OnlineCourse.Panel.Utils.ViewModels.Areas.Admin;
 
 namespace OnlineCourse.Panel.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class SectionsController : Controller
+    public class Sections1Controller : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public SectionsController(ApplicationDbContext context)
+        public Sections1Controller(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Admin/Sections
+        // GET: Admin/Sections1
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Sections.ToListAsync());
+            var applicationDbContext = _context.Sections.Include(s => s.Course).Include(s => s.Teacher).Include(s => s.Term);
+            return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Admin/Sections/Details/5
+        // GET: Admin/Sections1/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -36,6 +36,9 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
             }
 
             var section = await _context.Sections
+                .Include(s => s.Course)
+                .Include(s => s.Teacher)
+                .Include(s => s.Term)
                 .SingleOrDefaultAsync(m => m.Id == id);
             if (section == null)
             {
@@ -45,22 +48,21 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
             return View(section);
         }
 
-        // GET: Admin/Sections/Create
+        // GET: Admin/Sections1/Create
         public IActionResult Create()
         {
-            var model = new SectionViewModel(_context);
-
-            ViewBag.Teachers =new SelectList( _context.Users.ToList(),"Id","FullName");
-
-            return View(model);
+            ViewData["CourseId"] = new SelectList(_context.Courses, "Id", "Name");
+            ViewData["TeacherId"] = new SelectList(_context.Users, "Id", "FullName");
+            ViewData["TermId"] = new SelectList(_context.Terms, "Id", "Description");
+            return View();
         }
 
-        // POST: Admin/Sections/Create
+        // POST: Admin/Sections1/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,TotalTime,HourlyPrice")] Section section)
+        public async Task<IActionResult> Create([Bind("Id,TotalTime,HourlyPrice,CourseId,TermId,TeacherId,Activity")] Section section)
         {
             if (ModelState.IsValid)
             {
@@ -68,10 +70,13 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CourseId"] = new SelectList(_context.Courses, "Id", "Name", section.CourseId);
+            ViewData["TeacherId"] = new SelectList(_context.Users, "Id", "FullName", section.TeacherId);
+            ViewData["TermId"] = new SelectList(_context.Terms, "Id", "Description", section.TermId);
             return View(section);
         }
 
-        // GET: Admin/Sections/Edit/5
+        // GET: Admin/Sections1/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -84,15 +89,18 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
             {
                 return NotFound();
             }
+            ViewData["CourseId"] = new SelectList(_context.Courses, "Id", "Name", section.CourseId);
+            ViewData["TeacherId"] = new SelectList(_context.Users, "Id", "FullName", section.TeacherId);
+            ViewData["TermId"] = new SelectList(_context.Terms, "Id", "Description", section.TermId);
             return View(section);
         }
 
-        // POST: Admin/Sections/Edit/5
+        // POST: Admin/Sections1/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,TotalTime,HourlyPrice")] Section section)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,TotalTime,HourlyPrice,CourseId,TermId,TeacherId,Activity")] Section section)
         {
             if (id != section.Id)
             {
@@ -119,10 +127,13 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CourseId"] = new SelectList(_context.Courses, "Id", "Name", section.CourseId);
+            ViewData["TeacherId"] = new SelectList(_context.Users, "Id", "FullName", section.TeacherId);
+            ViewData["TermId"] = new SelectList(_context.Terms, "Id", "Description", section.TermId);
             return View(section);
         }
 
-        // GET: Admin/Sections/Delete/5
+        // GET: Admin/Sections1/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -131,6 +142,9 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
             }
 
             var section = await _context.Sections
+                .Include(s => s.Course)
+                .Include(s => s.Teacher)
+                .Include(s => s.Term)
                 .SingleOrDefaultAsync(m => m.Id == id);
             if (section == null)
             {
@@ -140,7 +154,7 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
             return View(section);
         }
 
-        // POST: Admin/Sections/Delete/5
+        // POST: Admin/Sections1/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

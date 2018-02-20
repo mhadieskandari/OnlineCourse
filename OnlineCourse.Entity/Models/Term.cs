@@ -15,5 +15,7 @@ namespace OnlineCourse.Entity.Models
         public string StartDate { get; set; }
         public string EndDate { get; set; }
         public TermType Type { get; set; }
+
+        public ICollection<Section> Sections { set; get; }
     }
 }

@@ -256,7 +256,7 @@
                 <!-- search form -->
                 <form action="#" method="get" class="sidebar-form">
                     <div class="input-group">
-                        <input type="text" name="q" class="form-control" placeholder="@localizer["Search"]">
+                        <input type="text" name="q" class="form-control" placeholder="جستجو">@*@localizer["Search"]*@ 
                         <span class="input-group-btn">
                             <button type="submit" name="search" id="search-btn" class="btn btn-flat">
                                 <i class="fa fa-search"></i>
@@ -267,16 +267,16 @@
                 <!-- /.search form -->
                 <!-- sidebar menu: : style can be found in sidebar.less -->
                 <ul class="sidebar-menu">
-                    <li class="header" style="color: white"> @localizer["MainMenu"]</li>
+                    <li class="header" style="color: white"> @*@localizer["MainMenu"]*@ منوی اصلی</li>
                     <!-- Add new comment here (FR) -->
                     <li class="treeview">
                         <a asp-action="Index" asp-controller="Users" asp-area="Admin">
-                            <i class="fa fa-user"></i> <span>@localizer["Users"]</span>
+                            <i class="fa fa-user"></i> <span>@*@localizer["Users"]*@ کاربران</span>
                         </a>
                     </li>
                     <li class="treeview">
                         <a asp-action="Index" asp-controller="Terms" asp-area="Admin">
-                            <i class="fa fa-user"></i> <span>@localizer["Terms"]</span>
+                            <i class="fa fa-user"></i> <span>@*@localizer["Terms"]*@ترم های تحصیلی</span>
                         </a>
                     </li>
                     <li class="treeview">
@@ -286,12 +286,12 @@
                     </li>
                     <li class="treeview">
                         <a asp-action="Index" asp-controller="Sections" asp-area="Admin">
-                            <i class="fa fa-user"></i> <span>@localizer["Sections"]</span>
+                            <i class="fa fa-user"></i> <span>@*@localizer["Sections"]*@دوره</span>
                         </a>
                     </li>
                     <li class="treeview">
                         <a asp-action="Index" asp-controller="Courses" asp-area="Admin">
-                            <i class="fa fa-user"></i> <span>@localizer["Courses"]</span>
+                            <i class="fa fa-user"></i> <span>@*@localizer["Courses"]*@لیست دروس</span>
                         </a>
                     </li>
                     @*<li class="treeview">

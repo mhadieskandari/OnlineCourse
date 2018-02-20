@@ -1,39 +1,51 @@
 ﻿@model OnlineCourse.Entity.Models.Course
-
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Create</h2>
 
-<h4>Course</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Level" class="control-label"></label>
-                <select asp-for="Level" class="form-control"></select>
-                <span asp-validation-for="Level" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </form>
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-md-12 col-lg-10 col-sm-12 col-xs-12 col-center-md ">
+            @Html.Partial("/Views/Shared/_Notifications.cshtml")
+            <form asp-action="Create" method="Post">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <b>@ViewData["Title"]</b>
+                    </div>
+                    <div class="box-body">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                            <label asp-for="Name" class="control-label"></label>
+                            <input asp-for="Name" class="form-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                            <label asp-for="Level" class="control-label"></label>
+                            <select asp-for="Level" class="form-control" asp-items="Html.GetEnumKeyValueSelectList<EducationLevel>(null,localizer)"></select>                            
+                            <span asp-validation-for="Level" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-success box-button"><i class="fa fa-plus"></i></button>
+                        <a asp-action="Index" class="btn btn-info  box-title"><i class="fa fa-backward"></i></a>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
+    <!-- /.row -->
+</section>
+<!-- /.content -->
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
 }
+
