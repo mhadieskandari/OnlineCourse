@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<OnlineCourse.Entity.Models.Section>
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "لیست دوره ها";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
@@ -12,32 +12,32 @@
         <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
             @Html.Partial("/Views/Shared/_Notifications.cshtml")
             @*<div class="box box-solid">
-                <div class="box-header with-border">
-                    <button type="button" title="@localizer["OpenClose"]" class="btn btn-default btn-sm box-button" data-toggle="collapse" data-target="#collapse" aria-expanded="false" aria-controls="collapse"><i class="fa fa-plus"></i></button>
-                    <p class="box-title" style="margin-bottom: 5px;"><i class="fa fa-search"></i> <b> @localizer["Search"]  </b></p>
-                </div>
-                <div class="box-body clearfix collapse" id="collapse">
-                    <form asp-action="Index">
-                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group">
-                            <label>ID</label>
-                            <input type="text" class="form-control pnum" value="" placeholder="" style="" id="id" name="id">
-                        </div>
-                        <div class="col-lg-3 col-md-3  col-sm-6 col-xs-12 form-group">
-                            <label>@localizer["FullName"]</label>
-                            <input type="text" class="form-control pnum" value="" placeholder="" style="" id="fullname" name="fullname">
-                        </div>
-                        <div class="col-lg-3 col-md-3  col-sm-6 col-xs-12 form-group">
-                            <label>@localizer["Email"]</label>
-                            <input type="text" class="form-control pnum" value="" placeholder="" style="" id="email" name="email">
-                        </div>
-                        <div class="col-lg-3 col-md-3  col-sm-6 col-xs-12 form-group">
-                            <label>@localizer["UserName"]</label>
-                            <input type="text" class="form-control pnum" value="" placeholder="" style="" id="username" name="username">
-                        </div>
-                        <button asp-action="Index" type="submit" class="btn btn-default btn-sm"><i class="fa fa-search"></i></button>
-                    </form>
-                </div>
-            </div>*@
+                    <div class="box-header with-border">
+                        <button type="button" title="@localizer["OpenClose"]" class="btn btn-default btn-sm box-button" data-toggle="collapse" data-target="#collapse" aria-expanded="false" aria-controls="collapse"><i class="fa fa-plus"></i></button>
+                        <p class="box-title" style="margin-bottom: 5px;"><i class="fa fa-search"></i> <b> @localizer["Search"]  </b></p>
+                    </div>
+                    <div class="box-body clearfix collapse" id="collapse">
+                        <form asp-action="Index">
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group">
+                                <label>ID</label>
+                                <input type="text" class="form-control pnum" value="" placeholder="" style="" id="id" name="id">
+                            </div>
+                            <div class="col-lg-3 col-md-3  col-sm-6 col-xs-12 form-group">
+                                <label>@localizer["FullName"]</label>
+                                <input type="text" class="form-control pnum" value="" placeholder="" style="" id="fullname" name="fullname">
+                            </div>
+                            <div class="col-lg-3 col-md-3  col-sm-6 col-xs-12 form-group">
+                                <label>@localizer["Email"]</label>
+                                <input type="text" class="form-control pnum" value="" placeholder="" style="" id="email" name="email">
+                            </div>
+                            <div class="col-lg-3 col-md-3  col-sm-6 col-xs-12 form-group">
+                                <label>@localizer["UserName"]</label>
+                                <input type="text" class="form-control pnum" value="" placeholder="" style="" id="username" name="username">
+                            </div>
+                            <button asp-action="Index" type="submit" class="btn btn-default btn-sm"><i class="fa fa-search"></i></button>
+                        </form>
+                    </div>
+                </div>*@
             <div class="box">
                 <div class="box-header with-border">
                     <b class="box-title">@ViewData["Title"] </b>
@@ -51,7 +51,7 @@
                             <p class="text-center">
                                 <i class="fa fa-frown-o fa-3x" aria-hidden="true"></i>
                             </p>
-                            <h4 class="text-center">@localizer["NoThingForShow"]</h4>
+                            <h4 class="text-center">اطلاعاتی برای نمایش وجود ندارد.</h4>
                             <hr />
                         </div>
                     }
@@ -67,10 +67,16 @@
                                         @Html.DisplayNameFor(model => model.HourlyPrice)
                                     </th>
                                     <th>
-                                        @Html.DisplayNameFor(model => model.Teacher)
+                                        @Html.DisplayNameFor(model => model.TeacherId)
                                     </th>
                                     <th>
-                                        @Html.DisplayNameFor(model => model.Term)
+                                        @Html.DisplayNameFor(model => model.TermId)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.CourseId)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Activity)
                                     </th>
                                     <th></th>
                                 </tr>
@@ -91,13 +97,19 @@
                                         <td>
                                             @Html.DisplayFor(modelItem => item.Term.Description)
                                         </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Course.Name)
+                                        </td>
+                                        <td>
+                                            @EnumExtention.GetDescription((ActiveState)item.Activity)
+                                        </td>
 
                                         <td class="table-action">
                                             @*<a asp-action="Index" asp-controller="Galleries" asp-route-publicId="@item.Id" asp-route-kind="@((byte)GalleryKind.UserGallery)" class="btn btn-sm  btn-default" title="@localizer["Galleries"]"><i class="fa fa-picture-o"></i></a>*@
-                                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm  btn-default" title="@localizer["Detail"]"> <i class="fa fa-eye"></i></a>
+                                            @*<a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm  btn-default" title="جزئیات"> <i class="fa fa-eye"></i></a>*@
                                             @*<a asp-action="Index" asp-controller="Foods" asp-route-userId="@item.Id" class="btn btn-sm  btn-default" title="@localizer["ShowFoods"]"> <i class="fa fa-cutlery" aria-hidden="true"></i></a>*@
-                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm  btn-info" title="@localizer["Edit"]"><i class="fa fa-edit"></i></a>
-                                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger" title="@localizer["Remove"]"><i class="fa fa-remove"></i></a>
+                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm  btn-info" title="ویرایش"><i class="fa fa-edit"></i></a>
+                                            <button class="btn btn-sm btn-danger" title="حذف" data-toggle="modal" data-target="#deleteModal" data-id="@item.Id"><i class="fa fa-remove"></i></button>
                                         </td>
                                     </tr>
                                 }
@@ -109,7 +121,6 @@
                 <div class="box-footer">
                     <div class="row">
                         <div class="col-md-1 col-md-offset-11 col-center-md">
-
                             <paginationag-helper count="@((Model == null || !Model.Any())?0:Model.Count())" pagination="@ViewBag.Pagination"></paginationag-helper>
                         </div>
                     </div>
@@ -127,3 +138,16 @@
     <!-- /.row -->
 </section>
 <!-- /.content -->
+
+@Html.Partial("~/Areas/Admin/Views/Sections/_Delete.cshtml")
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('button[data-id]').on("click",function () { 
+                var id = $(this).data("id");
+                $("#Id").val(id);
+            });
+    });
+    </script>
+}

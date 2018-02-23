@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using OnlineCourse.Entity;
 using OnlineCourse.Entity.Models;
 using OnlineCourse.Panel.Utils.ViewModels.Areas.Admin;
+using AutoMapper;
 
 namespace OnlineCourse.Panel.Areas.Admin.Controllers
 {
@@ -15,16 +16,18 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
     public class SectionsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public SectionsController(ApplicationDbContext context)
+        public SectionsController(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: Admin/Sections
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Sections.ToListAsync());
+            return View(await _context.Sections.Include(t=>t.Term).Include(c=>c.Course).Include(u=>u.Teacher).ToListAsync());
         }
 
         // GET: Admin/Sections/Details/5
@@ -48,10 +51,7 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
         // GET: Admin/Sections/Create
         public IActionResult Create()
         {
-            var model = new SectionViewModel(_context);
-
-            ViewBag.Teachers =new SelectList( _context.Users.ToList(),"Id","FullName");
-
+            var model = new SectionViewModel(_context);          
             return View(model);
         }
 
@@ -60,11 +60,12 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,TotalTime,HourlyPrice")] Section section)
+        public async Task<IActionResult> Create(SectionViewModel section)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(section);
+                var DbSection = _mapper.Map<Section>(section);
+                _context.Add(DbSection);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -84,7 +85,9 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            return View(section);
+            var model = _mapper.Map<SectionViewModel>(section);
+            model.IsEdit(_context);
+            return View(model);
         }
 
         // POST: Admin/Sections/Edit/5
@@ -92,7 +95,7 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,TotalTime,HourlyPrice")] Section section)
+        public async Task<IActionResult> Edit(int id, SectionViewModel section)
         {
             if (id != section.Id)
             {
@@ -103,7 +106,8 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
             {
                 try
                 {
-                    _context.Update(section);
+                    var DbSection = _mapper.Map<Section>(section);
+                    _context.Update(DbSection);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

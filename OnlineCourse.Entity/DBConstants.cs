@@ -49,19 +49,19 @@ namespace OnlineCourse.Entity
     public enum GeneralState
     {
         //[DisplayName("Disable")]
-        [Description("Disable")]
+        [Description("غیرفعال")]
         Disable = 0,
         //[DisplayName("Enable")]
-        [Description("Enable")]
+        [Description("فعال")]
         Enable = 1
 
     }
 
     public enum ValidationState
     {
-        [Description("Invalid")]
+        [Description("نامعتبر")]
         Invalid = 0,
-        [Description("Valid")]
+        [Description("معتبر")]
         Valid = 1
 
     }
@@ -123,7 +123,9 @@ namespace OnlineCourse.Entity
 
     public enum ActiveState
     {
+        [Description("غیرفعال")]
         DeActive = 0,
+        [Description("فعال")]
         Active = 1
     }
 
