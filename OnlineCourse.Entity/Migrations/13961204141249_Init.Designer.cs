@@ -11,7 +11,7 @@ using System;
 namespace OnlineCourse.Entity.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("13961128190840_Init")]
+    [Migration("13961204141249_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -275,6 +275,10 @@ namespace OnlineCourse.Entity.Migrations
 
                     b.Property<string>("StartDate");
 
+                    b.Property<int>("State");
+
+                    b.Property<string>("Title");
+
                     b.Property<int>("Type");
 
                     b.Property<short>("Year");
@@ -448,17 +452,17 @@ namespace OnlineCourse.Entity.Migrations
             modelBuilder.Entity("OnlineCourse.Entity.Models.Section", b =>
                 {
                     b.HasOne("OnlineCourse.Entity.Models.Course", "Course")
-                        .WithMany()
+                        .WithMany("Sections")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("OnlineCourse.Entity.Models.User", "Teacher")
-                        .WithMany()
+                        .WithMany("Sections")
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("OnlineCourse.Entity.Models.Term", "Term")
-                        .WithMany()
+                        .WithMany("Sections")
                         .HasForeignKey("TermId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

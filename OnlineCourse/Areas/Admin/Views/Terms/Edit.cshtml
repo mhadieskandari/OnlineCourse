@@ -1,60 +1,91 @@
 ﻿@model OnlineCourse.Entity.Models.Term
-
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "ویرایش ترم";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Edit</h2>
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-md-12 col-lg-10 col-sm-12 col-xs-12 col-center-md ">
+            @*@Html.Partial("/Views/Shared/_Notifications.cshtml")*@
+            <form asp-action="Edit">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <b>@ViewData["Title"]</b>
+                    </div>
+                    <div class="box-body">
 
-<h4>Term</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Year" class="control-label"></label>
-                <input asp-for="Year" class="form-control" />
-                <span asp-validation-for="Year" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="YearTerm" class="control-label"></label>
-                <input asp-for="YearTerm" class="form-control" />
-                <span asp-validation-for="YearTerm" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="StartDate" class="control-label"></label>
-                <input asp-for="StartDate" class="form-control" />
-                <span asp-validation-for="StartDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EndDate" class="control-label"></label>
-                <input asp-for="EndDate" class="form-control" />
-                <span asp-validation-for="EndDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Type" class="control-label"></label>
-                <select asp-for="Type" class="form-control"></select>
-                <span asp-validation-for="Type" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
-        </form>
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="Id" />
+                        <div class="form-group col-md-6">
+                            <label asp-for="Title" class="control-label"></label>
+                            <input asp-for="Title" class="form-control" />
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="Year" class="control-label"></label>
+                            <input asp-for="Year" class="form-control" />
+                            <span asp-validation-for="Year" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="YearTerm" class="control-label"></label>
+                            <input asp-for="YearTerm" class="form-control" />
+                            <span asp-validation-for="YearTerm" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="Description" class="control-label"></label>
+                            <input asp-for="Description" class="form-control" />
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="StartDate" class="control-label"></label>
+                            <input asp-for="StartDate" class="form-control date" />
+                            <span asp-validation-for="StartDate" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="EndDate" class="control-label"></label>
+                            <input asp-for="EndDate" class="form-control date" />
+                            <span asp-validation-for="EndDate" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="Type" class="control-label"></label>
+                            <select asp-for="Type" class="form-control" asp-items="@Html.GetEnumKeyDescriptionSelectList<TermType>(null)"></select>
+                            <span asp-validation-for="Type" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="State" class="control-label"></label>
+                            <select asp-for="State" class="form-control" asp-items="@Html.GetEnumKeyDescriptionSelectList<TermState>(null)"></select>
+                            <span asp-validation-for="State" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="box-footer">
+                        <div class="col-md-6">
+                            <button type="submit" class="btn btn-success  box-title"><i class="fa fa-save"></i></button>
+                        </div>
+                        <div class="col-md-6">
+                            <a asp-action="Index" class="btn btn-info   box-button"><i class="fa fa-backward"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+
+
+
+        </div>
+
+
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
+    <!-- /.row -->
+</section>
+<!-- /.content -->
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(document).ready(function () {
+            $(".date").datetimepicker();
+        });
+    </script>
+
 }

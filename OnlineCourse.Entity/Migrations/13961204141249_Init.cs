@@ -72,6 +72,8 @@ namespace OnlineCourse.Entity.Migrations
                     Description = table.Column<string>(nullable: true),
                     EndDate = table.Column<string>(nullable: true),
                     StartDate = table.Column<string>(nullable: true),
+                    State = table.Column<int>(nullable: false),
+                    Title = table.Column<string>(nullable: true),
                     Type = table.Column<int>(nullable: false),
                     Year = table.Column<short>(nullable: false),
                     YearTerm = table.Column<short>(nullable: false)

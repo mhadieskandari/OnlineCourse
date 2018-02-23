@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<OnlineCourse.Entity.Models.Term>
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "لیست ترم های تحصیلی";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
@@ -21,7 +21,7 @@
                             <p class="text-center">
                                 <i class="fa fa-frown-o fa-3x" aria-hidden="true"></i>
                             </p>
-                            <h4 class="text-center">@localizer["NoThingForShow"]</h4>
+                            <h4 class="text-center">اطلاعاتی برای نمایش وجود ندارد.</h4>
                             <hr />
                         </div>
                     }
@@ -30,6 +30,9 @@
                         <table class="table">
                             <thead>
                                 <tr>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Title)
+                                    </th>
                                     <th>
                                         @Html.DisplayNameFor(model => model.Year)
                                     </th>
@@ -48,6 +51,9 @@
                                     <th>
                                         @Html.DisplayNameFor(model => model.Type)
                                     </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.State)
+                                    </th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -55,6 +61,9 @@
                                 @foreach (var item in Model)
                                 {
                                     <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Title)
+                                        </td>
                                         <td>
                                             @Html.DisplayFor(modelItem => item.Year)
                                         </td>
@@ -74,9 +83,14 @@
                                             @Html.DisplayFor(modelItem => item.Type)
                                         </td>
                                         <td>
-                                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                                            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                            @EnumExtention.GetDescription((TermState)item.State)
+                                        </td>
+                                        <td>
+                                            @*<a asp-action="Index" asp-controller="Galleries" asp-route-publicId="@item.Id" asp-route-kind="@((byte)GalleryKind.UserGallery)" class="btn btn-sm  btn-default" title="@localizer["Galleries"]"><i class="fa fa-picture-o"></i></a>*@
+                                            @*<a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm  btn-default" title="جزئیات"> <i class="fa fa-eye"></i></a>*@
+                                            @*<a asp-action="Index" asp-controller="Foods" asp-route-userId="@item.Id" class="btn btn-sm  btn-default" title="@localizer["ShowFoods"]"> <i class="fa fa-cutlery" aria-hidden="true"></i></a>*@
+                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm  btn-info" title="ویرایش"><i class="fa fa-edit"></i></a>
+                                            <button class="btn btn-sm btn-danger" title="حذف" data-toggle="modal" data-target="#deleteModal" data-id="@item.Id"><i class="fa fa-remove"></i></button>
                                         </td>
                                     </tr>
                                 }
@@ -108,3 +122,18 @@
     <!-- /.row -->
 </section>
 <!-- /.content -->
+
+
+
+@Html.Partial("~/Areas/Admin/Views/Terms/_Delete.cshtml")
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('button[data-id]').on("click",function () {
+                var id = $(this).data("id");
+                $("#Id").val(id);
+            });
+    });
+    </script>
+}

@@ -57,6 +57,19 @@ namespace OnlineCourse.Entity
 
     }
 
+    public enum TermState
+    {
+        [Description("غیرفعال")]
+        Disable = 0,
+        [Description("بزودی")]
+        CommingSoon = 1,
+        [Description("درحال برگزاری")]
+        Enable = 2,        
+        [Description("پایان یافته")]
+        Finish =3
+
+    }
+
     public enum ValidationState
     {
         [Description("نامعتبر")]

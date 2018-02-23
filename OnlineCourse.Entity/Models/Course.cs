@@ -9,7 +9,10 @@ namespace OnlineCourse.Entity.Models
     {
         [Key]
         public int Id { get; set; }
+        [Display(Name = "نام درس")]
         public string Name { get; set; }
+
+        [Display(Name = "مقطع/پایه تحصیلی")]
         public EducationLevel Level { get; set; }
 
         public ICollection<Section> Sections { set; get; }
