@@ -1356,39 +1356,39 @@ h1[id] {
     white-space: normal
 }
 
-.bs-table th small, .responsive-utilities th small {
+.bs-table th small, .responsive-Utils th small {
     display: block;
     font-weight: 400;
     color: #999
 }
 
-.responsive-utilities tbody th {
+.responsive-Utils tbody th {
     font-weight: 400
 }
 
-.responsive-utilities td {
+.responsive-Utils td {
     text-align: center
 }
 
-    .responsive-utilities td.is-visible {
+    .responsive-Utils td.is-visible {
         color: #468847;
         background-color: #dff0d8 !important
     }
 
-    .responsive-utilities td.is-hidden {
+    .responsive-Utils td.is-hidden {
         color: #ccc;
         background-color: #f9f9f9 !important
     }
 
-.responsive-utilities-test {
+.responsive-Utils-test {
     margin-top: 5px
 }
 
-    .responsive-utilities-test .col-xs-6 {
+    .responsive-Utils-test .col-xs-6 {
         margin-bottom: 10px
     }
 
-    .responsive-utilities-test span {
+    .responsive-Utils-test span {
         display: block;
         padding: 15px 10px;
         font-size: 14px;

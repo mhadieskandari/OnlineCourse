@@ -1,4 +1,4 @@
-﻿@model OnlineCourse.Panel.utilities.ViewModels.AccountViewModels.UserUpdateViewModel
+﻿@model OnlineCourse.Panel.Utils.ViewModels.AccountViewModels.UserUpdateViewModel
 @{
     ViewData["Title"] = localizer["UserInfo"];
 }
@@ -11,7 +11,7 @@
         right: 0px;
     }
 </style>
-@Html.BuildBreadcrumbNavigation(localizer)
+@*@Html.BuildBreadcrumbNavigation(localizer)*@
 <section class="contact-page inner-page">
     <div class="container">
         <div class="row">
@@ -123,7 +123,7 @@
 
     <!-- Modal -->
 
-    @Html.Partial("~/Views/Account/_ChangePassword.cshtml", new OnlineCourse.Panel.utilities.ViewModels.AccountViewModels.ChangePasswordViewModel() { Id = Model.Id })
+    @Html.Partial("~/Views/Account/_ChangePassword.cshtml", new OnlineCourse.Panel.Utils.ViewModels.AccountViewModels.ChangePasswordViewModel() { Id = Model.Id })
 
 
 </section>

@@ -1,5 +1,4 @@
 ﻿@using OnlineCourse.Core
-@using OnlineCourse.Panel.Core.Extentions
 @model OnlineCourse.Entity.Models.User
 
 @{
@@ -74,7 +73,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                            @*<div class="form-group col-md-6 col-sm-12 col-xs-12">
                                 <label asp-for="OnOff" class="col-md-3 control-label"></label>
                                 <div class="col-md-9">
                                     <span class="form-control">
@@ -84,20 +83,14 @@
                                         }
                                     </span>
                                 </div>
-                            </div>
+                            </div>*@
                             <div class="form-group col-md-6 col-sm-12 col-xs-12">
                                 <label asp-for="ExpireDate" class="col-md-3 control-label"></label>
                                 <div class="col-md-9">
                                     <span class="form-control">@Html.DisplayFor(model => model.ExpireDate)</span>
                                 </div>
                             </div>
-                            <div class="form-group col-md-6 col-sm-12 col-xs-12">
-                                <label asp-for="WorkDays" class="col-md-3 control-label"></label>
-                                <div class="col-md-9">
-                                    @*@Html.DisplayFor(model => model.WorkDays)*@
-                                    <input asp-for="WorkDays" class="form-control" type="hidden"/>
-                                </div>
-                            </div>
+                           
 
                         </div>
                         <div class="row">
@@ -107,13 +100,13 @@
                                     <textarea asp-for="Addrress" class="form-control" rows="5" disabled="disabled"></textarea>
                                 </div>
                             </div>
-                            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                            @*<div class="form-group col-md-6 col-sm-12 col-xs-12">
                                 <label asp-for="Des" class="col-md-3 control-label"></label>
                                 <div class="col-md-9">
                                     <textarea asp-for="Des" class="form-control" rows="5" disabled="disabled"></textarea>
                                     <span asp-validation-for="Des" class="text-danger"></span>
                                 </div>
-                            </div>
+                            </div>*@
                         </div>
                     </div>
 

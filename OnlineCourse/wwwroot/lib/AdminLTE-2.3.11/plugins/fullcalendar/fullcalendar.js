@@ -357,7 +357,7 @@ fc.applyAll = applyAll;
 fc.debounce = debounce;
 
 
-/* FullCalendar-specific DOM Utilities
+/* FullCalendar-specific DOM Utils
 ----------------------------------------------------------------------------------------------------------------------*/
 
 
@@ -507,7 +507,7 @@ function unsetScroller(containerEl) {
 }
 
 
-/* General DOM Utilities
+/* General DOM Utils
 ----------------------------------------------------------------------------------------------------------------------*/
 
 
@@ -548,7 +548,7 @@ function isPrimaryMouseButton(ev) {
 }
 
 
-/* FullCalendar-specific Misc Utilities
+/* FullCalendar-specific Misc Utils
 ----------------------------------------------------------------------------------------------------------------------*/
 
 
@@ -610,7 +610,7 @@ function smartProperty(obj, name) { // get a camel-cased/namespaced property of 
 }
 
 
-/* Date Utilities
+/* Date Utils
 ----------------------------------------------------------------------------------------------------------------------*/
 
 var dayIDs = [ 'sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat' ];
@@ -710,7 +710,7 @@ function isTimeString(str) {
 }
 
 
-/* General Utilities
+/* General Utils
 ----------------------------------------------------------------------------------------------------------------------*/
 
 var hasOwnPropMethod = {}.hasOwnProperty;
@@ -3082,7 +3082,7 @@ var Grid = fc.Grid = RowRenderer.extend({
 	},
 
 
-	/* Generic rendering utilities for subclasses
+	/* Generic rendering Utils for subclasses
 	------------------------------------------------------------------------------------------------------------------*/
 
 
@@ -3952,7 +3952,7 @@ Grid.mixin({
 });
 
 
-/* Utilities
+/* Utils
 ----------------------------------------------------------------------------------------------------------------------*/
 
 
@@ -6914,7 +6914,7 @@ var View = fc.View = Class.extend({
 
 
 
-	// Calendar-specific Date Utilities
+	// Calendar-specific Date Utils
 	// -----------------------------------------------------------------------------------
 
 

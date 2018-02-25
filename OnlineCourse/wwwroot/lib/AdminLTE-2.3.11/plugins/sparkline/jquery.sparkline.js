@@ -376,7 +376,7 @@
             '}';
 
     /**
-     * Utilities
+     * Utils
      */
 
     createClass = function (/* [baseclass, [mixin, ...]], definition */) {

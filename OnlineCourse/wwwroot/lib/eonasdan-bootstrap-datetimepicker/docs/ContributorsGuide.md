@@ -109,7 +109,7 @@ The component uses on `jQuery`, `moment.js` and `bootstrap` libraries.
 
 * `isValid(targetMoment, granularity)` - returns `true` if the `targetMoment` moment object is valid according to the components set validation rules (`min/maxDates`, `disabled/enabledDates` and `daysOfWeekDisabled`). You may pass a second variable to check only up the the specific granularity `year, month, day, hour, minute, second`
 
-#### Utilities
+#### Utils
 
 * `indexGivenDates (givenDatesArray)` - Function that takes the array from `enabledDates()` and `disabledDates()` public functions and stores them as object keys to enable quick lookup
 
