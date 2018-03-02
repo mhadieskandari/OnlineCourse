@@ -12,45 +12,45 @@ namespace OnlineCourse.Entity.Models
         [Key]
         public int Id { set; get; }
 
-        [Display(Name = "UserName")]
+        [Display(Name = "نام کاربری")]
         [MaxLength(100)]
         public string UserName { set; get; }
 
-        [Display(Name = "Email")]
+        [Display(Name = "ایمیل")]
         [MaxLength(100)]
         public string Email { set; get; }
 
-        [Display(Name = "FullName")]
+        [Display(Name = "نام و نام خانوادگی")]
         [MaxLength(20)]
         public string FullName { set; get; }
 
-        [Display(Name = "Password")]
+        [Display(Name = "رمز عبور")]
         [MaxLength(200)]
         public string Password { get; set; }
 
-        [Display(Name = "Mobile")]
+        [Display(Name = "تلفن همراه")]
         [MaxLength(50)]
         public string Mobile { get; set; }
 
-        [Display(Name = "Description")]
+        [Display(Name = "توضیحات")]
         [MaxLength(400)]
         public string Description { get; set; }
 
-        [Display(Name = "AccessLevel")]
+        [Display(Name = "سطح دسترسی")]
         public UserAccessLevel AccessLevel { get; set; }
 
-        [Display(Name = "Phone")]
+        [Display(Name = "تلفن ثابت")]
         [MaxLength(50)]
         public string Phone { get; set; }
 
-        [Display(Name = "State")]
+        [Display(Name = "وضعیت")]
         public byte? State { get; set; }
 
-        [Display(Name = "ActivationCode")]
+        [Display(Name = "کد فعال سازی")]
         [MaxLength(20)]
         public string ActivationCode { get; set; }
 
-        [Display(Name = "LastRequestActivationCode")]
+        [Display(Name = "آخرین درخواست کد فعال سازی")]
         [Column(TypeName = "datetime")]
         [DataType(DataType.Date)]
         public DateTime? LastRequestActivationCode { get; set; }
@@ -59,12 +59,12 @@ namespace OnlineCourse.Entity.Models
 
         public byte? ValidEmail { get; set; }
 
-        [Display(Name = "RegisterDate")]
+        [Display(Name = "تاریخ ثبت نام")]
         [Column(TypeName = "datetime")]
         [DataType(DataType.Date)]
         public DateTime? RegisterDate { get; set; }
 
-        [Display(Name = "LastLoginIp")]
+        [Display(Name = "آخرین ip ورود")]
         [MaxLength(20)]
         public string LastLoginIp { get; set; }
 
@@ -73,7 +73,7 @@ namespace OnlineCourse.Entity.Models
         [DataType(DataType.Date)]
         public DateTime? LastLoginDate { get; set; }
 
-        [Display(Name = "ExpireDate")]
+        [Display(Name = "تاریخ انقضا")]
         [Column(TypeName = "datetime")]
         [DataType(DataType.Text)]
         public DateTime? ExpireDate { get; set; }
@@ -91,25 +91,27 @@ namespace OnlineCourse.Entity.Models
         [DataType(DataType.Date)]
         public DateTime? LastResetPasswordDate { get; set; }
 
-        [Display(Name = "Addrress")]
+        [Display(Name = "آدرس")]
         [MaxLength(200)]
         public string Addrress { set; get; }
         
-        [Display(Name = "Position")]
+        [Display(Name = "موقعیت مکانی")]
         [MaxLength(30)]
         public string Position { set; get; }
-
-        [Required(ErrorMessage = "PublicRequireValidation")]
-        [Display(Name = "City")]
+        
+        [Display(Name = "شهر")]
         [MaxLength(50)]
         public string City { set; get; }
 
         public string SecuritySpan { set; get; }
 
+        [Display(Name = "تاریخ تولد")]
         [Column(TypeName = "datetime")]
         [DataType(DataType.Date)]
         public DateTime? BirthDate { get; set; }
 
+
+        [Display(Name = "مدرک تحصیلی")]
         public EducationLevel? Degree { get; set; }
 
         public decimal? Sharj { get; set; }
