@@ -86,15 +86,15 @@
     }*@
 
 
-    <link href="~/css/wizard.css" rel="stylesheet" />
-    <link href="~/lib/bootstrap-persian-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />
+    @*<link href="~/css/wizard.css" rel="stylesheet" />*@
+    @*<link href="~/lib/bootstrap-persian-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet" />*@
     @*<link href="~/lib/Jalalidatepicker/bootstrap-datepicker.css" rel="stylesheet" />*@
 
-
+    <link href="~/lib/Jalalidatepicker/bootstrap-datepicker.css" rel="stylesheet" />
     <link href="~/css/bootstrap-switch.css" rel="stylesheet" />
 
     @*<link href="~/lib/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />*@
-    <link href="~/lib/weekLine-master/styles/jquery.weekLine.css" rel="stylesheet" />
+    @*<link href="~/lib/weekLine-master/styles/jquery.weekLine.css" rel="stylesheet" />*@
 
     @*</environment>
         <environment names="Staging,Production">
@@ -555,7 +555,7 @@
     @*<script src="~/lib/AdminLTE-2.3.11/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>*@
     <script src="~/lib/AdminLTE-2.3.11/plugins/input-mask/jquery.inputmask.extensions.js"></script>
     <!-- daterangepicker -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>*@
  @*   <script src="~/lib/AdminLTE-2.3.11/plugins/daterangepicker/daterangepicker.js"></script>*@
     <!-- bootstrap color picker -->
     <script src="~/lib/AdminLTE-2.3.11/plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
@@ -605,7 +605,7 @@
 
     <!-- fullCalendar 2.2.5 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
-    <script src="~/lib/AdminLTE-2.3.11/plugins/fullcalendar/fullcalendar.min.js"></script>
+    @*<script src="~/lib/AdminLTE-2.3.11/plugins/fullcalendar/fullcalendar.min.js"></script>*@
 
     <!-- Core JS file -->
     <script src="~/lib/photoswipe/dist/photoswipe.min.js"></script>
@@ -651,9 +651,13 @@
 
     <script src="~/js/bs-confirmation-master/bootstrap-confirmation.js"></script>
     <script src="~/js/bootstrap-menu-master/dist/BootstrapMenu.js"></script>
-    <script src="~/lib/bootstrap-persian-datetimepicker/js/bootstrap-datetimepicker.js"></script>
-    <script src="~/lib/bootstrap-persian-datetimepicker/js/bootstrap-persian-datetimepicker.js"></script>
-    <script src="~/lib/bootstrap-persian-datetimepicker/js/fa.js"></script>
+
+
+    <script src="~/lib/Jalalidatepicker/bootstrap-datepicker.min.js"></script>
+    <script src="~/lib/Jalalidatepicker/bootstrap-datepicker.fa.min.js"></script>
+    @*<script src="~/lib/bootstrap-persian-datetimepicker/js/bootstrap-datetimepicker.js"></script>*@
+    @*<script src="~/lib/bootstrap-persian-datetimepicker/js/bootstrap-persian-datetimepicker.js"></script>*@
+    @*<script src="~/lib/bootstrap-persian-datetimepicker/js/fa.js"></script>*@
     @RenderSection("Scripts", required: false)
 
 

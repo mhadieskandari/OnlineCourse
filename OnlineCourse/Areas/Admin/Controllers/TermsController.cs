@@ -55,7 +55,7 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Year,YearTerm,Description,StartDate,EndDate,Type")] Term term)
+        public async Task<IActionResult> Create([Bind("Id,،Title,Year,YearTerm,Description,StartDate,EndDate,Type")] Term term)
         {
             if (ModelState.IsValid)
             {
@@ -87,7 +87,7 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Year,YearTerm,Description,StartDate,EndDate,Type")] Term term)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Year,YearTerm,Description,StartDate,EndDate,Type")] Term term)
         {
             if (id != term.Id)
             {
