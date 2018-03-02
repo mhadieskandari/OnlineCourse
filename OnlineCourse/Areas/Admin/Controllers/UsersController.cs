@@ -27,7 +27,7 @@ using AutoMapper;
 namespace OnlineCourse.Panel.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    //[Authorize(Roles = "10")]
+    [Authorize(Roles ="10")]
     public class UsersController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

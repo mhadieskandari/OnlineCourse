@@ -9,10 +9,12 @@ using OnlineCourse.Entity;
 using OnlineCourse.Entity.Models;
 using OnlineCourse.Panel.Utils.ViewModels.Areas.Admin;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 
 namespace OnlineCourse.Panel.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "10")]
     public class SectionsController : Controller
     {
         private readonly ApplicationDbContext _context;

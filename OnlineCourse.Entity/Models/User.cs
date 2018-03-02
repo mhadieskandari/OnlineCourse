@@ -37,7 +37,7 @@ namespace OnlineCourse.Entity.Models
         public string Description { get; set; }
 
         [Display(Name = "AccessLevel")]
-        public byte? AccessLevel { get; set; }
+        public UserAccessLevel AccessLevel { get; set; }
 
         [Display(Name = "Phone")]
         [MaxLength(50)]

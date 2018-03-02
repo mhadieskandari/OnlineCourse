@@ -36,7 +36,7 @@ namespace OnlineCourse.Core.WorkFlows.LoginUser
                     if (user.ValidMobile != (byte) ValidationState.Valid)
                         return (byte) LoginUserMessage.AccountNotVerified;
 
-                    if (user.State != (byte)UserState.Approved && (user.AccessLevel==(byte)UserAccessLevel.Administrator  || user.AccessLevel == (byte)UserAccessLevel.Teacher))
+                    if (user.State != (byte)UserState.Approved && (user.AccessLevel==UserAccessLevel.Administrator  || user.AccessLevel ==UserAccessLevel.Teacher))
                         return (byte)LoginUserMessage.AccountDisabled;
 
                     if (user.State != (byte)UserState.Verified && user.State != (byte)UserState.Approved)

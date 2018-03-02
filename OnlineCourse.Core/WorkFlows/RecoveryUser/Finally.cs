@@ -32,7 +32,7 @@ namespace OnlineCourse.Core.WorkFlows.RecoveryUser
                     }
                     //todo recoverPassword Or ResetPassword
                     var tempPwd = EncryptDecrypt.Decrypt(usr.Password);
-                    var smsId=_messageSender.SendSmsAsync(usr.Mobile, tempPwd);
+                    var smsId=_messageSender.Verification(usr.Mobile, tempPwd);
                     return (byte)RegisterUserMessage.Success;
                 }
                
