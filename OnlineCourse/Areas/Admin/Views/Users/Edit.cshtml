@@ -55,7 +55,7 @@
                                         <div class="input-group">
                                             @*<span class="input-group-addon"><i class="fa fa-map-marker" aria-hidden="true"></i></span>*@
                                             <span class="input-group-btn">
-                                                <button class="btn btn-default" type="button" title="@localizer["Position"]"><i class="fa fa-map-marker" aria-hidden="true"></i></button>
+                                                <button class="btn btn-default" type="button" title="موقعیت مکانی"><i class="fa fa-map-marker" aria-hidden="true"></i></button>
                                             </span>
                                             <input asp-for="Position" class="form-control" readonly>
                                         </div>
@@ -72,7 +72,7 @@
                                 <div class="form-group col-md-6 col-sm-12 col-xs-12">
                                     <label asp-for="State" class="col-md-3 control-label"></label>
                                     <div class="col-md-9">
-                                        <select class="form-control" asp-items="@(Html.GetEnumKeyValueSelectList<UserState>((UserState)Model.State,localizer))"></select>
+                                        <select class="form-control" asp-items="@(Html.GetEnumKeyValueSelectList<UserState>((UserState)Model.State))"></select>
                                         @*@Html.DropDownListFor(m => m.State,
                                             Html.GetEnumKeyDescriptionSelectList<UserState>(null),
                                             new Dictionary<string, object>
