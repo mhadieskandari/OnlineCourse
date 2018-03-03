@@ -6,7 +6,7 @@ using OnlineCourse.Entity;
 namespace OnlineCourse.Panel.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = nameof(UserAccessLevel.Administrator))]
+    [Authorize(Roles = "10")]
     public class HomeController : Controller
     {
         public HomeController()

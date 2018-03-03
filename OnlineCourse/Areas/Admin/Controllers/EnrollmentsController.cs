@@ -7,10 +7,13 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OnlineCourse.Entity;
 using OnlineCourse.Entity.Models;
+using System.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace OnlineCourse.Panel.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "10")]
     public class EnrollmentsController : Controller
     {
         private readonly ApplicationDbContext _context;

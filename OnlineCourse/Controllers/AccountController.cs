@@ -127,10 +127,10 @@ namespace OnlineCourse.Panel.Controllers
             {
                 if (string.IsNullOrEmpty(returnUrl))
                 {
-                    if (user.AccessLevel == (byte)UserAccessLevel.Administrator)
+                    if (user.AccessLevel == UserAccessLevel.Administrator)
                         return RedirectToAction("Index", "Home", new { area = "Admin" });
 
-                    if (user.AccessLevel == (byte)UserAccessLevel.Teacher)
+                    if (user.AccessLevel == UserAccessLevel.Teacher)
                     {
                         return RedirectToAction("Index", "Home", new { area = "Teacher" });
                     }
@@ -175,7 +175,7 @@ namespace OnlineCourse.Panel.Controllers
                 return View(registerViewModel);
             }
 
-            var level = (registerViewModel.IsTeacher != null && registerViewModel.IsTeacher.Value == 1) ? (byte)UserAccessLevel.Teacher : (byte)UserAccessLevel.Stusent;
+            var level = (registerViewModel.IsTeacher != null && registerViewModel.IsTeacher.Value == 1) ? UserAccessLevel.Teacher : UserAccessLevel.Stusent;
             var user = new User()
             {
                 UserName = registerViewModel.Email,

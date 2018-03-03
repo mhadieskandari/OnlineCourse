@@ -4,9 +4,9 @@ namespace OnlineCourse.Panel.Utils.ViewModels.AccountViewModels
 {
     public class ForgotPasswordViewModel
     {
-        [DataType(DataType.PhoneNumber,ErrorMessage = "PublicNotValid")]
-        [Required(ErrorMessage = "PublicRequireValidation")]
-        [Display(Name = "Mobile")]
-        public string Mobile { get; set; }
+
+        [Required(ErrorMessage = "{0} را وارد کنید")]
+        [Display(Name = "شماره همراه")]
+        public string Mobile { set; get; }
     }
 }

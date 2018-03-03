@@ -37,7 +37,7 @@ namespace OnlineCourse.Core.WorkFlows.RecoveryUser
                 //{
                     if (!uw.Users.IsExistMobile(user.Mobile))
                     {
-                        res = (byte)RecoveryUserMessage.MobileIsNotExist;
+                        return (byte)RecoveryUserMessage.MobileIsNotExist;
                     }
                     else
                     {

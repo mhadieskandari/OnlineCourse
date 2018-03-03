@@ -7,10 +7,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OnlineCourse.Entity;
 using OnlineCourse.Entity.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace OnlineCourse.Panel.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "10")]
     public class TermsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -55,7 +57,7 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Year,YearTerm,Description,StartDate,EndDate,Type")] Term term)
+        public async Task<IActionResult> Create([Bind("Id,،Title,Year,YearTerm,Description,StartDate,EndDate,Type")] Term term)
         {
             if (ModelState.IsValid)
             {
@@ -87,7 +89,7 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Year,YearTerm,Description,StartDate,EndDate,Type")] Term term)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Year,YearTerm,Description,StartDate,EndDate,Type")] Term term)
         {
             if (id != term.Id)
             {

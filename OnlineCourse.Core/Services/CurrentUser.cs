@@ -82,10 +82,8 @@ namespace OnlineCourse.Core.Services
             userIdentity.AddClaim(user.SecuritySpan != null
                 ? new Claim(ClaimTypes.SerialNumber, user.SecuritySpan)
                 : new Claim(ClaimTypes.SerialNumber, "null"));
-
-            userIdentity.AddClaim(user.AccessLevel != null
-                ? new Claim(ClaimTypes.Role, ((UserAccessLevel)user.AccessLevel).ToString())
-                : new Claim(ClaimTypes.Role, "null"));
+            var ac = ((byte)user.AccessLevel).ToString();
+            userIdentity.AddClaim(new Claim(ClaimTypes.Role, ac));
 
 
             ClaimsPrincipal principal = new ClaimsPrincipal(userIdentity);

@@ -13,8 +13,11 @@ namespace OnlineCourse.Core
         //GenericRepository<Gallery> GalleryRepository { get; }
 
         IGalleryRepository Galleries { get; }
+        GenericRepository<History> HistoryRepository { get; }
 
         int Complete();
+
+        void UnTracking();
 
         Task<int> CompleteAsync();
         

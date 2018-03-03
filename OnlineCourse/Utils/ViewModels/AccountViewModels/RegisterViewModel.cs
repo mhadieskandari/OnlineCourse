@@ -4,24 +4,24 @@ namespace OnlineCourse.Panel.Utils.ViewModels.AccountViewModels
 {
     public class RegisterViewModel
     {
-        [Required(ErrorMessage = "PublicRequireValidation")]
-        [EmailAddress(ErrorMessage = "EmailAddressNotValidFormat")]
-        [Display(Name = "Email")]
+        [Required(ErrorMessage = "{0} را وارد کنید")]
+        [EmailAddress(ErrorMessage = "{0} را به طور صحیح وارد کنید")]
+        [Display(Name = "ایمیل")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "PublicRequireValidation")]
-        [Display(Name = "FullName")]
+        [Required(ErrorMessage = "{0} را وارد کنید")]
+        [Display(Name = "نام و نام خانوادگی")]
         public string FullName { set; get; }
 
 
-        [Required(ErrorMessage = "PublicRequireValidation")]
-        [Display(Name = "Mobile")]
+        [Required(ErrorMessage = "{0} را وارد کنید")]
+        [Display(Name = "شماره همراه")]
         public string Mobile { set; get; }
 
-        [Required(ErrorMessage = "PublicRequireValidation")]
-        [StringLength(100, ErrorMessage = "PublicStringLengthValidation", MinimumLength = 6)]
+        [Required(ErrorMessage = "{0} را وارد کنید")]
+        [StringLength(100, ErrorMessage = "{0} باید بین {1} تا {2} کاراکتر باشد", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "رمز عبور")]
         public string Password { get; set; }
 
         //[Required(ErrorMessage = "PublicRequireValidation")]
@@ -30,14 +30,14 @@ namespace OnlineCourse.Panel.Utils.ViewModels.AccountViewModels
         //[Compare("Password", ErrorMessage = "ConfirmPasswordValidation")]
         //public string ConfirmPassword { get; set; }
 
-        [Required(ErrorMessage = "PublicRequireValidation")]
-        [Display(Name = "City")]
+        [Required(ErrorMessage = "{0} را وارد کنید")]
+        [Display(Name = "شهر")]
         //[Required(ErrorMessage = "لطفا شهر را وارد کنید.")]
-        public string City { get; set; } = "Sydney";
+        public string City { get; set; }
 
-        [Required(ErrorMessage = "PublicRequireValidation")]
-        [Display(Name = "AccountType")]
-        [Range(0,1,ErrorMessage = "WrongUserKindValidation")]
+        [Required(ErrorMessage = "{0} را وارد کنید")]
+        [Display(Name = "نوع کابر")]
+        [Range(0,1,ErrorMessage = "{0} اشتباه است")]
         public byte? IsTeacher { set; get; }
     }
 }

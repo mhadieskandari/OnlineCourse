@@ -108,7 +108,8 @@ namespace OnlineCourse.Core.Repositories
         {
             try
             {
-                return _context.Users.SingleOrDefault(m => m.Mobile.Equals(mobile));
+                var res = _context.Users.Where(m => m.Mobile == mobile).FirstOrDefault();
+                return res;
             }
             catch (Exception e)
             {

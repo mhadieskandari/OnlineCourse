@@ -79,8 +79,8 @@ namespace OnlineCourse.Core.WorkFlows.UpdateAccount
                     {
                         dbuser.Mobile = user.Mobile;
                         dbuser.ValidMobile = (byte)ValidationState.Invalid;
-                        if (dbuser.AccessLevel == (byte)UserAccessLevel.Stusent ||
-                            dbuser.AccessLevel == (byte)UserAccessLevel.Teacher)
+                        if (dbuser.AccessLevel == UserAccessLevel.Stusent ||
+                            dbuser.AccessLevel == UserAccessLevel.Teacher)
                         {
                             dbuser.ActivationCode = null;
                         }
@@ -91,8 +91,8 @@ namespace OnlineCourse.Core.WorkFlows.UpdateAccount
                         dbuser.Email = user.Email;
                         //dbuser.ValidEmail = (byte)ValidationState.Invalid;
 
-                        if (dbuser.AccessLevel == (byte)UserAccessLevel.Stusent ||
-                            dbuser.AccessLevel == (byte)UserAccessLevel.Teacher)
+                        if (dbuser.AccessLevel == UserAccessLevel.Stusent ||
+                            dbuser.AccessLevel == UserAccessLevel.Teacher)
                         {
                             dbuser.ActivationCode = null;
                         }

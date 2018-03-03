@@ -41,9 +41,10 @@ namespace OnlineCourse.Core.Services
                         Message = e.ToString(),
                         Action = (byte)errorType
                     };
-                    //Todo 
-                    //uw.Histories.Add(log);
-                    //uw.Complete();
+                    //Todo
+                    uw.UnTracking();
+                    uw.HistoryRepository.Insert(log);
+                    uw.Complete();
                 }
                 catch (Exception exception)
                 {
