@@ -100,7 +100,7 @@
 
             var name = getUrlParameter("Name");
             var level = getUrlParameter("Level");
-            if (name != "" || level != "") {
+            if (name !== undefined || level !== undefined) {
                 $("#collapse").addClass("in");
             }
         });
