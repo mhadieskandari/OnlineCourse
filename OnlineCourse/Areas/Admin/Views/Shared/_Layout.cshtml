@@ -177,7 +177,11 @@
             text-overflow: ellipsis;
             white-space: nowrap;
         }
+        select.form-control {
+            padding-top: 2px;
+        }
     </style>
+  
     @*<style>
             .icon-circle-arrow-left:before {
                 content: "\f060";
@@ -200,6 +204,8 @@
             }
             /*bootstrap jalali date picker #####END*/
         </style>*@
+
+
 </head>
 
 <!-- copied directly from AdminLTE index.html (FR) -->
@@ -226,7 +232,7 @@
                         <!-- User Account: style can be found in dropdown.less -->
                         <li class="dropdown user user-menu">
 
-                            <a href="/admin/users"><i class="fa fa-sign-out "></i>@localizer["LogOut"]</a>
+                            <a href="/admin/users"><i class="fa fa-sign-out "></i> خروج</a>
 
 
                         </li>
@@ -575,7 +581,7 @@
     <script src="~/lib/AdminLTE-2.3.11/dist/js/app.js"></script> <!-- removed min-->
     <!-- ChartJS 1.0.1 -->
     <script src="~/lib/AdminLTE-2.3.11/plugins/chartjs/Chart.min.js"></script>
-
+    <script src="~/js/app.js"></script>
     <!-- DataTables -->
     <script src="~/lib/AdminLTE-2.3.11/plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="~/lib/AdminLTE-2.3.11/plugins/datatables/dataTables.bootstrap.min.js"></script>
