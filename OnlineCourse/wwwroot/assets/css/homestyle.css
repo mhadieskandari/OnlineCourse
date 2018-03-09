@@ -14,22 +14,17 @@
 /*=======================================
     GENERAL STYLES
 ==================================================*/
-
-@font-face {
-    font-family: 'Yekan';
-    src: url('../fonts/Yekan.eot?#') format('eot'),
-    url('../fonts/Yekan.woff') format('woff'),
-    url('../fonts/Yekan.ttf') format('truetype');
-}
-@font-face {
-  font-family: 'Mitra';
-  src: url('../fonts/Mitra.eot?#') format('eot'),
-       url('../fonts/Mitra.woff') format('woff'),
-       url('../fonts/Mitra.ttf') format('truetype');  
-}
+@import url(fontiran.css); /* لینک فایلی که وظیفه بارگذاری فونت ها را برعهده دارد */
 
 
 body {
+    background-image: url(../img/1.jpg);
+	background-size:cover;
+	background-position: center;
+	    background-attachment: fixed;
+    background-repeat: no-repeat;
+	max-width:1400px;
+	mmax-height:900px;
            font-family: 'Ruluko', sans-serif;
     font-size:14px;
 }
@@ -155,8 +150,8 @@ nav {
 }
 
 .navbar-inverse {
-background-color: #0066ff;
-border-color: #0088ff;
+background-color: rgba(59,157,255,0.8);
+border-color: rgba(59,157,225,0.6);
 }
 
 /*=======================================
@@ -171,9 +166,10 @@ box-shadow: none;
 border: 0;
 padding: 50px 20px 30px 20px;
 margin-bottom:20px;
+font-family : IRANSans;
 }
 #Parallax-one {
-    background-image: url("../images/2.jpg");
+    background-image: url("../img/2.jpg");
 padding: 0;
 background-repeat: no-repeat;
 background-position: center 0;
@@ -200,6 +196,7 @@ min-height:300px;
     margin: 30px 0px;
     list-style: none;
     text-align: center;
+    font-family: IRANSans;
   
     -webkit-transition: all 0.2s ease;
        -moz-transition: all 0.2s ease;
@@ -240,7 +237,7 @@ font-weight: 900;
 font-size: 30px;
 }
 #Parallax-two {
-    background-image: url("../images/3.jpg");
+    background-image: url("../img/3.jpg");
 padding: 0;
 background-repeat: no-repeat;
 background-position: center 0;
@@ -266,6 +263,15 @@ min-height:300px;
 .contact-cls {
     font-size:20px;
     line-height:40px;
+
+}
+.contact-cls div {
+    text-align: left;
+}
+@media (max-width: 991px) {
+    .contact-cls {
+        padding-top: 50px;
+    }
 }
 /*=======================================
     FOOTER STYLES
@@ -289,17 +295,23 @@ margin-bottom: 10px;
 .bk-color-red {
     background-color:#ff0000;
 }
-
-
+.bk-color-light-purple {
+    background-color:#607bb0;
+}
+.bk-color-light-cyan {
+    background-color:#7de5fe;
+}
+.bk-color-light-brown {
+    background-color:#fca14a;
+}
 .bk-color-green {
     background-color:#07BB00;
 }
 
 .bk-color-light-blue {
-    background-color:#BB00BB;
+    background-color:#0700BB;
 }
 #home-row-2{
-    margin-top:300px;
 color:#fff;
 }
 
@@ -308,11 +320,12 @@ color:#fff;
     color:#fff;
     padding:20px 50px 20px 50px;
     text-align:right;
+    position: absolute;
 }
 
 #home-row-2 h2{
     
-    font-family:Mitra;
+    font-family:yekan;
     margin-top:5px;
 }
 
@@ -321,20 +334,90 @@ color:#fff;
     padding:0px 15px;
     font-family:Yekan;
 }
-
+#home-row-2{
+    margin-top : 38vh;
+}
 
 .row-2-content{
 
 background-color:rgba(12,12,12,0.6);
 border-radius :30px;
 }
+/*=======================================
+    Content start position
+==================================================*/
+@media (min-width: 1024px){
 
-
-.login-box {
-    background-color: whitesmoke;
-    padding: 30px;
-    padding-top: 10px;
-    border-radius: 5px;
-    margin-top: 90px;
+#home-row-2{
+    margin-top : 53vh;
+}
+}
+#home-row-2 a{
+text-decoration : none;
+}
+a.qwe:hover {
+color:#a3cef9 ;
+}
+a.qwe{
+color:#fff;
+}
+.slide {
+	background-position: center center;
+	background-repeat: no-repeat;
+	padding-bottom: 65px;
+	text-align: center;
+}	#home-row-2 .col-12 .home-hover:hover {
+		height: 186px;
+		padding-top: 0;
+	}	#home-row-2 .col-12 .home-hover {
+		height: 186px;
+		overflow: hidden;
+		padding-top: 26px;
+		transition: all ease-in .5s;
+	}.navigation-slide {
+	cursor: pointer;
 }
 
+.about-div .icon-round{
+	margin-top:-10px;
+}
+.about-div{
+height:400px;
+}
+
+.navbar{
+    font-family: IRANSans;
+}
+
+.container .fontYekan{
+    font-family: Yekan ;
+}
+
+.logo{
+    margin-top: -10px;
+    color: #87d2ff !important;
+    text-shadow: 2px 1px 2px #fff;
+}
+
+.up-page{
+    color: red;
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    z-index: 1000;
+
+}
+
+.up-page:hover{
+
+    cursor: pointer;
+    bottom: 17px;
+    transition-duration: 700ms;
+    -moz-transition-duration: 700ms;
+    -o-transition-duration: 700ms;
+    -webkit-transition-duration: 700ms;
+}
+
+.nav-animate:hover{
+    color: #0700BB !important;
+}
