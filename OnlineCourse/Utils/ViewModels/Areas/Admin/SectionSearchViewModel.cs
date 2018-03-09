@@ -1,4 +1,5 @@
-﻿using OnlineCourse.Core.Extentions;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using OnlineCourse.Core.Extentions;
 using OnlineCourse.Entity;
 using OnlineCourse.Entity.Models;
 using System;
@@ -13,9 +14,9 @@ namespace OnlineCourse.Panel.Utils.ViewModels.Areas.Admin
     {
         public SectionSearchViewModel(ApplicationDbContext context)
         {
-            Courses = context.Courses.ToList();
-            Teachers = context.Users.Where(u => u.AccessLevel == UserAccessLevel.Teacher).ToList();
-            Terms = context.Terms.ToList();
+            Courses =new SelectList( context.Courses.ToList(),"Id","Name");
+            Teachers = new SelectList(context.Users.Where(u => u.AccessLevel == UserAccessLevel.Teacher).ToList(), "Id", "FullName");
+            Terms = new SelectList(context.Terms.ToList(), "Id", "Title");
         }
 
         [Display(Name = "نام درس")]
@@ -27,9 +28,8 @@ namespace OnlineCourse.Panel.Utils.ViewModels.Areas.Admin
         [Display(Name = "وضعیت")]
         public ActiveState? Activity { get; set; }
 
-        public List<Course> Courses { get; set; }
-        public List<Term> Terms { get; set; }
-        public List<User> Teachers { get; set; }
-        public List<ActiveState>  Activities { get; set; }
+        public SelectList Courses { get; set; }
+        public SelectList Terms { get; set; }
+        public SelectList Teachers { get; set; }
     }
 }
