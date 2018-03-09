@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 
     <meta http-equiv="Content-Language" content="fa" />
-    <title>@localizer["SiteName"] - @ViewData["Title"] </title>
+    <title>آموزش آنلاین - @ViewData["Title"] </title>
 
     <link rel="icon" href="~/images/fav16.ico">
    
@@ -79,6 +79,9 @@
 
                     <li class="navbar-right">
                         <a class="nav-animate" href="#contact-sec">آیتم سه</a>
+                    </li>
+                    <li class="navbar-right">
+                        <a class="nav-animate" id="login" asp-action="login" asp-controller="account">پنل مدیریت</a>
                     </li>
                 </ul>
             </div>
@@ -207,7 +210,13 @@
         </script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>*@
-
+    <script>
+        $(document).ready(function () {
+            $("#login").click(function () {
+                window.location = "/account/login";
+            });
+        });
+    </script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

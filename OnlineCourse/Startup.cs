@@ -67,6 +67,8 @@ namespace OnlineCourse
             services.AddTransient<IEmailSender, MessageService>();
             services.AddTransient<ISmsSender, MessageService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
             services.AddScoped<HistoryService, HistoryService>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<CurrentUser>();
