@@ -1,53 +1,51 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Rendering
 @model OnlineCourse.Panel.Utils.ViewModels.AccountViewModels.LoginViewModel
 @{
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_AccountLayout.cshtml";
     ViewData["Title"] = "ورود";
 }
-<div class="row">
-    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-11" style="float: none; margin:30px auto">
-        <div class="login-box">
-            <div class="login-logo">
-            </div>
-            <div class="login-box-body">
-               @* @Html.Partial("/Views/Shared/_Notifications.cshtml")*@
-                <form asp-controller="Account" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
-                    <h5 class="text-right">@ViewData["Title"]</h5>
-                    <hr/>
-                    <span asp-validation-summary="All" class="text-danger"></span>
-                    <span asp-validation="Success" class="text-success"></span>
-                    <div class="form-group">
-                        <label asp-for="Email" class="control-label"></label>
-                        <input asp-for="Email" class="form-control text-left"/>
-                        <span asp-validation-for="Email" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Password" class="control-label"></label>
-                        <input asp-for="Password" class="form-control text-left"/>
-                        <span asp-validation-for="Password" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <div class="checkbox">
-                            <label asp-for="RememberMe">
-                                <input asp-for="RememberMe"/>
-                                @Html.DisplayNameFor(m => m.RememberMe)
-                            </label>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary btn-block btn-flat">ورود</button>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 col-sm-12 pull-right text-right">
-                            <a asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]">ثبت نام</a>
-                        </div>
-                        <div class="col-md-6 col-sm-12 pull-left text-left">
-                            <a asp-action="ForgotPassword">فراموشی رمز عبور</a>
-                        </div>
-                    </div>
-                </form>
-            </div>
+@Html.Partial("/Views/Shared/_Notifications.cshtml")
+<div class="col-md-4 col-center-md" style="padding-top:100px;">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <strong class="text-right">@ViewData["Title"]</strong>
         </div>
+        <form asp-controller="Account" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+            <div class="panel-body">
+                <span asp-validation-summary="All" class="text-danger"></span>
+                <span asp-validation="Success" class="text-success"></span>
+                <div class="form-group">
+                    <label asp-for="Email" class="control-label"></label>
+                    <input asp-for="Email" class="form-control text-left" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password" class="control-label"></label>
+                    <input asp-for="Password" class="form-control text-left" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <div class="checkbox">
+                        <label asp-for="RememberMe">
+                            <input asp-for="RememberMe" />
+                            @Html.DisplayNameFor(m => m.RememberMe)
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block btn-flat">ورود</button>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-6 col-sm-12 pull-right text-right">
+                        <a asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]">ثبت نام</a>
+                    </div>
+                    <div class="col-md-6 col-sm-12 pull-left text-left">
+                        <a asp-action="ForgotPassword">فراموشی رمز عبور</a>
+                    </div>
+                </div>
+            </div>
+
+        </form>
     </div>
 </div>
 @section Scripts {

@@ -1,64 +1,48 @@
 ﻿@model OnlineCourse.Panel.Utils.ViewModels.AccountViewModels.UserUpdateViewModel
 @{
-    ViewData["Title"] = localizer["UserInfo"];
+    Layout = "~/Views/Shared/_AccountLayout.cshtml";
+    ViewData["Title"] = "تکمیل اطلاعات کاربری";
 }
-<style>
-    .form-group select {
-        padding: 1px;
-    }
-    button.close {
-        
-        right: 0px;
-    }
-</style>
-@*@Html.BuildBreadcrumbNavigation(localizer)*@
-<section class="contact-page inner-page">
-    <div class="container">
-        <div class="row">
-
-            <div class="col-md-8" style="float: none; margin:30px auto">
-                <div class="header">@localizer["UserInfo"]</div>
-                @*@Html.Partial("/Views/Shared/_Notifications.cshtml")*@
 
 
-                <div class="widget">
-                    <div class="widget-body">
-                        <form asp-controller="Account" asp-action="UpdateInfo" method="post" class="form-horizontal">
-                            <div asp-validation-summary="All" class="text-danger"></div>
-                            <input type="hidden" asp-for="Id" />
-                            <div class="row">
-                                <div class="form-group col-sm-6">
-                                    <label asp-for="FullName"></label>
-                                    <input asp-for="FullName" class="form-control" type="text" placeholder="@localizer["FullName"]">
-                                    <span asp-validation-for="FullName"></span>
-                                </div>
-                                <div class="form-group col-sm-6">
-                                    <label asp-for="UserName"></label>
-                                    <input asp-for="UserName" class="form-control" type="text" placeholder="example@ex.com" style="direction:ltr !important; text-align: left !important;">
-                                    <span asp-validation-for="UserName"></span>
-                                </div>
-                                <div class="form-group col-sm-6">
-                                    <label asp-for="Email"></label>
-                                    <input asp-for="Email" class="form-control" type="text" placeholder="example@ex.com" style="direction:ltr !important; text-align: left !important;">
-                                    <span asp-validation-for="Email"></span>
-                                </div>
-                                @*<div class="form-group col-sm-6">
-                                        <label asp-for="Mobile"></label>
-                                        <input asp-for="Mobile" class="form-control" type="text" placeholder="شماره همراه">
-                                    </div>*@
-                                <div class="form-group col-sm-6">
-                                    <label asp-for="Phone"></label>
-                                    <input asp-for="Phone" class="form-control" type="text" placeholder="@localizer["Phone"]" style="direction:ltr !important; text-align: left !important;">
-                                    <span asp-validation-for="Phone"></span>
-                                </div>
-                                @*<div class="form-group col-sm-6">
-                                        <label asp-for="Pwd"></label>
-                                        <input asp-for="Pwd" type="password" class="form-control" placeholder="درصورت خالی بودن رمز عبور قبلی تغییر نخواهد کرد" style="text-align: left">
-                                    </div>*@
+<div class="col-md-12 col-center-md" style="padding-top:100px;">
+    <div class="panel panel-default">
 
-                                <div class="form-group col-sm-6">
-                                    <label asp-for="City"></label>
-                                    @Html.DropDownListFor(m => m.City, new List<SelectListItem>
+        <div class="panel-heading">
+            <strong class="text-right">@ViewData["Title"]</strong>
+        </div>
+        <form asp-controller="Account" asp-action="UpdateInfo" method="post" class="form-horizontal">
+            <div class="panel-body">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <div class="form-group col-md-6">
+                    <label asp-for="FullName"></label>
+                    <input asp-for="FullName" class="form-control" type="text" placeholder="@localizer["FullName"]">
+                    <span asp-validation-for="FullName"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="UserName"></label>
+                    <input asp-for="UserName" class="form-control" type="text" placeholder="example@ex.com" style="direction:ltr !important; text-align: left !important;">
+                    <span asp-validation-for="UserName"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="Email"></label>
+                    <input asp-for="Email" class="form-control" type="text" placeholder="example@ex.com" style="direction:ltr !important; text-align: left !important;">
+                    <span asp-validation-for="Email"></span>
+                </div>
+                @*<div class="form-group col-md-6">
+                        <label asp-for="Mobile"></label>
+                        <input asp-for="Mobile" class="form-control" type="text" placeholder="شماره همراه">
+                    </div>*@
+                <div class="form-group col-md-6">
+                    <label asp-for="Phone"></label>
+                    <input asp-for="Phone" class="form-control" type="text" placeholder="@localizer["Phone"]" style="direction:ltr !important; text-align: left !important;">
+                    <span asp-validation-for="Phone"></span>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label asp-for="City"></label>
+                    @Html.DropDownListFor(m => m.City, new List<SelectListItem>
                                     {
                                         new SelectListItem {Text = "Sydney", Value = "Sydney"},
                                     }, new Dictionary<string, object>
@@ -69,64 +53,44 @@
                                         {"style", "text-align: left;padding:1px;direction:ltr;"}
                                     })
 
-                                    @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
 
-                                </div>
-
-                                <div class="form-group col-sm-6">
-
-                                    <label asp-for="Position"></label>
-                                    <div class="input-group">
-                                        @*<span class="input-group-addon"><i class="fa fa-map-marker" aria-hidden="true"></i></span>*@
-                                        <span class="input-group-btn">
-                                            <button class="btn btn-default" type="button" title="@localizer["Position"]"><i class="fa fa-map-marker" aria-hidden="true"></i></button>
-                                        </span>
-                                        <input asp-for="Position" class="form-control" readonly>
-                                    </div>
-
-                                </div>
-                                <div class="form-group col-sm-6">
-                                    <label asp-for="Addrress"></label>
-                                    <textarea asp-for="Addrress" rows="5" class="form-control"></textarea>
-                                </div>
-                                <div class="form-group col-sm-6">
-                                    <label>@localizer["ChangePassword"]</label>
-                                    <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#changePass"><i class="fa fa-key" aria-hidden="true"></i></button>
-
-                                </div>
-                            </div>
-                            <hr />
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <button type="submit" class="btn theme-btn box-title">@localizer["Save"]</button>
-
-                                </div>
-                                <div class="col-sm-6">
-                                    <a asp-action="Index" asp-controller="Home" class="btn theme-btn-dash box-button">@localizer["Cancel"]</a>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <!-- end: Widget -->
                 </div>
 
+                <div class="form-group col-md-6">
 
+                    <label asp-for="Position"></label>
+                    <div class="input-group">
+                        @*<span class="input-group-addon"><i class="fa fa-map-marker" aria-hidden="true"></i></span>*@
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button" title="@localizer["Position"]"><i class="fa fa-map-marker" aria-hidden="true"></i></button>
+                        </span>
+                        <input asp-for="Position" class="form-control" readonly>
+                    </div>
+
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="Addrress"></label>
+                    <textarea asp-for="Addrress" rows="5" class="form-control"></textarea>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>@localizer["ChangePassword"]</label>
+                    <button type="button" class="btn btn-warning btn-md" data-toggle="modal" data-target="#changePass"><i class="fa fa-key" aria-hidden="true"></i></button>
+
+                </div>
             </div>
 
+            <div class="panel-footer">
+                <button type="submit" class="btn btn-success">ذخیره</button>
 
-
-
-            <!-- /REGISTER -->
-        </div>
-
+            </div>
+        </form>
     </div>
 
-    <!-- Modal -->
+</div>
 
-    @Html.Partial("~/Views/Account/_ChangePassword.cshtml", new OnlineCourse.Panel.Utils.ViewModels.AccountViewModels.ChangePasswordViewModel() { Id = Model.Id })
+@Html.Partial("~/Views/Account/_ChangePassword.cshtml", new OnlineCourse.Panel.Utils.ViewModels.AccountViewModels.ChangePasswordViewModel() { Id = Model.Id })
 
-
-</section>
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }

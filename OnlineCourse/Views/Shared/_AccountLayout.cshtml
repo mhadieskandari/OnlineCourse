@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+    <meta http-equiv="Content-Language" content="fa" />
+    <title>@localizer["SiteName"] - @ViewData["Title"] </title>
+
+    <link rel="icon" href="~/images/fav16.ico">
+    <link href="~/assets/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/css/bootstrap-rtl.min.css" rel="stylesheet" />
+    <link href="~/css/rtl.css" rel="stylesheet" />
+    <link href="~/assets/css/font-awesome.min.css" rel="stylesheet" />
+    @RenderSection("Heads", required: false)
+
+</head>
+<body>
+
+
+    <div class="container">
+
+        @RenderBody()
+
+
+
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+
+    @RenderSection("Scripts", required: false)
+
+
+</body>
+</html>

@@ -1,43 +1,40 @@
 ﻿@model OnlineCourse.Panel.Utils.ViewModels.AccountViewModels.SendCodeViewModel
 @{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewData["Title"] = localizer["SendVerificatioCode"];
+    Layout = "~/Views/Shared/_AccountLayout.cshtml";
+    ViewData["Title"] = "فعال سازی";
 }
-<div class="row">
-    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-11" style="float: none; margin:30px auto">
-        <div class="login-box">
-            <div class="login-logo">
-            </div>
-            <div class="login-box-body">
-                @*@Html.Partial("/Views/Shared/_Notifications.cshtml")*@
-                <form asp-controller="Account" asp-action="SendCode" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
-                    <h5 class="text-center">@localizer["Verification"]</h5>
-                    <hr />
-                    <span asp-validation-summary="All" class="text-danger"></span>
-                    <span asp-validation="Success" class="text-success"></span>
-                    @if (string.IsNullOrEmpty(Model.Email))
-                    {
-                        <div class="form-group">
-                            <label asp-for="Email" class="control-label"></label>
-                            <input asp-for="Email" class="form-control" />
-                            <span asp-validation-for="Email" class="text-danger"></span>
-                        </div>
-                    }
-                    else
-                    {
-                        <input asp-for="Email" type="hidden" />
-                    }
-                    <div class="form-group">
-                        <label asp-for="Code" class="control-label"></label>
-                        <input asp-for="Code" class="form-control" />
-                        <span asp-validation-for="Code" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary btn-block btn-flat">@localizer["SendVerificationCode"]</button>
-                    </div>
-                </form>
-            </div>
+<div class="col-md-4 col-center-md" style="padding-top:100px;">
+    <div class="panel panel-default">
+
+        <div class="panel-heading">
+            <strong class="text-right">@ViewData["Title"]</strong>
         </div>
+        <form asp-controller="Account" asp-action="SendCode" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+            <div class="panel-body">
+                <span asp-validation-summary="All" class="text-danger"></span>
+                @if (string.IsNullOrEmpty(Model.Email))
+                {
+                    <div class="form-group">
+                        <label asp-for="Email" class="control-label"></label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                }
+                else
+                {
+                    <input asp-for="Email" type="hidden" />
+                }
+                <div class="form-group">
+                    <label asp-for="Code" class="control-label"></label>
+                    <input asp-for="Code" class="form-control" />
+                    <span asp-validation-for="Code" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block btn-flat">ارسال کد فعال سازی</button>
+                </div>
+
+            </div>
+        </form>
     </div>
 </div>
 @section Scripts {

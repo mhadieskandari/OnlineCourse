@@ -12,12 +12,12 @@ namespace OnlineCourse.Panel.Utils.ViewModels.AccountViewModels
 
         //public bool RememberMe { get; set; }
         [EmailAddress]
-        [Display(Name = "Email")]
+        [Display(Name = "ایمیل/نام کاربری")]
         public string Email { set; get; }
         public string Ip { set; get; }
         public string ReturnUrl { get; set; }
 
-        [Display(Name= "VerificationCode")]
+        [Display(Name= "کد فعال سازی")]
         public string Code { set; get; }
     }
 }
