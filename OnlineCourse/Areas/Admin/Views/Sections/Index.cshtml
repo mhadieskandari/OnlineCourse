@@ -11,33 +11,8 @@
     <div class="row">
         <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
             @Html.Partial("/Views/Shared/_Notifications.cshtml")
-            @*<div class="box box-solid">
-                    <div class="box-header with-border">
-                        <button type="button" title="@localizer["OpenClose"]" class="btn btn-default btn-sm box-button" data-toggle="collapse" data-target="#collapse" aria-expanded="false" aria-controls="collapse"><i class="fa fa-plus"></i></button>
-                        <p class="box-title" style="margin-bottom: 5px;"><i class="fa fa-search"></i> <b> @localizer["Search"]  </b></p>
-                    </div>
-                    <div class="box-body clearfix collapse" id="collapse">
-                        <form asp-action="Index">
-                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 form-group">
-                                <label>ID</label>
-                                <input type="text" class="form-control pnum" value="" placeholder="" style="" id="id" name="id">
-                            </div>
-                            <div class="col-lg-3 col-md-3  col-sm-6 col-xs-12 form-group">
-                                <label>@localizer["FullName"]</label>
-                                <input type="text" class="form-control pnum" value="" placeholder="" style="" id="fullname" name="fullname">
-                            </div>
-                            <div class="col-lg-3 col-md-3  col-sm-6 col-xs-12 form-group">
-                                <label>@localizer["Email"]</label>
-                                <input type="text" class="form-control pnum" value="" placeholder="" style="" id="email" name="email">
-                            </div>
-                            <div class="col-lg-3 col-md-3  col-sm-6 col-xs-12 form-group">
-                                <label>@localizer["UserName"]</label>
-                                <input type="text" class="form-control pnum" value="" placeholder="" style="" id="username" name="username">
-                            </div>
-                            <button asp-action="Index" type="submit" class="btn btn-default btn-sm"><i class="fa fa-search"></i></button>
-                        </form>
-                    </div>
-                </div>*@
+           @Html.Partial("/Areas/Admin/Views/Sections/_Search.cshtml")
+
             <div class="box">
                 <div class="box-header with-border">
                     <b class="box-title">@ViewData["Title"] </b>
