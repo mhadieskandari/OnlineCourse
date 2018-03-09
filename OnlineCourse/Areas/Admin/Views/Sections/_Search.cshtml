@@ -1,0 +1,39 @@
+﻿@model OnlineCourse.Panel.Utils.ViewModels.Areas.Admin.SectionSearchViewModel
+
+<div class="box">
+    <div class="box-header with-border">
+        <button type="button" title="باز/بسته" class="btn btn-default btn-sm box-button" data-toggle="collapse" data-target="#collapse" aria-expanded="false" aria-controls="collapse"><i class="fa fa-plus"></i></button>
+        <p class="box-title" style="margin-bottom: 5px;"><i class="fa fa-search"></i> <b> جستجوی دوره  </b></p>
+    </div>
+    <form asp-action="Index" method="get">
+
+        <div class="collapse" id="collapse">
+            <div class="box-body clearfix ">
+                <div class="form-group col-md-3">
+                    <label asp-for="TeacherId" class="control-label"></label>
+                    <select asp-for="TeacherId" class="form-control" asp-items="Teachers"></select>
+                    <span asp-validation-for="TeacherId" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="TermId" class="control-label"></label>
+                    <select asp-for="TermId" class="form-control" asp-items="Terms"></select>
+                    <span asp-validation-for="TermId" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="CourseId" class="control-label"></label>
+                    <select asp-for="CourseId" class="form-control" asp-items="Courses"></select>
+                    <span asp-validation-for="CourseId" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="Activity" class="control-label"></label>
+                    <select asp-for="Activity" class="form-control" asp-items='Html.GetEnumValueDescriptionSelectList<ActiveState>(null)'></select>
+                    <span asp-validation-for="Activity" class="text-danger"></span>
+                </div>
+
+            </div>
+            <div class="box-footer">
+                <button asp-action="Index" type="submit" class="btn btn-default btn-sm box-button"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+    </form>
+</div>

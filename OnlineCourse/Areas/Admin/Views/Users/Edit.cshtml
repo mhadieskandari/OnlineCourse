@@ -3,7 +3,7 @@
 @model OnlineCourse.Entity.Models.User
 
 @{
-    ViewData["Title"] = "ویرایش کاربر";
+    ViewData["Title"] = localizer["Edit"] + " " + localizer["User"];
 }
 
 <!-- Main content -->
@@ -23,14 +23,14 @@
                                 <div class="form-group col-md-6 col-sm-12 col-xs-12">
                                     <label asp-for="UserName" class="col-md-3 control-label"></label>
                                     <div class="col-md-9">
-                                        <input asp-for="UserName" class="form-control text-left" />
+                                        <input asp-for="UserName" class="form-control" />
                                         <span asp-validation-for="UserName" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="form-group col-md-6 col-sm-12 col-xs-12">
                                     <label asp-for="Email" class="col-md-3 control-label"></label>
                                     <div class="col-md-9">
-                                        <input asp-for="Email" class="form-control text-left" />
+                                        <input asp-for="Email" class="form-control" />
                                         <span asp-validation-for="Email" class="text-danger"></span>
                                     </div>
                                 </div>
@@ -38,14 +38,14 @@
                                 <div class="form-group col-md-6 col-sm-12 col-xs-12">
                                     <label asp-for="Mobile" class="col-md-3 control-label"></label>
                                     <div class="col-md-9">
-                                        <input asp-for="Mobile" class="form-control text-left" />
+                                        <input asp-for="Mobile" class="form-control" />
                                         <span asp-validation-for="Mobile" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="form-group col-md-6 col-sm-12 col-xs-12">
                                     <label asp-for="FullName" class="col-md-3 control-label"></label>
                                     <div class="col-md-9">
-                                        <input asp-for="FullName" class="form-control text-right" />
+                                        <input asp-for="FullName" class="form-control" />
                                         <span asp-validation-for="FullName" class="text-danger"></span>
                                     </div>
                                 </div>
@@ -57,7 +57,7 @@
                                             <span class="input-group-btn">
                                                 <button class="btn btn-default" type="button" title="موقعیت مکانی"><i class="fa fa-map-marker" aria-hidden="true"></i></button>
                                             </span>
-                                            <input asp-for="Position" class="form-control text-left" readonly>
+                                            <input asp-for="Position" class="form-control" readonly>
                                         </div>
                                         <span asp-validation-for="Position" class="text-danger"></span>
                                     </div>
@@ -65,19 +65,19 @@
                                 <div class="form-group col-md-6 col-sm-12 col-xs-12">
                                     <label asp-for="ExpireDate" class="col-md-3 control-label"></label>
                                     <div class="col-md-9">
-                                        <input asp-for="ExpireDate" class="form-control text-left" />
+                                        <input asp-for="ExpireDate" class="form-control" />
                                         <span asp-validation-for="ExpireDate" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="form-group col-md-6 col-sm-12 col-xs-12">
                                     <label asp-for="State" class="col-md-3 control-label"></label>
                                     <div class="col-md-9">
-                                        <select class="form-control text-left" asp-items="@(Html.GetEnumKeyValueSelectList<UserState>((UserState)Model.State))"></select>
+                                        <select class="form-control" asp-items="@(Html.GetEnumKeyValueSelectList<UserState>((UserState)Model.State))"></select>
                                         @*@Html.DropDownListFor(m => m.State,
                                             Html.GetEnumKeyDescriptionSelectList<UserState>(null),
                                             new Dictionary<string, object>
                                             {
-                                                {"class", "form-control text-left"},
+                                                {"class", "form-control"},
                                                 {"data-rule-required", "true"},
                                             })*@
                                         <span asp-validation-for="State" class="text-danger"></span>
@@ -87,7 +87,7 @@
                                     <label asp-for="OnOff" class="col-md-3 control-label"></label>
                                     <div class="col-md-9">
                                        
-                                            <select class="form-control text-left" asp-items="@(Html.GetEnumKeyValueSelectList<GeneralState>(Model.OnOff != null?(GeneralState)Model.OnOff:0, localizer))"></select>
+                                            <select class="form-control" asp-items="@(Html.GetEnumKeyValueSelectList<GeneralState>(Model.OnOff != null?(GeneralState)Model.OnOff:0, localizer))"></select>
 
                                         <span asp-validation-for="OnOff" class="text-danger"></span>
                                     </div>
@@ -95,13 +95,13 @@
                                 <div class="form-group col-md-6 col-sm-12 col-xs-12">
                                     <label asp-for="AccessLevel" class="col-md-3 control-label"></label>
                                     <div class="col-md-9">
-                                        <select class="form-control text-left" asp-items="@(Html.GetEnumKeyValueSelectList<UserAccessLevel>(Model.AccessLevel))"></select>
+                                        <select class="form-control" asp-items="@(Html.GetEnumKeyValueSelectList<UserAccessLevel>((UserAccessLevel)Model.AccessLevel,localizer))"></select>
 
                                         @*@Html.DropDownListFor(m => m.AccessLevel,
                                             Html.GetEnumKeyDescriptionSelectList<UserAccessLevel>(null),
                                             new Dictionary<string, object>
                                             {
-                                                {"class", "form-control text-left"},
+                                                {"class", "form-control"},
                                                 {"data-rule-required", "true"},
                                             }
                                             )*@
@@ -110,9 +110,9 @@
                                 </div>
                                
                                 <div class="form-group col-md-6 col-sm-12 col-xs-12">
-                                    <label class="col-md-3 control-label">تصویر</label>
+                                    <label class="col-md-3 control-label">@localizer["Image"]</label>
                                     <div class="col-md-9">
-                                        <input type="file" name="Image" id="Image" class="form-control text-left" />
+                                        <input type="file" name="Image" id="Image" class="form-control" />
                                         @*<span asp-validation-for="Image" class="text-danger"></span>*@
                                     </div>
                                 </div>
@@ -120,10 +120,10 @@
                                 <div class="form-group col-md-6 col-sm-12 col-xs-12">
                                     @*<label asp-for="Pwd" class="col-md-3 control-label"></label>
                                         <div class="col-md-9">
-                                            <input asp-for="Pwd" class="form-control text-left" type="password" />
+                                            <input asp-for="Pwd" class="form-control" type="password" />
                                             <span asp-validation-for="Pwd" class="text-danger"></span>
                                         </div>*@
-                                    <label class="col-md-3 control-label">تغییر رمز عبور</label>
+                                    <label class="col-md-3 control-label">@localizer["ChangePassword"]</label>
                                     <div class="col-md-9">
                                         <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#changePass"><i class="fa fa-key" aria-hidden="true"></i></button>
                                     </div>
@@ -135,14 +135,14 @@
                                 <div class="form-group col-md-6 col-sm-12 col-xs-12">
                                     <label asp-for="Addrress" class="col-md-3 control-label"></label>
                                     <div class="col-md-9">
-                                        <textarea asp-for="Addrress" class="form-control text-left" rows="5"></textarea>
+                                        <textarea asp-for="Addrress" class="form-control" rows="5"></textarea>
                                         <span asp-validation-for="Addrress" class="text-danger"></span>
                                     </div>
                                 </div>
                                 @*<div class="form-group col-md-6 col-sm-12 col-xs-12">
                                     <label asp-for="Des" class="col-md-3 control-label"></label>
                                     <div class="col-md-9">
-                                        <textarea asp-for="Des" class="form-control text-left" rows="5"></textarea>
+                                        <textarea asp-for="Des" class="form-control" rows="5"></textarea>
                                         <span asp-validation-for="Des" class="text-danger"></span>
                                     </div>
                                 </div>*@

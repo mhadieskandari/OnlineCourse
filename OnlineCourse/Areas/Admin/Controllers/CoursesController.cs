@@ -23,9 +23,18 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
         }
 
         // GET: Admin/Courses
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string Name,byte? Level)
         {
-            return View(await _context.Courses.ToListAsync());
+            var model = _context.Courses.Where(c=>c.Id>0);
+            if (!string.IsNullOrEmpty(Name))
+            {
+                model=model.Where(c => c.Name.Contains(Name));
+            }
+            if (Level.HasValue)
+            {
+                model=model.Where(c => c.Level ==(EducationLevel)Level);
+            }
+            return View(await model.ToListAsync());
         }
 
         // GET: Admin/Courses/Details/5
