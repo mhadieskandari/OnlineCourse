@@ -10,7 +10,7 @@
             <div class="box">
                 <div class="box-header with-border">
                     <b class="box-title">@ViewData["Title"] </b>
-                    <a asp-action="Create" class="btn btn-success btn-sm box-button" style="margin-bottom: 5px;"  title="افزودن واحد"><i class="fa fa-plus"></i></a>
+                    <a asp-action="Create" class="btn btn-success btn-sm box-button" style="margin-bottom: 5px;" title="افزودن واحد"><i class="fa fa-plus"></i></a>
                 </div>
                 <div class="box-body">
                     @if (!Model.Any())
@@ -26,27 +26,29 @@
                     }
                     else
                     {
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model)
-                                {
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped">
+                                <thead>
                                     <tr>
-                                        <td class="table-action">
-                                            @*<a asp-action="Index" asp-controller="Galleries" asp-route-publicId="@item.Id" asp-route-kind="@((byte)GalleryKind.UserGallery)" class="btn btn-sm  btn-default" title="@localizer["Galleries"]"><i class="fa fa-picture-o"></i></a>*@
-                                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm  btn-default" title="جزییات"> <i class="fa fa-eye"></i></a>
-                                            @*<a asp-action="Index" asp-controller="Foods" asp-route-userId="@item.Id" class="btn btn-sm  btn-default" title="@localizer["ShowFoods"]"> <i class="fa fa-cutlery" aria-hidden="true"></i></a>*@
-                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm  btn-info" title="ویرایش"><i class="fa fa-edit"></i></a>
-                                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger" title="حذف"><i class="fa fa-remove"></i></a>
-                                        </td>
+                                        <th></th>
                                     </tr>
-                                }
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td class="table-action">
+                                                @*<a asp-action="Index" asp-controller="Galleries" asp-route-publicId="@item.Id" asp-route-kind="@((byte)GalleryKind.UserGallery)" class="btn btn-sm  btn-default" title="@localizer["Galleries"]"><i class="fa fa-picture-o"></i></a>*@
+                                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm  btn-default" title="جزییات"> <i class="fa fa-eye"></i></a>
+                                                @*<a asp-action="Index" asp-controller="Foods" asp-route-userId="@item.Id" class="btn btn-sm  btn-default" title="@localizer["ShowFoods"]"> <i class="fa fa-cutlery" aria-hidden="true"></i></a>*@
+                                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm  btn-info" title="ویرایش"><i class="fa fa-edit"></i></a>
+                                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger" title="حذف"><i class="fa fa-remove"></i></a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
                     }
 
                 </div>

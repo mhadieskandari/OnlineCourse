@@ -9,7 +9,7 @@
     <div class="row">
         <div class="col-md-6 col-lg-6 col-sm-8 col-xs-12 col-center-md">
             @Html.Partial("/Views/Shared/_Notifications.cshtml")
-            @Html.Partial("/Areas/Admin/Views/Courses/_Search.cshtml",new Course())
+            @Html.Partial("/Areas/Admin/Views/Courses/_Search.cshtml", new Course())
             <div class="box">
                 <div class="box-header with-border">
                     <b class="box-title">@ViewData["Title"] </b>
@@ -29,41 +29,43 @@
                     }
                     else
                     {
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Name)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Level)
-                                    </th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model)
-                                {
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped">
+                                <thead>
                                     <tr>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Name)
-                                        </td>
-                                        <td>
-                                            @EnumExtention.Description(item.Level)
-                                        </td>
-
-
-                                        <td class="table-action">
-                                            @*<a asp-action="Index" asp-controller="Galleries" asp-route-publicId="@item.Id" asp-route-kind="@((byte)GalleryKind.UserGallery)" class="btn btn-sm  btn-default" title="@localizer["Galleries"]"><i class="fa fa-picture-o"></i></a>*@
-                                            @*<a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm  btn-default" title="@localizer["Detail"]"> <i class="fa fa-eye"></i></a>*@
-                                            @*<a asp-action="Index" asp-controller="Foods" asp-route-userId="@item.Id" class="btn btn-sm  btn-default" title="@localizer["ShowFoods"]"> <i class="fa fa-cutlery" aria-hidden="true"></i></a>*@
-                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm  btn-info" title="@localizer["Edit"]"><i class="fa fa-edit"></i></a>
-                                            <button class="btn btn-sm btn-danger" title="حذف" data-toggle="modal" data-target="#deleteModal" data-id="@item.Id"><i class="fa fa-remove"></i></button>
-                                        </td>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Name)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Level)
+                                        </th>
+                                        <th></th>
                                     </tr>
-                                }
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Name)
+                                            </td>
+                                            <td>
+                                                @EnumExtention.Description(item.Level)
+                                            </td>
+
+
+                                            <td class="table-action">
+                                                @*<a asp-action="Index" asp-controller="Galleries" asp-route-publicId="@item.Id" asp-route-kind="@((byte)GalleryKind.UserGallery)" class="btn btn-sm  btn-default" title="@localizer["Galleries"]"><i class="fa fa-picture-o"></i></a>*@
+                                                @*<a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm  btn-default" title="@localizer["Detail"]"> <i class="fa fa-eye"></i></a>*@
+                                                @*<a asp-action="Index" asp-controller="Foods" asp-route-userId="@item.Id" class="btn btn-sm  btn-default" title="@localizer["ShowFoods"]"> <i class="fa fa-cutlery" aria-hidden="true"></i></a>*@
+                                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm  btn-info" title="@localizer["Edit"]"><i class="fa fa-edit"></i></a>
+                                                <button class="btn btn-sm btn-danger" title="حذف" data-toggle="modal" data-target="#deleteModal" data-id="@item.Id"><i class="fa fa-remove"></i></button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
                     }
 
                 </div>

@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OnlineCourse.Entity;
 using OnlineCourse.Entity.Models;
 using Microsoft.AspNetCore.Authorization;
+using OnlineCourse.Panel.Utils.ViewModels.Areas.Admin;
 
 namespace OnlineCourse.Panel.Areas.Admin.Controllers
 {
@@ -23,9 +21,47 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
         }
 
         // GET: Admin/Terms
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(TermSearchViewModel term)
         {
-            return View(await _context.Terms.ToListAsync());
+            var list = _context.Terms.Where(t => t.Id > 0);
+            if (term != null)
+            {
+                if (!string.IsNullOrEmpty(term.Title))
+                {
+                    list = list.Where(t => t.Title.Contains(term.Title));
+                }
+                if (!string.IsNullOrEmpty(term.Description))
+                {
+                    list = list.Where(t => t.Title.Contains(term.Description));
+                }
+                if (!string.IsNullOrEmpty(term.StartDate))
+                {
+                    var p = PersianDateTime.Core.PersianDateTime.Parse(term.StartDate);
+                    list = list.Where(t => PersianDateTime.Core.PersianDateTime.Parse(t.StartDate) >= p);
+                }
+                if (!string.IsNullOrEmpty(term.EndDate))
+                {
+                    var p = PersianDateTime.Core.PersianDateTime.Parse(term.EndDate);
+                    list = list.Where(t => PersianDateTime.Core.PersianDateTime.Parse(t.EndDate) <= p);
+                }
+                if (term.Year!=null)
+                {
+                    list = list.Where(t => t.Year==term.Year);
+                }
+                if (term.YearTerm != null)
+                {
+                    list = list.Where(t => t.YearTerm == term.YearTerm);
+                }
+                if (term.State != null)
+                {
+                    list = list.Where(t => t.State == term.State);
+                }
+                if (term.Type != null)
+                {
+                    list = list.Where(t => t.Type == term.Type);
+                }
+            }
+            return View(await list.ToListAsync());
         }
 
         // GET: Admin/Terms/Details/5
@@ -57,7 +93,7 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,،Title,Year,YearTerm,Description,StartDate,EndDate,Type")] Term term)
+        public async Task<IActionResult> Create([Bind("Id,،Title,Year,YearTerm,Description,StartDate,EndDate,Type,State")] Term term)
         {
             if (ModelState.IsValid)
             {
@@ -89,7 +125,7 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Year,YearTerm,Description,StartDate,EndDate,Type")] Term term)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Year,YearTerm,Description,StartDate,EndDate,Type,State")] Term term)
         {
             if (id != term.Id)
             {

@@ -1,0 +1,65 @@
+﻿@model TermSearchViewModel
+
+<div class="box">
+    <div class="box-header with-border">
+        <button type="button" title="باز/بسته" class="btn btn-default btn-sm box-button" data-toggle="collapse" data-target="#collapse" aria-expanded="false" aria-controls="collapse"><i class="fa fa-plus"></i></button>
+        <p class="box-title" style="margin-bottom: 5px;"><i class="fa fa-search"></i> <b> جستجوی ترم  </b></p>
+    </div>
+    <form asp-action="Index" method="get">
+
+        <div class="collapse" id="collapse">
+            <div class="box-body">
+                <div class="form-group col-md-3">
+                    <label asp-for="Title" class="control-label"></label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="Description" class="control-label"></label>
+                    <input asp-for="Description" class="form-control" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="Year" class="control-label"></label>
+                    <input asp-for="Year" class="form-control" />
+                    <span asp-validation-for="Year" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="YearTerm" class="control-label"></label>
+                    <input asp-for="YearTerm" class="form-control" />
+                    <span asp-validation-for="YearTerm" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="StartDate" class="control-label"></label>
+                    <input asp-for="StartDate" class="form-control mydate" />
+                    <span asp-validation-for="StartDate" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="EndDate" class="control-label"></label>
+                    <input asp-for="EndDate" class="form-control mydate"/>
+                    <span asp-validation-for="EndDate" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="Type" class="control-label"></label>
+                    <select asp-for="Type" class="form-control" asp-items='Html.GetEnumValueDescriptionSelectList<TermType>(null)'>
+                        <option selected></option>
+                    </select>
+                    <span asp-validation-for="Type" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="State" class="control-label"></label>
+                    <select asp-for="State" class="form-control" asp-items='Html.GetEnumValueDescriptionSelectList<TermState>(null)'>
+                        <option selected></option>
+                    </select>
+                    <span asp-validation-for="State" class="text-danger"></span>
+                </div>
+
+
+
+            </div>
+            <div class="box-footer">
+                <button asp-action="Index" type="submit" class="btn btn-default btn-sm box-button"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+    </form>
+</div>

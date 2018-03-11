@@ -17,17 +17,60 @@
 @import url(fontiran.css); /* لینک فایلی که وظیفه بارگذاری فونت ها را برعهده دارد */
 
 
-body {
+/*body {
     background-image: url(../img/1.jpg);
 	background-size:cover;
 	background-position: center;
 	    background-attachment: fixed;
     background-repeat: no-repeat;
 	max-width:1400px;
-	mmax-height:900px;
+	max-height:900px;
            font-family: 'Ruluko', sans-serif;
     font-size:14px;
+}*/
+
+body {
+    background-image: url(../img/1.jpg);
+    background-position: center center;
+    /* Image doesn't repeat */
+    background-repeat: no-repeat;
+    /* Makes the image fixed in the viewport so that it doesn't move when 
+     the content height is greater than the image height */
+    background-attachment: fixed;
+    /* This is what makes the background image rescale based on its container's size */
+    background-size: cover;
+    height: 100%;
+    overflow: auto;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    /* Pick a solid background color that will be displayed while the background image is loading */
+    background-color: #464646;
 }
+
+@media (max-width: 767px) {
+    body {
+        background-attachment: initial;
+    }
+
+        body:before {
+            content: "";
+            display: block;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -10;
+            background: url(../img/1.jpg) no-repeat center center;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
+}
+
 
 .nav a {
     color:#ffffff !important;

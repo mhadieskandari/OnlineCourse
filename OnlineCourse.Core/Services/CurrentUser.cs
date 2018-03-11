@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using OnlineCourse.Entity;
+using System;
 
 namespace OnlineCourse.Core.Services
 {
@@ -76,7 +77,7 @@ namespace OnlineCourse.Core.Services
             if (user.FullName != null) userIdentity.AddClaim(new Claim(ClaimTypes.Name, user.FullName));
 
             userIdentity.AddClaim(remember
-                ? new Claim(ClaimTypes.Expiration, "20")
+                ? new Claim(ClaimTypes.Expiration, TimeSpan.FromDays(30).ToString())
                 : new Claim(ClaimTypes.Expiration, "0"));
 
             userIdentity.AddClaim(user.SecuritySpan != null
