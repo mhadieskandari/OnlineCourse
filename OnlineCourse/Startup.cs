@@ -85,13 +85,13 @@ namespace OnlineCourse
             })
                 .AddCookie(options =>
                 {
-                    //options.SlidingExpiration = false;
+                    options.SlidingExpiration = true;
                     options.LoginPath = "/account/login";
                     options.LogoutPath = "/account/logout";
                     //options.AccessDeniedPath = new PathString("/Home/Forbidden/");
-                    options.Cookie.Name = "cookieAuthentication";
+                    options.Cookie.Name = "onlineCourseAthentication";
                     options.Cookie.HttpOnly = true;
-                    //options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+                    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
                     options.Cookie.SameSite = SameSiteMode.Lax;
                     options.EventsType = typeof(LastAuthChangedValidator);
                     options.ExpireTimeSpan = TimeSpan.FromDays(30);

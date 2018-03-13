@@ -76,9 +76,11 @@ namespace OnlineCourse.Core.Services
 
             if (user.FullName != null) userIdentity.AddClaim(new Claim(ClaimTypes.Name, user.FullName));
 
-            userIdentity.AddClaim(remember
-                ? new Claim(ClaimTypes.Expiration, TimeSpan.FromDays(30).ToString())
-                : new Claim(ClaimTypes.Expiration, "0"));
+            //userIdentity.AddClaim(remember
+            //    ? new Claim(ClaimTypes.Expiration, TimeSpan.FromDays(30).ToString())
+            //    : new Claim(ClaimTypes.Expiration, "0"));
+
+            var expireDate = remember ? 30 : 0;
 
             userIdentity.AddClaim(user.SecuritySpan != null
                 ? new Claim(ClaimTypes.SerialNumber, user.SecuritySpan)
@@ -88,7 +90,11 @@ namespace OnlineCourse.Core.Services
 
 
             ClaimsPrincipal principal = new ClaimsPrincipal(userIdentity);
-            await _httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+            await _httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, new AuthenticationProperties()
+            {
+                ExpiresUtc = DateTimeOffset.Now.AddDays(expireDate),
+                IsPersistent = remember
+            });
 
             return user;
         }
