@@ -1,4 +1,4 @@
-﻿@model IEnumerable<OnlineCourse.Entity.Models.Enrollment>
+﻿@model IEnumerable<OnlineCourse.Entity.Models.Present>
 
 @{
     Layout = null;
@@ -19,16 +19,10 @@
     <thead>
         <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.Markdown)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Activity)
+                    @Html.DisplayNameFor(model => model.Title)
                 </th>
             <th>
-                @Html.DisplayNameFor(model => model.Present)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Student)
+                @Html.DisplayNameFor(model => model.Section)
             </th>
             <th></th>
         </tr>
@@ -37,16 +31,10 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Markdown)
+                @Html.DisplayFor(modelItem => item.Title)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Activity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Present.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Student.Id)
+                @Html.DisplayFor(modelItem => item.Section.Id)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

@@ -10,13 +10,16 @@ namespace OnlineCourse.Entity.Models
     {
         [Key]
         public int Id { get; set; }
+        public decimal Markdown { get; set; }
+        public int PresentId { get; set; }
+        public ActiveState Activity { get; set; }        
+        [ForeignKey("PresentId")]
+        public Present Present { get; set; }
         public int StudentId { get; set; }
-        public int TermId { get; set; }
-
         [ForeignKey("StudentId")]
         public User Student { get; set; }
 
-        [ForeignKey("TermId")]
-        public Term Term { get; set; }
+        public ICollection<Payment> payments { set; get; }
+
     }
 }

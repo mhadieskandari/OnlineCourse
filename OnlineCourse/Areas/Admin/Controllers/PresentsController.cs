@@ -11,23 +11,23 @@ using OnlineCourse.Entity.Models;
 namespace OnlineCourse.Panel.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class EnrollmentsController : Controller
+    public class PresentsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public EnrollmentsController(ApplicationDbContext context)
+        public PresentsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Admin/Enrollments
+        // GET: Admin/Presents
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Enrollments.Include(e => e.Present).Include(e => e.Student);
+            var applicationDbContext = _context.Presents.Include(p => p.Section).Include(p=>p.Schedules);
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Admin/Enrollments/Details/5
+        // GET: Admin/Presents/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -35,45 +35,42 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var enrollment = await _context.Enrollments
-                .Include(e => e.Present)
-                .Include(e => e.Student)
+            var present = await _context.Presents
+                .Include(p => p.Section)
                 .SingleOrDefaultAsync(m => m.Id == id);
-            if (enrollment == null)
+            if (present == null)
             {
                 return NotFound();
             }
 
-            return View(enrollment);
+            return View(present);
         }
 
-        // GET: Admin/Enrollments/Create
+        // GET: Admin/Presents/Create
         public IActionResult Create()
         {
-            ViewData["PresentId"] = new SelectList(_context.Presents, "Id", "Id");
-            ViewData["StudentId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["SectionId"] = new SelectList(_context.Sections, "Id", "Id");
             return View();
         }
 
-        // POST: Admin/Enrollments/Create
+        // POST: Admin/Presents/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Markdown,PresentId,Activity,StudentId")] Enrollment enrollment)
+        public async Task<IActionResult> Create([Bind("Id,Title,SectionId")] Present present)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(enrollment);
+                _context.Add(present);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PresentId"] = new SelectList(_context.Presents, "Id", "Id", enrollment.PresentId);
-            ViewData["StudentId"] = new SelectList(_context.Users, "Id", "Id", enrollment.StudentId);
-            return View(enrollment);
+            ViewData["SectionId"] = new SelectList(_context.Sections, "Id", "Id", present.SectionId);
+            return View(present);
         }
 
-        // GET: Admin/Enrollments/Edit/5
+        // GET: Admin/Presents/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -81,24 +78,23 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var enrollment = await _context.Enrollments.SingleOrDefaultAsync(m => m.Id == id);
-            if (enrollment == null)
+            var present = await _context.Presents.SingleOrDefaultAsync(m => m.Id == id);
+            if (present == null)
             {
                 return NotFound();
             }
-            ViewData["PresentId"] = new SelectList(_context.Presents, "Id", "Id", enrollment.PresentId);
-            ViewData["StudentId"] = new SelectList(_context.Users, "Id", "Id", enrollment.StudentId);
-            return View(enrollment);
+            ViewData["SectionId"] = new SelectList(_context.Sections, "Id", "Id", present.SectionId);
+            return View(present);
         }
 
-        // POST: Admin/Enrollments/Edit/5
+        // POST: Admin/Presents/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Markdown,PresentId,Activity,StudentId")] Enrollment enrollment)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,SectionId")] Present present)
         {
-            if (id != enrollment.Id)
+            if (id != present.Id)
             {
                 return NotFound();
             }
@@ -107,12 +103,12 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
             {
                 try
                 {
-                    _context.Update(enrollment);
+                    _context.Update(present);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!EnrollmentExists(enrollment.Id))
+                    if (!PresentExists(present.Id))
                     {
                         return NotFound();
                     }
@@ -123,12 +119,11 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PresentId"] = new SelectList(_context.Presents, "Id", "Id", enrollment.PresentId);
-            ViewData["StudentId"] = new SelectList(_context.Users, "Id", "Id", enrollment.StudentId);
-            return View(enrollment);
+            ViewData["SectionId"] = new SelectList(_context.Sections, "Id", "Id", present.SectionId);
+            return View(present);
         }
 
-        // GET: Admin/Enrollments/Delete/5
+        // GET: Admin/Presents/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -136,32 +131,31 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var enrollment = await _context.Enrollments
-                .Include(e => e.Present)
-                .Include(e => e.Student)
+            var present = await _context.Presents
+                .Include(p => p.Section)
                 .SingleOrDefaultAsync(m => m.Id == id);
-            if (enrollment == null)
+            if (present == null)
             {
                 return NotFound();
             }
 
-            return View(enrollment);
+            return View(present);
         }
 
-        // POST: Admin/Enrollments/Delete/5
+        // POST: Admin/Presents/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var enrollment = await _context.Enrollments.SingleOrDefaultAsync(m => m.Id == id);
-            _context.Enrollments.Remove(enrollment);
+            var present = await _context.Presents.SingleOrDefaultAsync(m => m.Id == id);
+            _context.Presents.Remove(present);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool EnrollmentExists(int id)
+        private bool PresentExists(int id)
         {
-            return _context.Enrollments.Any(e => e.Id == id);
+            return _context.Presents.Any(e => e.Id == id);
         }
     }
 }

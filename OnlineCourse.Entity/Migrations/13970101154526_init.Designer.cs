@@ -11,8 +11,8 @@ using System;
 namespace OnlineCourse.Entity.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("13961204141249_Init")]
-    partial class Init
+    [Migration("13970101154526_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -90,39 +90,21 @@ namespace OnlineCourse.Entity.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("StudentId");
-
-                    b.Property<int>("TermId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("StudentId");
-
-                    b.HasIndex("TermId");
-
-                    b.ToTable("Enrollments");
-                });
-
-            modelBuilder.Entity("OnlineCourse.Entity.Models.EnrollmentDetails", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
                     b.Property<int>("Activity");
-
-                    b.Property<int>("EnrollmentId");
 
                     b.Property<decimal>("Markdown");
 
                     b.Property<int>("PresentId");
 
-                    b.HasKey("Id");
+                    b.Property<int>("StudentId");
 
-                    b.HasIndex("EnrollmentId");
+                    b.HasKey("Id");
 
                     b.HasIndex("PresentId");
 
-                    b.ToTable("EnrollmentsDetails");
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("Enrollments");
                 });
 
             modelBuilder.Entity("OnlineCourse.Entity.Models.Gallery", b =>
@@ -295,7 +277,7 @@ namespace OnlineCourse.Entity.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<byte?>("AccessLevel");
+                    b.Property<int>("AccessLevel");
 
                     b.Property<string>("ActivationCode")
                         .HasMaxLength(20);
@@ -307,7 +289,6 @@ namespace OnlineCourse.Entity.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<string>("City")
-                        .IsRequired()
                         .HasMaxLength(50);
 
                     b.Property<int?>("Degree");
@@ -401,34 +382,21 @@ namespace OnlineCourse.Entity.Migrations
 
             modelBuilder.Entity("OnlineCourse.Entity.Models.Enrollment", b =>
                 {
+                    b.HasOne("OnlineCourse.Entity.Models.Present", "Present")
+                        .WithMany("Enrollments")
+                        .HasForeignKey("PresentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("OnlineCourse.Entity.Models.User", "Student")
                         .WithMany()
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("OnlineCourse.Entity.Models.Term", "Term")
-                        .WithMany()
-                        .HasForeignKey("TermId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("OnlineCourse.Entity.Models.EnrollmentDetails", b =>
-                {
-                    b.HasOne("OnlineCourse.Entity.Models.Enrollment", "Enrollment")
-                        .WithMany()
-                        .HasForeignKey("EnrollmentId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("OnlineCourse.Entity.Models.Present", "Present")
-                        .WithMany("EnrollmentDetails")
-                        .HasForeignKey("PresentId")
-                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("OnlineCourse.Entity.Models.Payment", b =>
                 {
                     b.HasOne("OnlineCourse.Entity.Models.Enrollment", "Enrollment")
-                        .WithMany()
+                        .WithMany("payments")
                         .HasForeignKey("EnrollmentId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

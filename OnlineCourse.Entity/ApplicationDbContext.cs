@@ -18,9 +18,7 @@ namespace OnlineCourse.Entity
         public DbSet<Schedule> Schedules { get; set; }
         public DbSet<Payment> Payments { get; set; }
         public DbSet<Enrollment> Enrollments { get; set; }
-        public DbSet<EnrollmentDetails> EnrollmentsDetails { get; set; }
         public DbSet<Course> Courses { get; set; }
-
         public DbSet<ClassRoomDetails> ClassRoomDetails { get; set; }
         public DbSet<ClassRoom> ClassRooms { get; set; }
         public DbSet<Present> Presents { get; set; }
@@ -31,7 +29,7 @@ namespace OnlineCourse.Entity
             base.OnModelCreating(builder);
 
             builder.Entity<Present>()
-                .HasMany(c => c.EnrollmentDetails)
+                .HasMany(c => c.Enrollments)
                 .WithOne(e => e.Present).OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<User>()

@@ -85,7 +85,7 @@ namespace OnlineCourse
             })
                 .AddCookie(options =>
                 {
-                    options.SlidingExpiration = true;
+                    //options.SlidingExpiration = true;
                     options.LoginPath = "/account/login";
                     options.LogoutPath = "/account/logout";
                     //options.AccessDeniedPath = new PathString("/Home/Forbidden/");
@@ -94,7 +94,7 @@ namespace OnlineCourse
                     options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
                     options.Cookie.SameSite = SameSiteMode.Lax;
                     options.EventsType = typeof(LastAuthChangedValidator);
-                    options.ExpireTimeSpan = TimeSpan.FromDays(30);
+                    //options.ExpireTimeSpan = TimeSpan.FromDays(30);
 
                 });
 

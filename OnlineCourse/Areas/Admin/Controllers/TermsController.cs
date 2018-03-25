@@ -93,7 +93,7 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,،Title,Year,YearTerm,Description,StartDate,EndDate,Type,State")] Term term)
+        public async Task<IActionResult> Create([Bind("Id,Title,Year,YearTerm,Description,StartDate,EndDate,Type,State")] Term term)
         {
             if (ModelState.IsValid)
             {

@@ -17,7 +17,6 @@ namespace OnlineCourse.Entity
         DbSet<Schedule> Schedules { get; set; }
         DbSet<Payment> Payments { get; set; }
         DbSet<Enrollment> Enrollments { get; set; }
-        DbSet<EnrollmentDetails> EnrollmentsDetails { get; set; }
         DbSet<Course> Courses { get; set; }
         DbSet<ClassRoomDetails> ClassRoomDetails { get; set; }
         DbSet<ClassRoom> ClassRooms { get; set; }
