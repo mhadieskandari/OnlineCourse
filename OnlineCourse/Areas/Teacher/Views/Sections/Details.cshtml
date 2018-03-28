@@ -1,0 +1,226 @@
+﻿@model OnlineCourse.Entity.Models.Section
+@{
+    ViewData["Title"] = "جزئیات";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-md-6 col-lg-6 col-sm-8 col-xs-12 col-center-md">
+            @*@Html.Partial("/Views/Shared/_Notifications.cshtml")*@
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <b>@ViewData["Title"]</b>
+                </div>
+                <div class="box-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input asp-for="Id" type="hidden" />
+
+                    <div class="row">
+                        <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                            <label asp-for="TotalTime" class="control-label"></label>
+                            <input asp-for="TotalTime" class="form-control" readonly />
+                            <span asp-validation-for="TotalTime" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                            <label asp-for="HourlyPrice" class="control-label"></label>
+                            <input asp-for="HourlyPrice" class="form-control" readonly />
+                            <span asp-validation-for="HourlyPrice" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                            <label asp-for="TeacherId" class="control-label"></label>
+                            <input asp-for="Teacher.FullName" class="form-control" readonly />
+                        </div>
+                        <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                            <label asp-for="TermId" class="control-label"></label>
+                            <input asp-for="Term.Title" class="form-control" readonly />
+                        </div>
+                        <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                            <label asp-for="CourseId" class="control-label"></label>
+                            <input asp-for="Course.CourseName" class="form-control" readonly />
+                        </div>
+                        <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                            <label asp-for="Activity" class="control-label"></label>
+                            <input asp-for="Activity" class="form-control" value='@(EnumExtention.GetDescription(Model.Activity))' readonly />
+                        </div>
+                    </div>
+
+                </div>
+                <div class="box-footer">
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-success  box-button" title="ویرایش"><i class="fa fa-save"></i></a>
+                    <a asp-action="Index" class="btn btn-info  box-title"><i class="fa fa-backward"></i></a>
+
+                </div>
+            </div>
+
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <b>برنامه های  این دوره</b>
+                    <button class="btn btn-success box-button addpresentmodalbtn" title="افزودن برنامه به دوره" data-toggle="modal" data-target="#presentAddModal" data-sectionid="@Model.Id"><i class="fa fa-plus"></i></button>
+                </div>
+                <div class="box-body">
+                    @if (!Model.Presents.Any())
+                    {
+                        <div>
+                            <hr />
+                            <p class="text-center">
+                                <i class="fa fa-frown-o fa-3x" aria-hidden="true"></i>
+                            </p>
+                            <h4 class="text-center">اطلاعاتی برای نمایش وجود ندارد.</h4>
+                            <hr />
+                        </div>
+                    }
+                    else
+                    {
+
+                        int i = 1;
+
+                        foreach (var present in Model.Presents)
+                        {
+                            <div class="box box-info">
+                                <div class="box-header">
+                                    <strong> برنامه @i  </strong>
+                                    <button class="btn btn-danger box-button removepresentmodalbtn" title="حذف برنامه" data-toggle="modal" data-target="#presentdeleteModal" data-presentid="@present.Id"><i class="fa fa-remove"></i></button>
+                                </div>
+                                <div class="box-body">
+                                    @Html.Partial("~/Areas/Admin/Views/Sections/_Scheduls.cshtml", present.Schedules)
+                                </div>
+                            </div>
+                            i++;
+                        }
+                    }
+
+                </div>
+                <div class="box-footer">
+                    @*<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-success  box-button" title="ویرایش"><i class="fa fa-save"></i></a>
+                        <a asp-action="Index" class="btn btn-info  box-title"><i class="fa fa-backward"></i></a>*@
+
+                </div>
+            </div>
+
+
+
+
+
+        </div>
+
+
+    </div>
+    <!-- /.row -->
+</section>
+<!-- /.content -->
+
+
+@Html.Partial("~/Areas/Admin/Views/Sections/_DeleteSchedul.cshtml")
+
+
+@Html.Partial("~/Areas/Admin/Views/Sections/_DeletePresent.cshtml")
+
+
+@Html.Partial("~/Areas/Admin/Views/Sections/_AddSchedul.cshtml", new Schedule())
+
+
+@Html.Partial("~/Areas/Admin/Views/Sections/_AddPresent.cshtml", new AddPresentScedulViewModel())
+
+
+
+@section Heads{
+    @*<link href="~/lib/pickadate.js-master/lib/themes/default.css" rel="stylesheet" />
+        <link href="~/lib/pickadate.js-master/lib/themes/default.time.css" rel="stylesheet" />*@
+    <link href="~/lib/pickadate.js-master/lib/themes/classic.css" rel="stylesheet" />
+    <link href="~/lib/pickadate.js-master/lib/themes/classic.time.css" rel="stylesheet" />
+
+
+    @*<style>
+            .form-control {
+                /*padding: 1px;*/
+                background-color: white !important;
+            }
+
+
+
+            @@media(max-width:992px) {
+                .showlargdown {
+                    display: block;
+                }
+
+                .ddtform-control {
+                    border: 0 !important;
+                }
+
+                #postCart {
+                    width: 100%;
+                }
+            }
+        </style>*@
+
+}
+
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+    <script src="~/lib/pickadate.js-master/lib/picker.js"></script>
+    <script src="~/lib/pickadate.js-master/lib/picker.date.js"></script>
+    <script src="~/lib/pickadate.js-master/lib/picker.time.js"></script>
+
+    <script>
+        $(document).ready(function() {
+
+            var wdays = $("#singleWorkday").weekLine({
+                singleDaySelect: true,
+                onChange: function () {
+                    var days = $(this).weekLine('getSelected', 'indexes');
+                    $("#DayOfWeek").val(days.toString());
+                }
+            });
+
+            wdays.weekLine("setSelected", $("#DayOfWeek").val());
+
+
+
+            $('.piktime').each(function() {
+                $(this).pickatime({ format: 'H:i',min: [7, 30],max:[23,0]} /*{ interval: 30 }*/);
+            });
+
+            $(".addschedulemodalbtn").click(function() {
+                var presentid=$(this).data("presentid");
+                console.log(presentid);
+
+                $("#schedulAddModal").find("input[name='PresentId']").val(presentid);
+            });
+
+            $(".removeschedulemodalbtn").click(function() {
+                var schedulid=$(this).data("schedulid");
+                console.log(schedulid);
+
+                $("#scheduldeleteModal").find("input[name='schedulid']").val(schedulid);
+            });
+            $(".removepresentmodalbtn").click(function() {
+                var presentid=$(this).data("presentid");
+                console.log(presentid);
+
+                $("#presentdeleteModal").find("input[name='presentid']").val(presentid);
+            });
+
+            $(".addpresentmodalbtn").click(function() {
+                var sectionid=$(this).data("sectionid");
+                console.log(sectionid);
+                $("#presentAddModal").find("input[name='SectionId']").val(sectionid);
+            });
+
+
+            var wdays1 = $("#WorkLine").weekLine({
+                onChange: function() {
+                    var days = $(this).weekLine('getSelected', 'indexes');
+                    $("#WorkDays").val(days.toString());
+                }
+            });
+            wdays1.weekLine("setSelected", $("#WorkDays").val());
+        });
+    </script>
+
+}

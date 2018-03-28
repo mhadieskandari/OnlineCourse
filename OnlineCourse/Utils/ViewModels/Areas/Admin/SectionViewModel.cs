@@ -14,7 +14,7 @@ namespace OnlineCourse.Panel.Utils.ViewModels.Areas.Admin
     {
         public SectionViewModel(ApplicationDbContext context)
         {
-            Teachers =new SelectList( context.Users,"Id","FullName");
+            Teachers =new SelectList( context.Users.Where(u=>u.AccessLevel==UserAccessLevel.Teacher).ToList(),"Id","FullName");
             Terms =new SelectList( context.Terms.ToList(),"Id" , "Title");
             Courses =new SelectList( context.Courses.ToList(),"Id", "CourseName");
         }
@@ -59,9 +59,10 @@ namespace OnlineCourse.Panel.Utils.ViewModels.Areas.Admin
 
         public void IsEdit(ApplicationDbContext context)
         {
-            Teachers = new SelectList(context.Users, "Id", "FullName",TeacherId);
+            Teachers = new SelectList(context.Users.Where(u => u.AccessLevel == UserAccessLevel.Teacher).ToList(), "Id", "FullName",TeacherId);
             Terms = new SelectList(context.Terms.ToList(), "Id", "Title",TermId);
             Courses = new SelectList(context.Courses.ToList(), "Id", "CourseName", CourseId);
         }
+
     }
 }

@@ -1,0 +1,46 @@
+﻿@model ICollection<Schedule>
+
+
+<div class="table-responsive">
+    <table class="table table-hover table-striped">
+        <thead>
+        <tr>
+            <th>
+                روز هفته
+            </th>
+            <th>
+                زمان شروع
+            </th>
+            <th>
+               زمان پایان
+            </th>
+            <th>
+                @{
+                    var presId = Model.FirstOrDefault().PresentId;
+                }
+                <button class="btn btn-success btn-sm box-button addschedulemodalbtn" title="افزودن روز" data-toggle="modal" data-target="#schedulAddModal" data-presentid="@presId"><i class="fa fa-plus"></i></button>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @EnumExtention.GetDescription(item.DayOfWeek)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndTime)
+                </td>
+                
+                <td class="table-action">
+                    <button class="btn btn-sm btn-danger removeschedulemodalbtn" title="حذف" data-toggle="modal" data-target="#scheduldeleteModal" data-schedulid="@item.Id"><i class="fa fa-remove"></i></button>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

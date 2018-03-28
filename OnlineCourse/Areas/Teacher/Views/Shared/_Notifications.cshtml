@@ -1,0 +1,129 @@
+﻿﻿@using System
+@using System.Linq
+@using OnlineCourse.Panel.Utils.Extentions
+
+@{
+    var errorList = Html.GetNotifications(NotificationType.Error);
+    var warningList = Html.GetNotifications(NotificationType.Warning);
+    var successList = Html.GetNotifications(NotificationType.Success);
+    var infoList = Html.GetNotifications(NotificationType.Info);
+}
+<!-- display errors -->
+@if (errorList != null)
+{
+    <div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        @{
+            var enumerable = errorList as string[] ?? errorList.ToArray();
+        }
+        @if (enumerable.Count() > 1)
+        {
+            @*<strong><span class="glyphicon glyphicon-remove"></span>There are @enumerable.Count() errors: </strong>*@
+            <ul>
+                @foreach (String message in enumerable)
+                {
+                    <li>@Html.Raw(message)</li>
+                }
+            </ul>
+        }
+        else
+        {
+            if (string.IsNullOrEmpty(enumerable.First()))
+            {
+                <strong><span class="fa fa-times"></span>خطا! </strong>
+            }
+            else
+            {
+                @Html.Raw(enumerable.First())
+            }
+        }
+    </div>
+}
+
+<!-- display warnings -->
+@if (warningList != null)
+{
+    <div class="alert alert-warning alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+
+        @{
+            var enumerable = warningList as string[] ?? warningList.ToArray();
+        }
+        @if (enumerable.Count() > 1)
+        {
+            @*<strong><span class="glyphicon glyphicon-warning-sign"></span>There are @enumerable.Count() warnings: </strong>*@
+            <ul>
+                @foreach (String message in enumerable)
+                {
+                    <li>@Html.Raw(message)</li>
+                }
+            </ul>
+        }
+        else
+        {
+            @*<strong><span class="glyphicon glyphicon-warning-sign"></span>اخطار: </strong>*@
+            @Html.Raw(enumerable.First())
+        }
+    </div>
+}
+
+<!-- display success -->
+@if (successList != null)
+{
+    <div class="alert alert-success alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+
+        @{
+            var enumerable = successList as string[] ?? successList.ToArray();
+        }
+        @if (enumerable.Count() > 1)
+        {
+            @*<strong><span class="glyphicon glyphicon-ok"></span>There are @enumerable.Count() successful notifications: </strong>*@
+            <ul>
+                @foreach (String message in enumerable)
+                {
+                    <li>@Html.Raw(message)</li>
+                }
+            </ul>
+        }
+        else
+        {
+            if (string.IsNullOrEmpty(enumerable.First()))
+            {
+
+                <strong><span class="glyphicon glyphicon-ok"></span>با موفقیت انجام شد! </strong>
+            }
+            else
+            {
+                @Html.Raw(enumerable.First())
+            }
+        }
+    </div>
+}
+
+<!-- display success -->
+@if (infoList != null)
+{
+    <div class="alert alert-info alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+
+        @{
+            var enumerable = infoList as string[] ?? infoList.ToArray();
+        }
+        @if (enumerable.Count() > 1)
+        {
+            <strong><span class="glyphicon glyphicon-info-sign"></span>There are @enumerable.Count() notifications: </strong>
+            <ul>
+                @foreach (String message in enumerable)
+                {
+                    <li>@Html.Raw(message)</li>
+                }
+            </ul>
+        }
+        else
+        {
+            <strong><span class="glyphicon glyphicon-info-sign"></span></strong>
+            @Html.Raw(enumerable.First())
+        }
+    </div>
+}
