@@ -16,7 +16,7 @@ namespace OnlineCourse.Panel.Utils.ViewModels.Areas.Admin
         {
             Teachers =new SelectList( context.Users,"Id","FullName");
             Terms =new SelectList( context.Terms.ToList(),"Id" , "Title");
-            Courses =new SelectList( context.Courses.ToList(),"Id","Name");
+            Courses =new SelectList( context.Courses.ToList(),"Id", "CourseName");
         }
         public SectionViewModel()
         {
@@ -60,8 +60,8 @@ namespace OnlineCourse.Panel.Utils.ViewModels.Areas.Admin
         public void IsEdit(ApplicationDbContext context)
         {
             Teachers = new SelectList(context.Users, "Id", "FullName",TeacherId);
-            Terms = new SelectList(context.Terms.ToList(), "Id", "Description",TermId);
-            Courses = new SelectList(context.Courses.ToList(), "Id", "Name",CourseId);
+            Terms = new SelectList(context.Terms.ToList(), "Id", "Title",TermId);
+            Courses = new SelectList(context.Courses.ToList(), "Id", "CourseName", CourseId);
         }
     }
 }

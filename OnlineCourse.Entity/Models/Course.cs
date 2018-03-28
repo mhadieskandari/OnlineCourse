@@ -16,5 +16,7 @@ namespace OnlineCourse.Entity.Models
         public EducationLevel Level { get; set; }
 
         public ICollection<Section> Sections { set; get; }
+
+        public string CourseName => Name + " " + EnumExtentionEntity.GetDescription(Level);
     }
 }
