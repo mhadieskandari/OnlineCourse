@@ -33,5 +33,8 @@ namespace OnlineCourse.Entity.Models
 
         [ForeignKey("TermId")]
         public Term Term { get; set; }
+
+
+        public ICollection<Present> Presents { set; get; }
     }
 }

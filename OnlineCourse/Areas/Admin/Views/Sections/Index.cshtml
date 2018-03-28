@@ -71,18 +71,21 @@
                                                 @Html.DisplayFor(modelItem => item.Teacher.FullName)
                                             </td>
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.Term.Description)
+                                                @Html.DisplayFor(modelItem => item.Term.Title)
                                             </td>
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.Course.Name)
                                             </td>
                                             <td>
-                                                @EnumExtention.GetDescription((ActiveState)item.Activity)
+                                                @if (item.Activity != null)
+                                                {
+                                                    @EnumExtention.GetDescription((ActiveState) item.Activity)
+                                                }
                                             </td>
 
                                             <td class="table-action">
                                                 @*<a asp-action="Index" asp-controller="Galleries" asp-route-publicId="@item.Id" asp-route-kind="@((byte)GalleryKind.UserGallery)" class="btn btn-sm  btn-default" title="@localizer["Galleries"]"><i class="fa fa-picture-o"></i></a>*@
-                                                @*<a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm  btn-default" title="جزئیات"> <i class="fa fa-eye"></i></a>*@
+                                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm  btn-default" title="جزئیات"> <i class="fa fa-eye"></i></a>
                                                 @*<a asp-action="Index" asp-controller="Foods" asp-route-userId="@item.Id" class="btn btn-sm  btn-default" title="@localizer["ShowFoods"]"> <i class="fa fa-cutlery" aria-hidden="true"></i></a>*@
                                                 <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm  btn-info" title="ویرایش"><i class="fa fa-edit"></i></a>
                                                 <button class="btn btn-sm btn-danger" title="حذف" data-toggle="modal" data-target="#deleteModal" data-id="@item.Id"><i class="fa fa-remove"></i></button>

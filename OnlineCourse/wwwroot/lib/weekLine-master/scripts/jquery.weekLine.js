@@ -11,7 +11,7 @@
 	};
 
 	$.fn.weekLine.defaultSettings = {
-        dayLabels: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],//dayLabels: ["شنبه","یکشنبه", "دوشنبه", "سه شنبه", "چهارشنبه", "پنجشنبه", "جمعه"],
+        dayLabels: ["شنبه", "یکشنبه", "دوشنبه", "سه شنبه", "چهارشنبه", "پنجشنبه", "جمعه"],// ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],//dayLabels: ["شنبه","یکشنبه", "دوشنبه", "سه شنبه", "چهارشنبه", "پنجشنبه", "جمعه"],
 		mousedownSel: true,
 		startDate: null,
 		singleDaySelect: false,

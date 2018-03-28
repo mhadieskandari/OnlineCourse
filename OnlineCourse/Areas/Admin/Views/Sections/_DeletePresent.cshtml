@@ -1,0 +1,23 @@
+﻿<div id="presentdeleteModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">هشدار</h4>
+            </div>
+            <div class="modal-body">
+              <strong>آیا برای حذف این برنامه مطمئنید؟</strong>
+            </div>
+            <div class="modal-footer">
+                <form asp-action="DeletePresent">
+                    <input type="hidden" name="presentid" id="presentid" />
+                    <button type="submit" class="btn btn-danger box-button">حذف</button>
+                </form>
+                <button type="button" class="btn btn-default box-title" data-dismiss="modal">بستن</button>
+            </div>
+        </div>
+
+    </div>
+</div>

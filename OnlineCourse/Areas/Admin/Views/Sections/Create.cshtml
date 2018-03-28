@@ -50,6 +50,27 @@
                             </div>
                         </div>
 
+                        <div class="row" id="present[1]">
+                            <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                                <label asp-for="WorkDays" class="control-label"></label>
+                                <div id="WorkLine" style="margin: 5px;"></div>
+                                <input asp-for="WorkDays" class="form-control" type="hidden" />
+                                <span asp-validation-for="WorkDays" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                                <label asp-for="StartTime" class="control-label"></label>
+                                <input asp-for="StartTime" class="form-control piktime text-left" type="text" />
+
+                                <span asp-validation-for="StartTime" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                                <label asp-for="EndTime" class="control-label"></label>
+                                <input asp-for="EndTime" class="form-control piktime ltr text-left" type="text" />
+
+                                <span asp-validation-for="EndTime" class="text-danger"></span>
+                            </div>
+                        </div>
+
                     </div>
                     <div class="box-footer">
                         <button type="submit" class="btn btn-success  box-button"><i class="fa fa-save"></i></button>
@@ -72,8 +93,68 @@
 <!-- /.content -->
 
 
+@section Heads{
+    @*<link href="~/lib/pickadate.js-master/lib/themes/default.css" rel="stylesheet" />
+        <link href="~/lib/pickadate.js-master/lib/themes/default.time.css" rel="stylesheet" />*@
+    <link href="~/lib/pickadate.js-master/lib/themes/classic.css" rel="stylesheet" />
+    <link href="~/lib/pickadate.js-master/lib/themes/classic.time.css" rel="stylesheet" />
+
+
+    @*<style>
+            .form-control {
+                /*padding: 1px;*/
+                background-color: white !important;
+            }
+
+
+
+            @@media(max-width:992px) {
+                .showlargdown {
+                    display: block;
+                }
+
+                .ddtform-control {
+                    border: 0 !important;
+                }
+
+                #postCart {
+                    width: 100%;
+                }
+            }
+        </style>*@
+
+}
+
+
 
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+    <script src="~/lib/pickadate.js-master/lib/picker.js"></script>
+    <script src="~/lib/pickadate.js-master/lib/picker.date.js"></script>
+    <script src="~/lib/pickadate.js-master/lib/picker.time.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var wdays = $("#WorkLine").weekLine({
+                onChange: function() {
+                    var days = $(this).weekLine('getSelected', 'indexes');
+                    $("#WorkDays").val(days.toString());
+                }
+            });
+
+            wdays.weekLine("setSelected", $("#WorkDays").val());
+
+           
+
+            $('.piktime').each(function() {
+                $(this).pickatime({ format: 'H:i',min: [7, 30],max:[23,0]} /*{ interval: 30 }*/);
+            });
+
+
+        });
+    </script>
+
 }
