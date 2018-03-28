@@ -23,19 +23,21 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
         private readonly IMapper _mapper;
         private readonly HistoryService _history;
         private readonly CurrentUser _user;
+        private readonly int _userid;
 
-        public SectionsController(ApplicationDbContext context, IMapper mapper, HistoryService history,CurrentUser user)
+        public SectionsController(ApplicationDbContext context, IMapper mapper, HistoryService history, CurrentUser user)
         {
             _context = context;
             _mapper = mapper;
             _history = history;
             _user = user;
+            _userid = _user.GetUserId().Result.Value;
         }
 
         // GET: Admin/Sections
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Sections.Include(t => t.Term).Include(c => c.Course).Include(u => u.Teacher).ToListAsync());
+            return View(await _context.Sections.Include(t => t.Term).Include(c => c.Course).Include(u => u.Teacher).Where(s => s.TeacherId == _userid).ToListAsync());
         }
 
         // GET: Admin/Sections/Details/5
@@ -48,7 +50,7 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
 
             var section = await _context.Sections.Include(s => s.Presents).ThenInclude(p => p.Schedules).Include(s => s.Course).Include(s => s.Teacher).Include(s => s.Term)
                 .SingleOrDefaultAsync(m => m.Id == id);
-            if (section == null)
+            if (section == null || section.TeacherId != _userid)
             {
                 return NotFound();
             }
@@ -60,11 +62,7 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
         public IActionResult Create()
         {
             var model = new SectionViewModel(_context);
-            var userid = _user.GetUserId().Result;
-            if (userid != null)
-            {
-                model.TeacherId = userid.Value;
-            }
+            model.TeacherId = _userid;
             return View(model);
         }
 
@@ -79,11 +77,9 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var userid = _user.GetUserId().Result;
-                    if (userid == null || userid!=section.TeacherId)
+                    if (section.TeacherId != _userid)
                     {
-                        this.AddNotification("عدم دسترسی", NotificationType.Error);
-                        return RedirectToAction(nameof(Create));
+                        return NotFound();
                     }
 
                     var dbSection = _mapper.Map<Section>(section);
@@ -123,18 +119,20 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    _context.Schedules.Add(schedule);
+                    var isOwner = _context.Sections.Any(s => s.Presents.Any(p=>p.Id==schedule.PresentId) && s.TeacherId==_userid );
+                    if (!isOwner)
+                        return NotFound();
 
+                    _context.Schedules.Add(schedule);
                     await _context.SaveChangesAsync();
-                    this.AddNotification("روز با موفقیت به دوره افزوده شد.", NotificationType.Success);
+                    this.AddNotification("روز با موفقیت به برنامه افزوده شد.", NotificationType.Success);
                     var present = _context.Presents.FirstOrDefault(s => s.Id == schedule.PresentId);
                     if (present != null)
                     {
                         return RedirectToAction(nameof(Details), new { Id = present.SectionId });
                     }
-                    _history.LogError(new Exception("addSchedul in section has error"),HistoryErrorType.Middle );
+                    _history.LogError(new Exception("addSchedul in section has error"), HistoryErrorType.Middle);
                     return RedirectToAction(nameof(Index));
-
                 }
                 this.AddNotification("خطایی در ایجاد روز رخ داده است.", NotificationType.Error);
                 return View(nameof(Index));
@@ -156,7 +154,7 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var p=new Present(){SectionId = present.SectionId};
+                    var p = new Present() { SectionId = present.SectionId };
                     _context.Presents.Add(p);
                     await _context.SaveChangesAsync();
 
@@ -169,16 +167,16 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
                     }
                     await _context.SaveChangesAsync();
                     this.AddNotification("برنامه با موفقیت به دوره افزوده شد.", NotificationType.Success);
-                    return RedirectToAction(nameof(Details),new {id=present.SectionId});
+                    return RedirectToAction(nameof(Details), new { id = present.SectionId });
 
                 }
-                this.AddNotification("خطایی در ایجاد روز رخ داده است.", NotificationType.Error);
+                this.AddNotification("خطایی در ایجاد برنامه رخ داده است.", NotificationType.Error);
                 return View(nameof(Index));
             }
             catch (Exception e)
             {
                 _history.LogError(e, HistoryErrorType.Middle);
-                this.AddNotification("خطایی در ایجاد روز رخ داده است.", NotificationType.Error);
+                this.AddNotification("خطایی در ایجاد برنامه رخ داده است.", NotificationType.Error);
                 throw;
             }
 
@@ -301,7 +299,7 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
         {
             try
             {
-                var present = await _context.Presents.Include(p=>p.Section).SingleOrDefaultAsync(m => m.Id == presentid);
+                var present = await _context.Presents.Include(p => p.Section).SingleOrDefaultAsync(m => m.Id == presentid);
                 var sectionid = present.SectionId;
                 _context.Presents.Remove(present);
                 await _context.SaveChangesAsync();
