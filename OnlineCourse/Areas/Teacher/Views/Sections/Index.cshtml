@@ -35,32 +35,39 @@
                         <div class="table-responsive">
                             <table class="table table-hover table-striped">
                                 <thead>
-                                    <tr>
-                                        <th>
-                                            @Html.DisplayNameFor(model => model.TotalTime)
-                                        </th>
-                                        <th>
-                                            @Html.DisplayNameFor(model => model.HourlyPrice)
-                                        </th>
-                                        <th>
-                                            @Html.DisplayNameFor(model => model.TeacherId)
-                                        </th>
-                                        <th>
-                                            @Html.DisplayNameFor(model => model.TermId)
-                                        </th>
-                                        <th>
-                                            @Html.DisplayNameFor(model => model.CourseId)
-                                        </th>
-                                        <th>
-                                            @Html.DisplayNameFor(model => model.Activity)
-                                        </th>
-                                        <th></th>
-                                    </tr>
+                                <tr>
+                                    
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Id)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.TotalTime)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.HourlyPrice)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.TeacherId)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.TermId)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.CourseId)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Activity)
+                                    </th>
+                                    <th></th>
+                                </tr>
                                 </thead>
                                 <tbody>
                                     @foreach (var item in Model)
                                     {
                                         <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Id)
+                                            </td>
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.TotalTime)
                                             </td>

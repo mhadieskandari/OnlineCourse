@@ -31,7 +31,9 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
             _mapper = mapper;
             _history = history;
             _user = user;
-            _userid = _user.GetUserId().Result.Value;
+
+            var tmpId = _user.GetUserId().Result;
+            if (tmpId != null) _userid = tmpId.Value;
         }
 
         // GET: Admin/Sections
@@ -47,7 +49,7 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
                 model = model.Where(s => s.Activity == activity);
 
 
-            return View(await model.ToListAsync());
+            return View(model);
         }
 
         // GET: Admin/Sections/Details/5
