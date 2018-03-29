@@ -14,7 +14,7 @@ namespace OnlineCourse.Panel.Utils.ViewModels.Areas.Admin
     {
         public SectionSearchViewModel(ApplicationDbContext context)
         {
-            Courses =new SelectList( context.Courses.ToList(),"Id","Name");
+            Courses =new SelectList( context.Courses.ToList(),"Id","CourseName");
             Teachers = new SelectList(context.Users.Where(u => u.AccessLevel == UserAccessLevel.Teacher).ToList(), "Id", "FullName");
             Terms = new SelectList(context.Terms.ToList(), "Id", "Title");
         }

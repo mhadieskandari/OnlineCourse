@@ -7,18 +7,19 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using OnlineCourse.Panel.Utils.CustomValidationAttribute;
 
 namespace OnlineCourse.Panel.Utils.ViewModels.Areas.Admin
 {
-    public class SectionViewModel
+    public class SectionEditViewModel
     {
-        public SectionViewModel(ApplicationDbContext context)
+        public SectionEditViewModel(ApplicationDbContext context)
         {
             Teachers =new SelectList( context.Users.Where(u=>u.AccessLevel==UserAccessLevel.Teacher).ToList(),"Id","FullName");
             Terms =new SelectList( context.Terms.ToList(),"Id" , "Title");
             Courses =new SelectList( context.Courses.ToList(),"Id", "CourseName");
         }
-        public SectionViewModel()
+        public SectionEditViewModel()
         {
         }
 
@@ -41,18 +42,7 @@ namespace OnlineCourse.Panel.Utils.ViewModels.Areas.Admin
         [Required(ErrorMessage = "{0} اجباریست")]
         [Display(Name = "وضعیت")]
         public ActiveState? Activity { get; set; }
-
-        [Display(Name = "روزهای هفته")]
-        [Required(ErrorMessage = "{0} اجباریست", AllowEmptyStrings = false)]
-        public string WorkDays { set; get; }
-        [Required(ErrorMessage = "{0} اجباریست")]
-        [Display(Name = "ساعت شروع")]
-        public string StartTime { set; get; }
-        [Required(ErrorMessage = "{0} اجباریست")]
-        [Display(Name = "ساعت پایان")]
-        public  string EndTime { set; get; }
-
-
+        
         public SelectList Courses { set; get; }
         public SelectList Terms { set; get; }
         public SelectList Teachers { set; get; }

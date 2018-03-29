@@ -57,7 +57,7 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
         // GET: Admin/Sections/Create
         public IActionResult Create()
         {
-            var model = new SectionViewModel(_context);
+            var model = new SectionCreateViewModel(_context);
             return View(model);
         }
 
@@ -66,7 +66,7 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(SectionViewModel section)
+        public async Task<IActionResult> Create(SectionCreateViewModel section)
         {
             try
             {
@@ -89,7 +89,7 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
                     }
                     await _context.SaveChangesAsync();
                     this.AddNotification("دوره با موفقیت ایجاد شد.", NotificationType.Success);
-                    return RedirectToAction(nameof(Details));
+                    return RedirectToAction(nameof(Details),new {id=dbSection.Id});
                 }
                 return View(section);
             }
@@ -182,7 +182,7 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            var model = _mapper.Map<SectionViewModel>(section);
+            var model = _mapper.Map<SectionEditViewModel>(section);
             model.IsEdit(_context);
             return View(model);
         }
@@ -192,7 +192,7 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, SectionViewModel section)
+        public async Task<IActionResult> Edit(int id, SectionEditViewModel section)
         {
             if (id != section.Id)
             {

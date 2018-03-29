@@ -20,8 +20,11 @@ namespace OnlineCourse.Panel.Utils
             CreateMap<CreateUserViewModel, User>();
             CreateMap<User, CreateUserViewModel>();
 
-            CreateMap<SectionViewModel, Section>();
-            CreateMap<Section, SectionViewModel>();
+            CreateMap<SectionCreateViewModel, Section>();
+            CreateMap<Section, SectionCreateViewModel>();
+
+            CreateMap<SectionEditViewModel, Section>();
+            CreateMap<Section, SectionEditViewModel>();
 
         }
     }

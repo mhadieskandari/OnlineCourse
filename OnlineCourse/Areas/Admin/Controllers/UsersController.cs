@@ -51,7 +51,6 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
             _cuser = cUser;
             _localizer = localizer;
             _config = config;
-            var aaa = nameof(UserAccessLevel.Administrator);
         }
 
         // GET: Admin/Users

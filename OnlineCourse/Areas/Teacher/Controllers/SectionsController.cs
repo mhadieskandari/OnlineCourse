@@ -35,9 +35,19 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
         }
 
         // GET: Admin/Sections
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? termId,int? courseId , ActiveState? activity)
         {
-            return View(await _context.Sections.Include(t => t.Term).Include(c => c.Course).Include(u => u.Teacher).Where(s => s.TeacherId == _userid).ToListAsync());
+            var model = _context.Sections.Include(t => t.Term).Include(c => c.Course).Include(u => u.Teacher)
+                .Where(s => s.TeacherId == _userid);
+            if (termId.HasValue)
+                model = model.Where(s => s.TermId == termId);
+            if (courseId.HasValue)
+                model = model.Where(s => s.CourseId == courseId);
+            if (activity.HasValue)
+                model = model.Where(s => s.Activity == activity);
+
+
+            return View(await model.ToListAsync());
         }
 
         // GET: Admin/Sections/Details/5
@@ -61,7 +71,7 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
         // GET: Admin/Sections/Create
         public IActionResult Create()
         {
-            var model = new SectionViewModel(_context);
+            var model = new SectionCreateViewModel(_context);
             model.TeacherId = _userid;
             return View(model);
         }
@@ -71,7 +81,7 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(SectionViewModel section)
+        public async Task<IActionResult> Create(SectionCreateViewModel section)
         {
             try
             {
@@ -99,7 +109,7 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
                     }
                     await _context.SaveChangesAsync();
                     this.AddNotification("دوره با موفقیت ایجاد شد.", NotificationType.Success);
-                    return RedirectToAction(nameof(Details));
+                    return RedirectToAction(nameof(Details),new {id=dbSection.Id});
                 }
                 return View(section);
             }
@@ -194,7 +204,7 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
             {
                 return NotFound();
             }
-            var model = _mapper.Map<SectionViewModel>(section);
+            var model = _mapper.Map<SectionEditViewModel>(section);
             model.IsEdit(_context);
             return View(model);
         }
@@ -204,7 +214,7 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, SectionViewModel section)
+        public async Task<IActionResult> Edit(int id, SectionEditViewModel section)
         {
             if (id != section.Id)
             {
