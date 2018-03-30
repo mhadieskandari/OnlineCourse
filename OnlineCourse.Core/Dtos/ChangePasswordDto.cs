@@ -11,5 +11,7 @@ namespace OnlineCourse.Core.Dtos
         public string NewPassword { set; get; }
         public string ConfirmNewPassword { set; get; }
         public string Ip { set; get; }
+
+        public bool IsAdmin { set; get; } = false;
     }
 }

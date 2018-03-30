@@ -15,7 +15,9 @@
                 @ViewData["Title"]
             </div>
             <div class="panel-body">
-                @*<div asp-validation-summary="All" class="text-danger"></div>*@
+
+                @Html.Partial("/Views/Shared/_Notifications.cshtml")
+                <div asp-validation-summary="All" class="text-danger"></div>
                 <div class="row">
                     <div class="form-group col-sm-12">
                         <label asp-for="FullName"></label>
@@ -49,20 +51,65 @@
                         </div>
                         <span asp-validation-for="Password" class="text-danger"></span>
                     </div>
+                    <div class="form-group col-sm-12">
+                        @Html.LabelFor(m => m.City, new { @class = "control-label col-md-3" })
 
+                        @Html.DropDownListFor(m => m.City, new List<SelectListItem>
+                        {
+                            new SelectListItem {Text = "آذربایجان شرقی", Value = "آذربایجان شرقی"},
+                            new SelectListItem {Text = "آذربایجان غربی", Value = "آذربایجان غربی"},
+                            new SelectListItem {Text = "اردبیل", Value = "اردبیل"},
+                            new SelectListItem {Text = "اصفهان", Value = "اصفهان"},
+                            new SelectListItem {Text = "البرز", Value = "البرز"},
+                            new SelectListItem {Text = "ایلام", Value = "ایلام"},
+                            new SelectListItem {Text = "بوشهر", Value = "بوشهر"},
+                            new SelectListItem {Text = "تهران", Value = "تهران"},
+                            new SelectListItem {Text = "چهارمحال و بختیاری", Value = "چهارمحال و بختیاری"},
+                            new SelectListItem {Text = "خراسان جنوبی", Value = "خراسان جنوبی"},
+                            new SelectListItem {Text = "خراسان رضوی", Value = "خراسان رضوی"},
+                            new SelectListItem {Text = "خراسان شمالی", Value = "خراسان شمالی"},
+                            new SelectListItem {Text = "خوزستان", Value = "خوزستان"},
+                            new SelectListItem {Text = "زنجان", Value = "زنجان"},
+                            new SelectListItem {Text = "سمنان", Value = "سمنان"},
+                            new SelectListItem {Text = "سیستان و بلوچستان", Value = "سیستان و بلوچستان"},
+                            new SelectListItem {Text = "فارس", Value = "فارس"},
+                            new SelectListItem {Text = "قزوین", Value = "قزوین"},
+                            new SelectListItem {Text = "قم", Value = "قم"},
+                            new SelectListItem {Text = "کردستان", Value = "کردستان"},
+                            new SelectListItem {Text = "کرمان", Value = "کرمان"},
+                            new SelectListItem {Text = "کرمانشاه", Value = "کرمانشاه"},
+                            new SelectListItem {Text = "کهگیلویه و بویراحمد", Value = "کهگیلویه و بویراحمد"},
+                            new SelectListItem {Text = "گلستان", Value = "گلستان"},
+                            new SelectListItem {Text = "گیلان", Value = "گیلان"},
+                            new SelectListItem {Text = "لرستان", Value = "لرستان"},
+                            new SelectListItem {Text = "مازندران", Value = "مازندران"},
+                            new SelectListItem {Text = "مرکزی", Value = "مرکزی"},
+                            new SelectListItem {Text = "هرمزگان", Value = "هرمزگان"},
+                            new SelectListItem {Text = "همدان", Value = "همدان"},
+                            new SelectListItem {Text = "یزد", Value = "یزد"},
+
+                        }, new Dictionary<string, object>
+                        {
+                            {"class", "form-control"},
+                            {"data-rule-required", "true"},
+                            {"data-msg-required", "پر نمودن این فیلد اجباری است"},
+                        })
+                        @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
+
+                    </div>
                     <div class="form-group col-sm-12">
                         <label asp-for="IsTeacher"></label>
                         @Html.DropDownListFor(m => m.IsTeacher, new List<SelectListItem>
-                                    {
-                                        new SelectListItem {Text ="دانش آموز/دانشجو", Value = "0"},
-                                        new SelectListItem {Text ="معلم یا استاد", Value = "1"},
-                                    }, new Dictionary<string, object>
-                                    {
-                                        {"class", "form-control"},
-                                        {"data-rule-required", "true"},
-                                        {"data-msg-required", localizer["RequireField"]},
-                                        {"style", "padding:1px;"}
-                                    })
+                    {
+                        new SelectListItem {Text = "دانش آموز/دانشجو", Value = "0"},
+                        new SelectListItem {Text = "معلم یا استاد", Value = "1"},
+                    }, new Dictionary<string, object>
+                    {
+                        {"class", "form-control"},
+                        {"data-rule-required", "true"},
+                        {"data-msg-required", localizer["RequireField"]},
+                        {"style", "padding:1px;"}
+                    })
 
                         @Html.ValidationMessageFor(model => model.IsTeacher, "", new { @class = "text-danger" })
                     </div>

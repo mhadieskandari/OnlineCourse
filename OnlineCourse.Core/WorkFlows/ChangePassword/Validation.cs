@@ -11,7 +11,7 @@ namespace OnlineCourse.Core.WorkFlows.ChangePassword
     public class Validation : ServiceBase
     {
         private readonly HistoryService _historyService;
-        public Validation(IServiceProvider serviceProvider,HistoryService historyService) : base(serviceProvider)
+        public Validation(IServiceProvider serviceProvider, HistoryService historyService) : base(serviceProvider)
         {
             _historyService = historyService;
         }
@@ -39,24 +39,24 @@ namespace OnlineCourse.Core.WorkFlows.ChangePassword
                 return (byte)ChangePasswordUserMessage.MobileAndEmailIsNull;
             }
 
-
-            var PassCheck = ValidateOldPass(user);
-            if (PassCheck != (byte)ChangePasswordUserMessage.Success)
-                return PassCheck;
-
-
-            if (!PublicValidator.PasswordCheck(user.Password))
+            if (!user.IsAdmin)
             {
-                return (byte)ChangePasswordUserMessage.PasswordIsNotValid;
-            }
+                var passCheck = ValidateOldPass(user);
+                if (passCheck != (byte)ChangePasswordUserMessage.Success)
+                    return passCheck;
 
+                if (!PublicValidator.PasswordCheck(user.Password))
+                {
+                    return (byte)ChangePasswordUserMessage.PasswordIsNotValid;
+                }
+            }
             if (!PublicValidator.PasswordCheck(user.NewPassword))
             {
                 return (byte)ChangePasswordUserMessage.NewPasswordNotValid;
             }
 
 
-            if (!PublicValidator.ConfirmPasswordCheck(user.NewPassword,user.ConfirmNewPassword))
+            if (!PublicValidator.ConfirmPasswordCheck(user.NewPassword, user.ConfirmNewPassword))
             {
                 return (byte)ChangePasswordUserMessage.ConfirmNewPasswordNotValid;
             }
@@ -87,7 +87,7 @@ namespace OnlineCourse.Core.WorkFlows.ChangePassword
                 try
                 {
                     var dbUser = uw.Users.GetByEmail(user.UserName);
-                    if (dbUser==null )
+                    if (dbUser == null)
                     {
                         return (byte)ChangePasswordUserMessage.EmailIsNotExist;
                     }
@@ -98,10 +98,10 @@ namespace OnlineCourse.Core.WorkFlows.ChangePassword
                 }
                 catch (Exception e)
                 {
-                   _historyService.LogError(e,HistoryErrorType.Core);
+                    _historyService.LogError(e, HistoryErrorType.Core);
                     throw;
                 }
-               
+
             }
         }
 

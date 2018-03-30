@@ -29,7 +29,7 @@ namespace OnlineCourse.Core.WorkFlows.UpdateAccount
 
                     var securitySpan = Guid.NewGuid().ToString();
 
-                    if (user.AccessLevel != null && dbuser.AccessLevel != user.AccessLevel)
+                    if ( dbuser.AccessLevel != user.AccessLevel)
                     {
                         dbuser.AccessLevel = user.AccessLevel;
                         dbuser.SecuritySpan = securitySpan;
@@ -57,7 +57,7 @@ namespace OnlineCourse.Core.WorkFlows.UpdateAccount
 
                     dbuser.FullName = user.FullName;
                     
-                    if (user.State != null && dbuser.State != user.State)
+                    if (dbuser.State != user.State)
                     {
                         dbuser.State = user.State;
                         dbuser.SecuritySpan = securitySpan;
@@ -71,10 +71,6 @@ namespace OnlineCourse.Core.WorkFlows.UpdateAccount
                         withLogin = true;
                     }
                         
-
-                    dbuser.Position = user.Position;
-
-
                     if (!string.IsNullOrEmpty(user.Mobile) && !dbuser.Mobile.Equals(user.Mobile))
                     {
                         dbuser.Mobile = user.Mobile;

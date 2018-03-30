@@ -44,7 +44,7 @@ namespace OnlineCourse.Entity.Models
         public string Phone { get; set; }
 
         [Display(Name = "وضعیت")]
-        public byte? State { get; set; }
+        public UserState State { get; set; }
 
         [Display(Name = "کد فعال سازی")]
         [MaxLength(20)]
@@ -95,10 +95,6 @@ namespace OnlineCourse.Entity.Models
         [MaxLength(200)]
         public string Addrress { set; get; }
         
-        [Display(Name = "موقعیت مکانی")]
-        [MaxLength(30)]
-        public string Position { set; get; }
-        
         [Display(Name = "شهر")]
         [MaxLength(50)]
         public string City { set; get; }
@@ -110,11 +106,8 @@ namespace OnlineCourse.Entity.Models
         [DataType(DataType.Date)]
         public DateTime? BirthDate { get; set; }
 
-
         [Display(Name = "مدرک تحصیلی")]
         public EducationLevel? Degree { get; set; }
-
-        public decimal? Sharj { get; set; }
 
         public ICollection<ClassRoomDetails> ClassRoomDetails { set; get; }
 

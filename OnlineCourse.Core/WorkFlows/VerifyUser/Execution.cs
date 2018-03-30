@@ -34,7 +34,7 @@ namespace OnlineCourse.Core.WorkFlows.VerifyUser
                     if (dbUser != null)
                     {
                         dbUser.LastLoginIp = verifyDto.Ip;
-                        dbUser.State = (byte)UserState.Verified;
+                        dbUser.State = UserState.Verified;
                         dbUser.ValidMobile = (byte)ValidationState.Valid;
 
                         var count=uw.Complete();

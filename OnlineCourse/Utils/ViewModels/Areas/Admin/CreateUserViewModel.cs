@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using OnlineCourse.Entity;
 
 namespace OnlineCourse.Panel.Utils.ViewModels.Areas.Admin
 {
@@ -16,70 +17,50 @@ namespace OnlineCourse.Panel.Utils.ViewModels.Areas.Admin
         public int Id { set; get; }
 
         [MaxLength(100)]
-        [Display(Name = "UserName")]
+        [Display(Name = "نام کاربری")]
         public string UserName { set; get; }
 
         [MaxLength(100)]
-        [Display(Name = "Email")]
+        [Display(Name = "ایمیل")]
         public string Email { set; get; }
 
         [MaxLength(20)]
-        [Display(Name = "FullName")]
+        [Display(Name = "نام و نام خانوادگی")]
         public string FullName { set; get; }
 
         [MaxLength(200)]
-        [Display(Name = "Password")]
+        [Display(Name = "رمز عبور")]
         public string Pwd { get; set; }
 
         [MaxLength(50)]
-        [Display(Name = "Mobile")]
+        [Display(Name = "تلفن همراه")]
         public string Mobile { get; set; }
 
         [MaxLength(400)]
-        [Display(Name = "Description")]
-        public string Des { get; set; }
+        [Display(Name = "توضیحات")]
+        public string Description { get; set; }
 
+        [Display(Name = "سطح دسترسی")]
+        public UserAccessLevel AccessLevel { get; set; }
 
-        [Display(Name = "AccessLevel")]
-        public byte? AccessLevel { get; set; }
-
-
-        [Display(Name = "State")]
-        public byte? State { get; set; }
+        [Display(Name = "وضعیت")]
+        public UserState State { get; set; }
 
         [Column(TypeName = "datetime")]
-        [Display(Name = "ExpireDate")]
+        [Display(Name = "تاریخ انقضا")]
         [DataType(DataType.Text)]
         public DateTime? ExpireDate { get; set; }
 
         [MaxLength(200)]
-        [Display(Name = "Addrress")]
+        [Display(Name = "آدرس")]
         public string Addrress { set; get; }
 
-        [MaxLength(30)]
-        [Display(Name = "Position")]
-        public string Position { set; get; }
-
-        [MaxLength(30)]
-        [Display(Name = "WorkDays")]
-        public string WorkDays { set; get; }
-
         [MaxLength(50)]
-        [Display(Name = "City")]
+        [Display(Name = "شهر")]
         public string City { set; get; }
 
-        [MaxLength(50)]
-        [Display(Name = "Country")]
-        public string Country { set; get; }
-
-
-        [Display(Name = "OnOff")]
-        public byte? OnOff { set; get; }
-
-
-        [Display(Name = "Image")]
-        [UploadFileExtensions(".png,.jpg,.jpeg,.gif", ErrorMessage = "ChooseImageExtValidationMessage")]
-        [Required(ErrorMessage = "PublicRequireValidation")]
+        [Display(Name = "تصویر پروفایل")]
+        [UploadFileExtensions(".png,.jpg,.jpeg,.gif", ErrorMessage = " نوع {0} باید یکی از .png,.jpg,.jpeg,.gif این فرمتها باشد.")]
         [DataType(DataType.Upload)]
         public IFormFile Image { set; get; }
 

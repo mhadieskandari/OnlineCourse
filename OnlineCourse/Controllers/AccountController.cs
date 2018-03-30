@@ -183,7 +183,7 @@ namespace OnlineCourse.Panel.Controllers
                 FullName = registerViewModel.FullName,
                 Mobile = registerViewModel.Mobile,
                 Password = registerViewModel.Password,
-                State = (byte)UserState.Pending,
+                State = UserState.Pending,
                 RegisterDate = DateTime.Now,
                 LastLoginIp = WebHelper.GetRemoteIP,
                 AccessLevel = level
@@ -349,10 +349,10 @@ namespace OnlineCourse.Panel.Controllers
             if (userId != null)
             {
                 var user = await _unitOfWork.Users.GetAsync(userId.Value);
-                var model = new UserUpdateViewModel() { Id = user.Id, /*Pwd = user.Pwd,*/ Addrress = user.Addrress, City = user.City, /*Country = user.Country,*/ Email = user.Email, FullName = user.FullName,/* Mobile = user.Mobile,*/ Phone = user.Phone, UserName = user.UserName, Position = user.Position };
+                var model = new UserUpdateViewModel() { Id = user.Id, Addrress = user.Addrress, City = user.City, Email = user.Email, FullName = user.FullName, Phone = user.Phone, UserName = user.UserName};
                 return View(model);
             }
-            this.AddNotification(_localizer["UserNotFound"].ToString(), NotificationType.Error);
+            this.AddNotification("اطلاعات کاربری یافت نشد.", NotificationType.Error);
             return RedirectToAction("NotFoundPage", "Home");
         }
 
@@ -364,22 +364,22 @@ namespace OnlineCourse.Panel.Controllers
             {
                 try
                 {
-                    var req = new UserUpdate(_provider, _msgSender, _historyService).Update(new User() { Id = user.Id, Addrress = user.Addrress, City = user.City, /*Country = user.Country,*/ Email = user.Email, FullName = user.FullName,/* Mobile = user.Mobile, */Phone = user.Phone, UserName = user.UserName, Position = user.Position });
+                    var req = new UserUpdate(_provider, _msgSender, _historyService).Update(new User() { Id = user.Id, Addrress = user.Addrress, City = user.City, Email = user.Email, FullName = user.FullName,Phone = user.Phone, UserName = user.UserName});
 
                     if (req == (byte)UpdateUserMessage.SuccessWithLogin)
                     {
 
-                        this.AddNotification(_localizer[EnumExtention.GetDescription((UpdateUserMessage)req)].Value.ToString(), NotificationType.Success);
+                        this.AddNotification(EnumExtention.GetDescription((UpdateUserMessage)req), NotificationType.Success);
                         await _cUser.LogOutAsync();
                         return RedirectToAction("Login", new LoginViewModel() { Email = user.Email });
                     }
                     else if (req == (byte)UpdateUserMessage.Success)
                     {
-                        this.AddNotification(_localizer[EnumExtention.GetDescription((UpdateUserMessage)req)].Value.ToString(), NotificationType.Success);
+                        this.AddNotification(EnumExtention.GetDescription((UpdateUserMessage)req), NotificationType.Success);
                     }
                     else
                     {
-                        this.AddNotification(_localizer[EnumExtention.GetDescription((UpdateUserMessage)req)].Value.ToString(), NotificationType.Error);
+                        this.AddNotification(EnumExtention.GetDescription((UpdateUserMessage)req), NotificationType.Error);
                     }
 
 
@@ -400,7 +400,7 @@ namespace OnlineCourse.Panel.Controllers
         public async Task<IActionResult> ChangePassword()
         {
             var userid = await _cUser.GetUserId();
-            var model = new ChangePasswordViewModel() { Id = userid.Value };
+            var model = new ChangePasswordViewModel() { UserId = userid.Value };
             return View(model);
         }
 
@@ -414,7 +414,7 @@ namespace OnlineCourse.Panel.Controllers
                 {
                     var req = new UserChangePassword(_provider, _msgSender, _historyService).CahngePassword(new ChangePasswordDto() { UserName = _cUser.GetEmail(), Password = model.OldPass, NewPassword = model.NewPass, ConfirmNewPassword = model.ConfirmNewPass, Ip = WebHelper.GetRemoteIP });
 
-                    if (req == (byte)ChangePasswordUserMessage.SuccessWithLogin)
+                    if (req == (byte)ChangePasswordUserMessage.Success)
                     {
 
                         this.AddNotification(_localizer[EnumExtention.GetDescription((ChangePasswordUserMessage)req)].Value.ToString(), NotificationType.Success);

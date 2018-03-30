@@ -25,9 +25,9 @@ namespace OnlineCourse.Core.WorkFlows.RegisterUser {
                     //user.AccessLevel = (byte)UserAccessLevel.Customer;
                     user.RegisterDate=DateTime.Now;
                     user.ExpireDate=DateTime.Now.AddDays(30);
-                    user.State = (byte)UserState.Pending;
+                    user.State = UserState.Pending;
                     user.SecuritySpan=Guid.NewGuid().ToString();
-                    user.City = "qaz";
+                    //user.City = "qaz";
                     uw.Users.Add(user);
                     uw.Complete();
                     return (byte)RegisterUserMessage.Success;

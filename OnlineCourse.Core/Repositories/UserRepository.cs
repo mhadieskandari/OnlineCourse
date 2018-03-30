@@ -173,7 +173,7 @@ namespace OnlineCourse.Core.Repositories
             try
             {
                 var state = _context.Users.SingleOrDefault(m => m.Email == email).State;
-                return state;
+                return (byte)state;
             }
             catch (Exception e)
             {
@@ -213,7 +213,7 @@ namespace OnlineCourse.Core.Repositories
             try
             {
                 var user = _context.Users.SingleOrDefault(m => m.Email == email && m.Password == password);
-                return user.State;
+                return (byte)user.State;
             }
             catch (Exception e)
             {

@@ -11,9 +11,10 @@ using System;
 namespace OnlineCourse.Entity.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("13970110191630_changeStateType")]
+    partial class changeStateType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -332,12 +333,17 @@ namespace OnlineCourse.Entity.Migrations
                     b.Property<string>("Phone")
                         .HasMaxLength(50);
 
+                    b.Property<string>("Position")
+                        .HasMaxLength(30);
+
                     b.Property<int?>("RegisterAttemptFailure");
 
                     b.Property<DateTime?>("RegisterDate")
                         .HasColumnType("datetime");
 
                     b.Property<string>("SecuritySpan");
+
+                    b.Property<decimal?>("Sharj");
 
                     b.Property<int>("State");
 

@@ -4,90 +4,113 @@
     ViewData["Title"] = "تکمیل اطلاعات کاربری";
 }
 
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-md-6 col-lg-6 col-sm-8 col-xs-12 col-center-md">
+            <div class="box box-default">
 
-<div class="col-md-12 col-center-md" style="padding-top:100px;">
-    <div class="panel panel-default">
-
-        <div class="panel-heading">
-            <strong class="text-right">@ViewData["Title"]</strong>
-        </div>
-        <form asp-controller="Account" asp-action="UpdateInfo" method="post" class="form-horizontal">
-            <div class="panel-body">
-                <div asp-validation-summary="All" class="text-danger"></div>
-                <input type="hidden" asp-for="Id" />
-                <div class="form-group col-md-6">
-                    <label asp-for="FullName"></label>
-                    <input asp-for="FullName" class="form-control" type="text" placeholder="@localizer["FullName"]">
-                    <span asp-validation-for="FullName"></span>
+                <div class="box-header with-border">
+                    <strong class="text-right">@ViewData["Title"]</strong>
                 </div>
-                <div class="form-group col-md-6">
-                    <label asp-for="UserName"></label>
-                    <input asp-for="UserName" class="form-control" type="text" placeholder="example@ex.com" style="direction:ltr !important; text-align: left !important;">
-                    <span asp-validation-for="UserName"></span>
-                </div>
-                <div class="form-group col-md-6">
-                    <label asp-for="Email"></label>
-                    <input asp-for="Email" class="form-control" type="text" placeholder="example@ex.com" style="direction:ltr !important; text-align: left !important;">
-                    <span asp-validation-for="Email"></span>
-                </div>
-                @*<div class="form-group col-md-6">
-                        <label asp-for="Mobile"></label>
-                        <input asp-for="Mobile" class="form-control" type="text" placeholder="شماره همراه">
-                    </div>*@
-                <div class="form-group col-md-6">
-                    <label asp-for="Phone"></label>
-                    <input asp-for="Phone" class="form-control" type="text" placeholder="@localizer["Phone"]" style="direction:ltr !important; text-align: left !important;">
-                    <span asp-validation-for="Phone"></span>
-                </div>
+                <form asp-controller="Account" asp-action="UpdateInfo" method="post">
+                    <div class="box-body">
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <input type="hidden" asp-for="Id" />
+                        <div class="row">
+                            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                                <label class="control-label" asp-for="FullName"></label>
+                                <input asp-for="FullName" class="form-control">
+                                <span asp-validation-for="FullName"></span>
+                            </div>
+                            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                                <label class="control-label" asp-for="UserName"></label>
+                                <input asp-for="UserName" class="form-control" style="direction:ltr !important; text-align: left !important;">
+                                <span asp-validation-for="UserName"></span>
+                            </div>
+                            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                                <label class="control-label" asp-for="Email"></label>
+                                <input class="form-control" asp-for="Email" style="direction:ltr !important; text-align: left !important;">
+                                <span asp-validation-for="Email"></span>
+                            </div>
 
-                <div class="form-group col-md-6">
-                    <label asp-for="City"></label>
-                    @Html.DropDownListFor(m => m.City, new List<SelectListItem>
-                                    {
-                                        new SelectListItem {Text = "Sydney", Value = "Sydney"},
-                                    }, new Dictionary<string, object>
-                                    {
-                                        {"class", "form-control"},
-                                        {"data-rule-required", "true"},
-                                        {"data-msg-required", localizer["RequireField"]},
-                                        {"style", "text-align: left;padding:1px;direction:ltr;"}
-                                    })
+                            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                                <label class="control-label" asp-for="Phone"></label>
+                                <input class="form-control" asp-for="Phone" style="direction:ltr !important; text-align: left !important;">
+                                <span asp-validation-for="Phone"></span>
+                            </div>
 
-                    @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
+                            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                                <label class="control-label" asp-for="City"></label>
 
-                </div>
+                                @Html.DropDownListFor(m => m.City, new List<SelectListItem>
+                                            {
+                                                new SelectListItem {Text = "آذربایجان شرقی", Value = "آذربایجان شرقی"},
+                                                new SelectListItem {Text = "آذربایجان غربی", Value = "آذربایجان غربی"},
+                                                new SelectListItem {Text = "اردبیل", Value = "اردبیل"},
+                                                new SelectListItem {Text = "اصفهان", Value = "اصفهان"},
+                                                new SelectListItem {Text = "البرز", Value = "البرز"},
+                                                new SelectListItem {Text = "ایلام", Value = "ایلام"},
+                                                new SelectListItem {Text = "بوشهر", Value = "بوشهر"},
+                                                new SelectListItem {Text = "تهران", Value = "تهران"},
+                                                new SelectListItem {Text = "چهارمحال و بختیاری", Value = "چهارمحال و بختیاری"},
+                                                new SelectListItem {Text = "خراسان جنوبی", Value = "خراسان جنوبی"},
+                                                new SelectListItem {Text = "خراسان رضوی", Value = "خراسان رضوی"},
+                                                new SelectListItem {Text = "خراسان شمالی", Value = "خراسان شمالی"},
+                                                new SelectListItem {Text = "خوزستان", Value = "خوزستان"},
+                                                new SelectListItem {Text = "زنجان", Value = "زنجان"},
+                                                new SelectListItem {Text = "سمنان", Value = "سمنان"},
+                                                new SelectListItem {Text = "سیستان و بلوچستان", Value = "سیستان و بلوچستان"},
+                                                new SelectListItem {Text = "فارس", Value = "فارس"},
+                                                new SelectListItem {Text = "قزوین", Value = "قزوین"},
+                                                new SelectListItem {Text = "قم", Value = "قم"},
+                                                new SelectListItem {Text = "کردستان", Value = "کردستان"},
+                                                new SelectListItem {Text = "کرمان", Value = "کرمان"},
+                                                new SelectListItem {Text = "کرمانشاه", Value = "کرمانشاه"},
+                                                new SelectListItem {Text = "کهگیلویه و بویراحمد", Value = "کهگیلویه و بویراحمد"},
+                                                new SelectListItem {Text = "گلستان", Value = "گلستان"},
+                                                new SelectListItem {Text = "گیلان", Value = "گیلان"},
+                                                new SelectListItem {Text = "لرستان", Value = "لرستان"},
+                                                new SelectListItem {Text = "مازندران", Value = "مازندران"},
+                                                new SelectListItem {Text = "مرکزی", Value = "مرکزی"},
+                                                new SelectListItem {Text = "هرمزگان", Value = "هرمزگان"},
+                                                new SelectListItem {Text = "همدان", Value = "همدان"},
+                                                new SelectListItem {Text = "یزد", Value = "یزد"},
 
-                <div class="form-group col-md-6">
+                                            }, new Dictionary<string, object>
+                                            {
+                                                {"class", "form-control"},
+                                                {"data-rule-required", "true"},
+                                                {"data-msg-required", "پر نمودن این فیلد اجباری است"},
+                                            })
+                                <span asp-validation-for="City"></span>
 
-                    <label asp-for="Position"></label>
-                    <div class="input-group">
-                        @*<span class="input-group-addon"><i class="fa fa-map-marker" aria-hidden="true"></i></span>*@
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" type="button" title="@localizer["Position"]"><i class="fa fa-map-marker" aria-hidden="true"></i></button>
-                        </span>
-                        <input asp-for="Position" class="form-control" readonly>
+                            </div>
+
+
+                            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                                <label class="control-label" asp-for="Addrress"></label>
+                                <textarea class="form-control" asp-for="Addrress" rows="5"></textarea>
+                            </div>
+                            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                                <label class="control-label">تغییر رمز عبور</label>
+                                <button type="button" class="btn btn-warning btn-md" data-toggle="modal" data-target="#changePass"><i class="fa fa-key" aria-hidden="true"></i></button>
+
+                            </div>
+                        </div>
                     </div>
 
-                </div>
-                <div class="form-group col-md-6">
-                    <label asp-for="Addrress"></label>
-                    <textarea asp-for="Addrress" rows="5" class="form-control"></textarea>
-                </div>
-                <div class="form-group col-md-6">
-                    <label>@localizer["ChangePassword"]</label>
-                    <button type="button" class="btn btn-warning btn-md" data-toggle="modal" data-target="#changePass"><i class="fa fa-key" aria-hidden="true"></i></button>
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-success">ذخیره</button>
 
-                </div>
+                    </div>
+                </form>
             </div>
 
-            <div class="panel-footer">
-                <button type="submit" class="btn btn-success">ذخیره</button>
-
-            </div>
-        </form>
+        </div>
     </div>
+</section>
 
-</div>
 
 @Html.Partial("~/Views/Account/_ChangePassword.cshtml", new OnlineCourse.Panel.Utils.ViewModels.AccountViewModels.ChangePasswordViewModel() { Id = Model.Id })
 

@@ -1,151 +1,128 @@
-﻿@using Microsoft.AspNetCore.Mvc.Rendering
-@using OnlineCourse.Core
-@model OnlineCourse.Entity.Models.User
-
+﻿@model CreateUserViewModel
 @{
-    ViewData["Title"] = localizer["Edit"] + " " + localizer["User"];
+    ViewData["Title"] = "ویرایش کاربر";
 }
 
 <!-- Main content -->
 <section class="content">
     <div class="row">
-        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+        <div class="col-md-8 col-lg-8 col-sm-12 col-xs-12 col-center-md">
             <form asp-action="Edit" method="Post" enctype="multipart/form-data">
                 <div class="box">
                     <div class="box-header with-border">
                         <b>@ViewData["Title"]</b>
                     </div>
                     <div class="box-body">
-                        <div class="form-horizontal">
+                        
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <input asp-for="Id" type="hidden" />
                             <div class="row">
                                 <div class="form-group col-md-6 col-sm-12 col-xs-12">
-                                    <label asp-for="UserName" class="col-md-3 control-label"></label>
-                                    <div class="col-md-9">
+                                    <label asp-for="UserName" class="control-label"></label>
+                                    
                                         <input asp-for="UserName" class="form-control" />
                                         <span asp-validation-for="UserName" class="text-danger"></span>
-                                    </div>
+                                    
                                 </div>
                                 <div class="form-group col-md-6 col-sm-12 col-xs-12">
-                                    <label asp-for="Email" class="col-md-3 control-label"></label>
-                                    <div class="col-md-9">
+                                    <label asp-for="Email" class="control-label"></label>
+                                    
                                         <input asp-for="Email" class="form-control" />
                                         <span asp-validation-for="Email" class="text-danger"></span>
-                                    </div>
+                                    
                                 </div>
 
                                 <div class="form-group col-md-6 col-sm-12 col-xs-12">
-                                    <label asp-for="Mobile" class="col-md-3 control-label"></label>
-                                    <div class="col-md-9">
+                                    <label asp-for="Mobile" class="control-label"></label>
+                                    
                                         <input asp-for="Mobile" class="form-control" />
                                         <span asp-validation-for="Mobile" class="text-danger"></span>
-                                    </div>
+                                    
                                 </div>
                                 <div class="form-group col-md-6 col-sm-12 col-xs-12">
-                                    <label asp-for="FullName" class="col-md-3 control-label"></label>
-                                    <div class="col-md-9">
+                                    <label asp-for="FullName" class="control-label"></label>
+                                    
                                         <input asp-for="FullName" class="form-control" />
                                         <span asp-validation-for="FullName" class="text-danger"></span>
-                                    </div>
                                 </div>
+                               
                                 <div class="form-group col-md-6 col-sm-12 col-xs-12">
-                                    <label asp-for="Position" class="col-md-3 control-label"></label>
-                                    <div class="col-md-9">
-                                        <div class="input-group">
-                                            @*<span class="input-group-addon"><i class="fa fa-map-marker" aria-hidden="true"></i></span>*@
-                                            <span class="input-group-btn">
-                                                <button class="btn btn-default" type="button" title="موقعیت مکانی"><i class="fa fa-map-marker" aria-hidden="true"></i></button>
-                                            </span>
-                                            <input asp-for="Position" class="form-control" readonly>
-                                        </div>
-                                        <span asp-validation-for="Position" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-6 col-sm-12 col-xs-12">
-                                    <label asp-for="ExpireDate" class="col-md-3 control-label"></label>
-                                    <div class="col-md-9">
+                                    <label asp-for="ExpireDate" class="control-label"></label>
+                                    
                                         <input asp-for="ExpireDate" class="form-control" />
                                         <span asp-validation-for="ExpireDate" class="text-danger"></span>
-                                    </div>
                                 </div>
+                                @*<div class="form-group col-md-6 col-sm-12 col-xs-12">
+                                    <label asp-for="State" class="control-label"></label>
+                                    
+                                        <select class="form-control" asp-items="@(Html.GetEnumValueDescriptionSelectList<UserState>(Model.State))"></select>
+                                        <span asp-validation-for="State" class="text-danger"></span>
+                                </div>
+                               
                                 <div class="form-group col-md-6 col-sm-12 col-xs-12">
-                                    <label asp-for="State" class="col-md-3 control-label"></label>
-                                    <div class="col-md-9">
-                                        <select class="form-control" asp-items="@(Html.GetEnumKeyValueSelectList<UserState>((UserState)Model.State))"></select>
-                                        @*@Html.DropDownListFor(m => m.State,
-                                            Html.GetEnumKeyDescriptionSelectList<UserState>(null),
+                                    <label asp-for="AccessLevel" class="control-label"></label>
+                                    
+                                        <select class="form-control" asp-items="@(Html.GetEnumKeyDescriptionSelectList<UserAccessLevel>(Model.AccessLevel))"></select>
+                                        <span asp-validation-for="AccessLevel" class="text-danger"></span>
+                                </div>*@
+                                <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                                    <label asp-for="State" class="control-label"></label>
+                                      @Html.DropDownListFor(m => m.State,
+                                            Html.GetEnumKeyDescriptionSelectList<UserState>(Model.State),
                                             new Dictionary<string, object>
                                             {
                                                 {"class", "form-control"},
                                                 {"data-rule-required", "true"},
-                                            })*@
+                                            })
                                         <span asp-validation-for="State" class="text-danger"></span>
-                                    </div>
+                                   
                                 </div>
-                                @*<div class="form-group col-md-6 col-sm-12 col-xs-12">
-                                    <label asp-for="OnOff" class="col-md-3 control-label"></label>
-                                    <div class="col-md-9">
-                                       
-                                            <select class="form-control" asp-items="@(Html.GetEnumKeyValueSelectList<GeneralState>(Model.OnOff != null?(GeneralState)Model.OnOff:0, localizer))"></select>
 
-                                        <span asp-validation-for="OnOff" class="text-danger"></span>
-                                    </div>
-                                </div>*@
+
                                 <div class="form-group col-md-6 col-sm-12 col-xs-12">
-                                    <label asp-for="AccessLevel" class="col-md-3 control-label"></label>
-                                    <div class="col-md-9">
-                                        <select class="form-control" asp-items="@(Html.GetEnumKeyValueSelectList<UserAccessLevel>((UserAccessLevel)Model.AccessLevel,localizer))"></select>
-
-                                        @*@Html.DropDownListFor(m => m.AccessLevel,
-                                            Html.GetEnumKeyDescriptionSelectList<UserAccessLevel>(null),
+                                    <label asp-for="AccessLevel" class="control-label"></label>
+                                    
+                                        @Html.DropDownListFor(m => m.AccessLevel,
+                                            Html.GetEnumKeyDescriptionSelectList<UserAccessLevel>(Model.AccessLevel),
                                             new Dictionary<string, object>
                                             {
                                                 {"class", "form-control"},
                                                 {"data-rule-required", "true"},
                                             }
-                                            )*@
+                                            )
                                         <span asp-validation-for="AccessLevel" class="text-danger"></span>
-                                    </div>
+                                    
                                 </div>
-                               
                                 <div class="form-group col-md-6 col-sm-12 col-xs-12">
-                                    <label class="col-md-3 control-label">@localizer["Image"]</label>
-                                    <div class="col-md-9">
+                                    <label asp-for="Image" class="control-label"></label>
+                                    
                                         <input type="file" name="Image" id="Image" class="form-control" />
                                         @*<span asp-validation-for="Image" class="text-danger"></span>*@
-                                    </div>
                                 </div>
 
-                                <div class="form-group col-md-6 col-sm-12 col-xs-12">
-                                    @*<label asp-for="Pwd" class="col-md-3 control-label"></label>
-                                        <div class="col-md-9">
-                                            <input asp-for="Pwd" class="form-control" type="password" />
-                                            <span asp-validation-for="Pwd" class="text-danger"></span>
-                                        </div>*@
-                                    <label class="col-md-3 control-label">@localizer["ChangePassword"]</label>
-                                    <div class="col-md-9">
-                                        <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#changePass"><i class="fa fa-key" aria-hidden="true"></i></button>
-                                    </div>
-                                </div>
+                               
                                
                             </div>
 
-                            <div class="row">
-                                <div class="form-group col-md-6 col-sm-12 col-xs-12">
-                                    <label asp-for="Addrress" class="col-md-3 control-label"></label>
-                                    <div class="col-md-9">
-                                        <textarea asp-for="Addrress" class="form-control" rows="5"></textarea>
-                                        <span asp-validation-for="Addrress" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                @*<div class="form-group col-md-6 col-sm-12 col-xs-12">
-                                    <label asp-for="Des" class="col-md-3 control-label"></label>
-                                    <div class="col-md-9">
-                                        <textarea asp-for="Des" class="form-control" rows="5"></textarea>
-                                        <span asp-validation-for="Des" class="text-danger"></span>
-                                    </div>
-                                </div>*@
+                        <div class="row">
+                            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                                <label asp-for="Addrress" class="control-label"></label>
+                                    
+                                <textarea asp-for="Addrress" class="form-control" rows="5"></textarea>
+                                <span asp-validation-for="Addrress" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                                <label asp-for="Description" class="control-label"></label>
+                                    
+                                <textarea asp-for="Description" class="form-control" rows="5"></textarea>
+                                <span asp-validation-for="Description" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                                <label class="control-label">تغییر رمز عبور</label>
+                                    
+                                <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#changePass"><i class="fa fa-key" aria-hidden="true"></i></button>
                             </div>
                         </div>
 
@@ -170,7 +147,7 @@
 <!-- /.content -->
 
 
-@Html.Partial("~/Areas/Admin/Views/Users/_ChangePassword.cshtml", new OnlineCourse.Panel.Utils.ViewModels.AccountViewModels.ChangePasswordViewModel() { Id = Model.Id })
+@Html.Partial("~/Areas/Admin/Views/Users/_ChangePassword.cshtml", new OnlineCourse.Panel.Utils.ViewModels.AccountViewModels.ChangePasswordViewModel() { UserId = Model.Id })
 
 
 
@@ -179,17 +156,6 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script>
-        $(document).ready(function () {
-            var wdays = $("#WorkLine").weekLine({
-                onChange: function () {
-                    var days = $(this).weekLine('getSelected', 'indexes');
-                    $("#WorkDays").val(days.toString());
-                }
-            });
-
-            wdays.weekLine("setSelected", $("#WorkDays").val());
-        });
-    </script>
+    
 }
 

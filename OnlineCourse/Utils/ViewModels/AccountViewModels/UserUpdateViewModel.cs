@@ -11,51 +11,35 @@ namespace OnlineCourse.Panel.Utils.ViewModels.AccountViewModels
     {
         public int Id { set; get; }
 
-        [Required(ErrorMessage = "PublicRequireValidation")]
-        [Display(Name = "UserName")]
+        [Required(ErrorMessage = "{0} را وارد کنید.")]
+        [Display(Name = "نام کاربری")]
         [MaxLength(100)]
         public string UserName { set; get; }
 
-        [Required(ErrorMessage = "PublicRequireValidation")]
-        [Display(Name = "Email")]
-        [EmailAddress(ErrorMessage = "PublicNotValid")]
+        [Required(ErrorMessage = "{0} را وارد کنید.")]
+        [Display(Name = "ایمیل")]
+        [EmailAddress(ErrorMessage = "{0} نامعتبر است.")]
         [MaxLength(100)]
         public string Email { set; get; }
 
-        [Required(ErrorMessage = "PublicRequireValidation")]
+        [Required(ErrorMessage = "{0} را وارد کنید.")]
         [MaxLength(20)]
-        [Display(Name = "FullName")]
+        [Display(Name = "نام و نام خانوادگی")]
         public string FullName { set; get; }
 
-        //[Required(ErrorMessage = "لطفا رمز عبور را وارد نمائید.")]
-        //[Display(Name = "رمز عبور")]
-        //[StringLength(100, ErrorMessage = "{0} حداقل  {2} کاراکتر و حداکثر {1} کاراکتر باید باشد.", MinimumLength = 6)]
-        //[DataType(DataType.Password)]
-        //public string Pwd { get; set; }
-
-        //[Display(Name = "تلفن همراه")]
-        //[MaxLength(50)]
-        //public string Mobile { get; set; }
-
-        [Display(Name = "Phone")]
+        [Display(Name = "تلفن ثابت")]
         [MaxLength(50)]
         public string Phone { get; set; }
 
-        [Display(Name = "Addrress")]
+        [Display(Name = "آدرس")]
         [MaxLength(200)]
         public string Addrress { set; get; }
 
-        [Display(Name = "Position")]
-        [MaxLength(30)]
-        public string Position { set; get; }
-
-        [Display(Name = "City")]
+        [Display(Name = "شهر")]
         [MaxLength(50)]
-        public string City { set; get; } = "Sydney";
+        [Required(ErrorMessage = "{0} را وارد کنید.")]
+        public string City { set; get; } 
 
-        [MaxLength(50)]
-        [Display(Name = "Country")]
-        public string Country { set; get; } = "Australia";
 
 
 

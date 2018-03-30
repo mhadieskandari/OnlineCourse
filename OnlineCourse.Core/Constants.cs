@@ -52,30 +52,26 @@ namespace OnlineCourse.Core
 
     public enum ChangePasswordUserMessage
     {
-        [Description("ChangePasswordSuccess")]
+        [Description("رمز عبور با موفقیت ویرایش شد.")]
         Success = 0,
-        [Description("MobileAndEmailIsNull")]
+        [Description("شماره همراه یا ایمیل نباید خالی باشد.")]
         MobileAndEmailIsNull = 1,
-        [Description("EmailIsNotExist")]
+        [Description("ایمیل یافت نشد.")]
         EmailIsNotExist = 2,
-        [Description("MobileIsNotExist")]
+        [Description("شماره همراه یافت نشد.")]
         MobileIsNotExist = 3,
-        [Description("EmailPatternNotValid")]
+        [Description("ایمیل صحیح نمی باشد.")]
         EmailPatternNotValid = 4,
-        [Description("MobilePatternNotValid")]
+        [Description("شماره همراه صحیح نمی باشد.")]
         MobilePatternNotValid = 5,
-        [Description("PasswordIsNotValid")]
+        [Description("رمز عبور صحیح نمی باشد.")]
         PasswordIsNotValid = 6,
-        [Description("IpIsNotValid")]
+        [Description("ip شما مجاز نمی باشد.")]
         IpIsNotValid = 7,
-        [Description("ChangePasswordSuccess")]
-        SuccessWithLogin = 8,
-        [Description("NewPasswordNotValid")]
+        [Description("رمز عبور جدید صحیح نمی باشد.")]
         NewPasswordNotValid = 9,
-        [Description("ConfirmNewPasswordNotValid")]
+        [Description("تکرار رمز عبور جدید صحیح نمی باشد.")]
         ConfirmNewPasswordNotValid = 10,
-        //[Description("حساب کاربری با موفقیت ویرایش شد.")]
-        //Exception = 8,
     }
     public enum RecoveryUserMessage
     {

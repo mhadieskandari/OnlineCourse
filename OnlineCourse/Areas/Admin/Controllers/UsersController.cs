@@ -101,12 +101,6 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
         // GET: Admin/Users/Create
         public IActionResult Create()
         {
-
-
-
-
-
-
             return View();
         }
 
@@ -115,7 +109,7 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(/*[Bind("Id,UserName,Email,Pwd,Mobile,FullName,Position,ExpireDate,WorkDays,State,OnOff,AccessLevel,City,Country,Addrress,Des")] User*/CreateUserViewModel user/*, IFormFile Image*/)
+        public IActionResult Create(CreateUserViewModel user)
         {
             if (ModelState.IsValid)
             {
@@ -145,7 +139,7 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
                                 var filePath = new Uploder(_hostingEnvironment, _historyService).UploadGallery(
                                     EncryptDecrypt.GetUrlHash(gal.Id.ToString() + gal.PublicId + gal.Kind), user.Image);
                                 if (!string.IsNullOrEmpty(filePath))
-                                    this.AddNotification(_localizer["UploadFaild"].Value.ToString(), NotificationType.Error);
+                                    this.AddNotification("خطا درآپلود تصویر پروفایل.", NotificationType.Error);
 
                                 //var uploadsRootFolder = Path.Combine(_hostingEnvironment.WebRootPath,
                                 //    Path.Combine("uploads", "galleries"));
@@ -166,13 +160,13 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
                                 //}
                             }
                         }
-                        this.AddNotification(_localizer[EnumExtention.GetDescription(res)].Value.ToString(),
+                        this.AddNotification(EnumExtention.GetDescription(res),
                             NotificationType.Success);
                         return RedirectToAction("Index");
                     }
                     else
                     {
-                        this.AddNotification(_localizer[EnumExtention.GetDescription(res)].Value.ToString(),
+                        this.AddNotification(EnumExtention.GetDescription(res),
                             NotificationType.Error);
                         return View(user);
                     }
@@ -196,12 +190,13 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
             }
             try
             {
-                var chef = _unitOfWork.Users.Get(id.Value);
-                if (chef == null)
+                var user = _unitOfWork.Users.Get(id.Value);
+                if (user == null)
                 {
                     return NotFound();
                 }
-                return View(chef);
+                var viewModel = _mapper.Map<CreateUserViewModel>(user);
+                return View(viewModel);
             }
             catch (Exception e)
             {
@@ -217,7 +212,7 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, [Bind("Id,UserName,Email,Pwd,Mobile,FullName,Position,ExpireDate,WorkDays,State,OnOff,AccessLevel,City,Country,Addrress,Des")] User user, IFormFile Image)
+        public IActionResult Edit(int id, CreateUserViewModel user)
         {
             if (id != user.Id)
             {
@@ -228,24 +223,28 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
             {
                 try
                 {
+                    var orgUser = _mapper.Map<User>(user);
                     using (var res = new UserUpdate(_provider, _msgSender, _historyService))
                     {
-                        var msg = (UpdateUserMessage)res.Update(user);
+                        var msg = (UpdateUserMessage)res.Update(orgUser);
                         if (msg == UpdateUserMessage.Success)
                         {
-                            this.AddNotification(_localizer[EnumExtention.GetDescription(msg)].Value.ToString(), NotificationType.Success);
-                            if (Image != null)
+                            this.AddNotification(EnumExtention.GetDescription(msg), NotificationType.Success);
+                            if (user.Image != null)
                             {
 
                                 Gallery gal;
-                                var dbgal = _unitOfWork.Galleries.GetGallery(user.Id, (byte)GalleryKind.UserProfile);
+                                var dbgal = _unitOfWork.Galleries.GetGallery(orgUser.Id, (byte)GalleryKind.UserProfile);
                                 int count = 0;
                                 if (dbgal != null && dbgal.Any())
                                 {
                                     gal = dbgal.FirstOrDefault();
-                                    gal.POrder = 1;
-                                    gal.Ext = Path.GetExtension(Image.FileName);
-                                    _unitOfWork.Galleries.Update(gal);
+                                    if (gal != null)
+                                    {
+                                        gal.POrder = 1;
+                                        gal.Ext = Path.GetExtension(user.Image.FileName);
+                                        _unitOfWork.Galleries.Update(gal);
+                                    }
                                     count = _unitOfWork.Complete();
                                 }
                                 else
@@ -253,10 +252,10 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
                                     gal = new Gallery()
                                     {
                                         Kind = (byte)GalleryKind.UserProfile,
-                                        PublicId = user.Id,
+                                        PublicId = orgUser.Id,
                                         State = (byte)GeneralState.Disable,
-                                        Title = user.FullName,
-                                        Ext = Path.GetExtension(Image.FileName),
+                                        Title = orgUser.FullName,
+                                        Ext = Path.GetExtension(user.Image.FileName),
                                         POrder = 1
                                     };
                                     _unitOfWork.Galleries.Add(gal);
@@ -264,10 +263,10 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
                                 }
                                 if (count > 0)
                                 {
-                                    var filePath = new Uploder(_hostingEnvironment, _historyService).UploadGallery(EncryptDecrypt.GetUrlHash(gal.Id.ToString() + gal.PublicId + gal.Kind), Image);
+                                    var filePath = new Uploder(_hostingEnvironment, _historyService).UploadGallery(EncryptDecrypt.GetUrlHash(gal.Id.ToString() + gal.PublicId + gal.Kind), user.Image);
 
                                     if (string.IsNullOrEmpty(filePath))
-                                        this.AddNotification(_localizer["UploadFaild"].Value.ToString(), NotificationType.Error);
+                                        this.AddNotification("خطا در آپلود تصویر پروفایل.", NotificationType.Error);
                                 }
                                 return RedirectToAction("Index");
                             }
@@ -346,36 +345,33 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        public IActionResult ChangePassword(ChangePasswordViewModel model)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var dbUser = _unitOfWork.Users.Get(model.Id);
+                    var dbUser = _unitOfWork.Users.Get(model.UserId);
                     if (dbUser != null)
                     {
-                        var req = new UserChangePassword(_provider, _msgSender, _historyService).CahngePassword(new ChangePasswordDto() { UserName = dbUser.UserName, Password = model.OldPass, NewPassword = model.NewPass, ConfirmNewPassword = model.ConfirmNewPass, Ip = WebHelper.GetRemoteIP });
-                        if (req == (byte)ChangePasswordUserMessage.SuccessWithLogin)
-                        {
+                        var req = new UserChangePassword(_provider, _msgSender, _historyService).CahngePassword(new ChangePasswordDto() { UserName = dbUser.UserName, Password = model.OldPass, NewPassword = model.NewPass, ConfirmNewPassword = model.ConfirmNewPass, Ip = WebHelper.GetRemoteIP, IsAdmin = true });
+                        //if (req == (byte)ChangePasswordUserMessage.Success)
+                        //{
 
-                            this.AddNotification(_localizer[EnumExtention.GetDescription((ChangePasswordUserMessage)req)].Value.ToString(), NotificationType.Success);
-                            var returnUrl = Url.Action("Edit", "Users", new { area = "Admin", id = model.Id });
-                            await _cuser.LogOutAsync();
-                            return RedirectToAction("Login", "Account", new { area = "", returnUrl = returnUrl /* , LoginViewModel = new LoginViewModel() { Email = _cUser.GetEmail() }*/});
-                        }
-                        this.AddNotification(_localizer[EnumExtention.GetDescription((ChangePasswordUserMessage)req)].Value.ToString(), NotificationType.Error);
+                        this.AddNotification(EnumExtention.GetDescription((ChangePasswordUserMessage)req), NotificationType.Success);
+                        //var returnUrl = Url.Action("Edit", "Users", new { area = "Admin", id = model.UserId });
+                        //await _cuser.LogOutAsync();
+                        //return RedirectToAction("Login", "Account", new { area = "", returnUrl = returnUrl /* , LoginViewModel = new LoginViewModel() { Email = _cUser.GetEmail() }*/});
+                        //}
+                        //this.AddNotification(_localizer[EnumExtention.GetDescription((ChangePasswordUserMessage)req)].Value.ToString(), NotificationType.Error);
                         return RedirectToAction(nameof(Edit), new
                         {
-                            id = model.Id
+                            id = model.UserId
                         });
                     }
 
-                    this.AddNotification("InvalidData", NotificationType.Error);
-                    return RedirectToAction(nameof(Edit), new
-                    {
-                        id = model.Id
-                    });
+                    this.AddNotification("کاربر مورد نظر یافت نشد.", NotificationType.Error);
+                    return RedirectToAction(nameof(Index));
 
                 }
                 catch (Exception e)
@@ -385,13 +381,11 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
                     return RedirectToAction("ErrorPage", "Home");
                 }
             }
-            this.AddNotification(_localizer["UnMatchedPassword"].Value.ToString(), NotificationType.Error);
 
             return RedirectToAction(nameof(Edit), new
             {
-                id = model.Id
+                id = model.UserId
             });
-            // return View();
         }
     }
 }

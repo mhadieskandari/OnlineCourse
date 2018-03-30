@@ -9,7 +9,7 @@ namespace OnlineCourse.Panel.Utils.ViewModels.AccountViewModels
 {
     public class ChangePasswordViewModel
     {
-        public int Id { set; get; }
+        public int UserId { set; get; }
 
         [Required(ErrorMessage = "{0} اجباریست.")]
         [Display(Name = "رمز عبور قبلی")]

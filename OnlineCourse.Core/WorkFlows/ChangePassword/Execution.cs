@@ -30,9 +30,9 @@ namespace OnlineCourse.Core.WorkFlows.ChangePassword
                         dbuser.Password = EncryptDecrypt.Encrypt(user.NewPassword);
                         uw.Users.Update(dbuser);
                         var res = uw.Complete();
-                        if(res>0)return (byte)ChangePasswordUserMessage.SuccessWithLogin;
+                        if(res>0)return (byte)ChangePasswordUserMessage.Success;
                     }
-                    return (byte)ChangePasswordUserMessage.Success;
+                    return (byte)ChangePasswordUserMessage.EmailIsNotExist;
                 }
             }
             catch (Exception e)

@@ -143,25 +143,25 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
                     if (dbUser != null)
                     {
                         var req = new UserChangePassword(_provider, _msgSender, _historyService).CahngePassword(new ChangePasswordDto() { UserName = dbUser.UserName, Password = model.OldPass, NewPassword = model.NewPass, ConfirmNewPassword = model.ConfirmNewPass, Ip = WebHelper.GetRemoteIP });
-                        if (req == (byte)ChangePasswordUserMessage.SuccessWithLogin)
+                        if (req == (byte)ChangePasswordUserMessage.Success)
                         {
 
                             this.AddNotification(EnumExtention.GetDescription((ChangePasswordUserMessage)req), NotificationType.Success);
-                            var returnUrl = Url.Action(nameof(Profile), "Home", new { area = "Teacher", id = model.Id });
+                            var returnUrl = Url.Action(nameof(Profile), "Home", new { area = "Teacher", id = model.UserId });
                             await _user.LogOutAsync();
                             return RedirectToAction("Login", "Account", new { area = "", returnUrl = returnUrl /* , LoginViewModel = new LoginViewModel() { Email = _cUser.GetEmail() }*/});
                         }
                         this.AddNotification(EnumExtention.GetDescription((ChangePasswordUserMessage)req), NotificationType.Error);
                         return RedirectToAction(nameof(Profile), new
                         {
-                            id = model.Id
+                            id = model.UserId
                         });
                     }
 
                     this.AddNotification("خطا", NotificationType.Error);
                     return RedirectToAction(nameof(Profile), new
                     {
-                        id = model.Id
+                        id = model.UserId
                     });
 
                 }
@@ -176,7 +176,7 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
 
             return RedirectToAction(nameof(Profile), new
             {
-                id = model.Id
+                id = model.UserId
             });
         }
 

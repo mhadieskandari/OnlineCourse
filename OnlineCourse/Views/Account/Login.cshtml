@@ -4,7 +4,6 @@
     Layout = "~/Views/Shared/_AccountLayout.cshtml";
     ViewData["Title"] = "ورود";
 }
-@Html.Partial("/Views/Shared/_Notifications.cshtml")
 <div class="col-md-4 col-center-md" style="padding-top:100px;">
     <div class="panel panel-default">
         <div class="panel-heading">
@@ -12,22 +11,24 @@
         </div>
         <form asp-controller="Account" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
             <div class="panel-body">
+                
+                @Html.Partial("/Views/Shared/_Notifications.cshtml")
                 <span asp-validation-summary="All" class="text-danger"></span>
                 <span asp-validation="Success" class="text-success"></span>
                 <div class="form-group">
                     <label asp-for="Email" class="control-label"></label>
-                    <input asp-for="Email" class="form-control text-left" />
+                    <input asp-for="Email" class="form-control text-left"/>
                     <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="Password" class="control-label"></label>
-                    <input asp-for="Password" class="form-control text-left" />
+                    <input asp-for="Password" class="form-control text-left"/>
                     <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <div class="checkbox">
                         <label asp-for="RememberMe">
-                            <input asp-for="RememberMe" />
+                            <input asp-for="RememberMe"/>
                             @Html.DisplayNameFor(m => m.RememberMe)
                         </label>
                     </div>
