@@ -80,7 +80,7 @@ namespace OnlineCourse.Core.Services
             //    ? new Claim(ClaimTypes.Expiration, TimeSpan.FromDays(30).ToString())
             //    : new Claim(ClaimTypes.Expiration, "0"));
 
-            var expireDate = remember ? 30 : 0;
+           // var expireDate = remember ? 30 : 0;
 
             userIdentity.AddClaim(user.SecuritySpan != null
                 ? new Claim(ClaimTypes.SerialNumber, user.SecuritySpan)
@@ -88,13 +88,24 @@ namespace OnlineCourse.Core.Services
             var ac = ((byte)user.AccessLevel).ToString();
             userIdentity.AddClaim(new Claim(ClaimTypes.Role, ac));
 
-
             ClaimsPrincipal principal = new ClaimsPrincipal(userIdentity);
-            await _httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, new AuthenticationProperties()
+
+            if (remember)
             {
-                ExpiresUtc = DateTimeOffset.Now.AddDays(expireDate),
-                IsPersistent = remember
-            });
+                await _httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                    principal, new AuthenticationProperties()
+                    {
+                        ExpiresUtc = DateTimeOffset.Now.AddDays(30),
+                        IsPersistent = true,
+
+                    });
+            }
+            else
+            {
+                await _httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,principal);
+            }
+
+            
 
             return user;
         }

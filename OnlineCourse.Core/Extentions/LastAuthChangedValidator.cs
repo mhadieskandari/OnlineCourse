@@ -27,13 +27,13 @@ namespace OnlineCourse.Core.Extentions
                     if (string.IsNullOrEmpty(lastChanged) || !await unitOfWork.Users.ValidateLastChanged(username.Value, lastChanged))
                     {
                         context.RejectPrincipal();
-                        await context.HttpContext.Authentication.SignOutAsync("CookieAuthentication");
+                        await context.HttpContext.Authentication.SignOutAsync("onlineCourseAthentication");
                     }
                 }
                 else
                 {
                     context.RejectPrincipal();
-                    await context.HttpContext.Authentication.SignOutAsync("CookieAuthentication");
+                    await context.HttpContext.Authentication.SignOutAsync("onlineCourseAthentication");
                 }
             }
             catch (Exception e)
