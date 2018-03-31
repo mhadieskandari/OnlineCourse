@@ -7,21 +7,21 @@ namespace OnlineCourse.Core
 {
     public enum RegisterUserMessage
     {
-        [Description("RegistrationSuccess")]
+        [Description("ثبت نام با موفقیت انجام شد.")]
         Success = 0,
-        [Description("MobileAndEmailIsNull")]
+        [Description("مویایل یا ایمیل نباید خالی باشد.")]
         MobileAndEmailIsNull = 1,
-        [Description("EmailIsExist")]
+        [Description("ایمیل یافت نشد.")]
         EmailIsExist = 2,
-        [Description("MobileIsExist")]
+        [Description("شماره همراه یافت نشد.")]
         MobileIsExist = 3,
-        [Description("EmailPatternNotValid")]
+        [Description("ایمیل صحیح نیست.")]
         EmailPatternNotValid = 4,
-        [Description("MobilePatternNotValid")]
+        [Description("شماره همراه صحیح نیست.")]
         MobilePatternNotValid = 5,
         [Description("ایمیل یافت نشد.")]
         PasswordIsNotValid = 6,
-        [Description("IpIsNotValid")]
+        [Description("ip شما مجاز نمی باشد.")]
         IpIsNotValid = 7,
         //[Description("ایمیل یافت نشد")]
         //Exception = 8,
@@ -73,37 +73,37 @@ namespace OnlineCourse.Core
     }
     public enum RecoveryUserMessage
     {
-        [Description("NewPasswordSend")]
+        [Description("رمز عبور جدید ارسال شد.")]
         Success = 0,
-        [Description("EmailIsNotExist")]
+        [Description("ایمیل یافت نشد.")]
         EmailIsNotExist = 1,
-        [Description("MobileIsNotExist")]
+        [Description("شماره همراه موجود نیست.")]
         MobileIsNotExist = 2,
-        [Description("ResetPasswordSendClosely")]
+        [Description("رمز عبور به تازگی ذخیره شده است, لطفا اندکی صبر کنید.")]
         LastResetIsClose = 3,
-        [Description("DuplicateUser")]
+        [Description("خطای داپلیکیت")]
         DuplicateUser = 7,
-        [Description("Exception")]
+        [Description("خطا")]
         Exception = 8,
     }
 
     public enum LoginUserMessage
     {
-        [Description("LoginSuccess")]
+        [Description("ورود موفقیت آمیز.")]
         Success = 0,
-        [Description("EmailIsNotExist")]
+        [Description("ایمیل یافت نشد.")]
         EmailIsNotExist = 1,
-        [Description("MobileIsNotExist")]
+        [Description("شماره همراه موجود نیست.")]
         MobileIsNotExist = 2,
-        [Description("PasswordInCorrect")]
+        [Description("رمز عبور اشتباه است.")]
         PasswordInCorrect = 3,
-        [Description("AccountDisabled")]
+        [Description("حساب کاربری غیر فعال است.")]
         AccountDisabled = 4,
-        [Description("AccountNotVerified.")]
+        [Description("حساب کاربری اعتبار سنجی نشده است.")]
         AccountNotVerified = 5,
-        [Description("IpNotValid")]
+        [Description("ip شما مجاز نمی باشد.")]
         IpNotValid = 7,
-        [Description("Exception")]
+        [Description("خطا")]
         Exception = 8,
 
 

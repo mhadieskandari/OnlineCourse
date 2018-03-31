@@ -1,6 +1,6 @@
 ﻿@model OnlineCourse.Panel.Utils.ViewModels.Areas.Admin.SectionEditViewModel
 @{
-    ViewData["Title"] = "ویرایش ";
+    ViewData["Title"] = "ویرایش دوره ";
     Layout = "~/Areas/Teacher/Views/Shared/_Layout.cshtml";
 }
 
@@ -44,11 +44,7 @@
                                 <select asp-for="CourseId" class="form-control" asp-items="Model.Courses"></select>
                                 <span asp-validation-for="CourseId" class="text-danger"></span>
                             </div>
-                            <div class="form-group col-md-6 col-sm-12 col-xs-12">
-                                <label asp-for="Activity" class="control-label"></label>
-                                <select asp-for="Activity" class="form-control" asp-items='Html.GetEnumValueDescriptionSelectList<ActiveState>((ActiveState)Model.Activity)'></select>
-                                <span asp-validation-for="Activity" class="text-danger"></span>
-                            </div>
+                           
                         </div>
 
                     </div>
