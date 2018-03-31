@@ -381,7 +381,7 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
                     return RedirectToAction("ErrorPage", "Home");
                 }
             }
-
+            this.AddNotification("خطا در تغییر رمز عبور.",NotificationType.Error);
             return RedirectToAction(nameof(Edit), new
             {
                 id = model.UserId

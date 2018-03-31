@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using OnlineCourse.Panel.Utils.CustomValidationAttribute;
 
 namespace OnlineCourse.Panel.Utils.ViewModels.AccountViewModels
 {
@@ -11,7 +12,7 @@ namespace OnlineCourse.Panel.Utils.ViewModels.AccountViewModels
     {
         public int UserId { set; get; }
 
-        [Required(ErrorMessage = "{0} اجباریست.")]
+        [RequiredIf( propertyName: "FromAdmin",desiredvalue:false, ErrorMessage = "{0} اجباریست.")]
         [Display(Name = "رمز عبور قبلی")]
         [StringLength(100, ErrorMessage = "حداقل طول {0} باید {1} کاراکتر باید باشد.", MinimumLength = 6)]
         [DataType(DataType.Password)]
@@ -30,6 +31,6 @@ namespace OnlineCourse.Panel.Utils.ViewModels.AccountViewModels
         [Compare("NewPass",ErrorMessage = "{0} با {1}همخوانی ندارد.")]
         public string ConfirmNewPass { get; set; }
 
-
+        public bool FromAdmin { set; get; } = true;
     }
 }

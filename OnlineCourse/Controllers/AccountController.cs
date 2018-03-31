@@ -62,7 +62,7 @@ namespace OnlineCourse.Panel.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Login(LoginViewModel loginModel, string returnUrl)
+        public IActionResult Login(LoginViewModel loginModel, string returnUrl)
         {
             //ViewData["ReturnUrl"] = returnUrl;
             if (!ModelState.IsValid)
@@ -77,10 +77,10 @@ namespace OnlineCourse.Panel.Controllers
             {
                 try
                 {
-                    var user =_cUser.Login(loginModel.Email, loginModel.Password, loginModel.RememberMe).Result;
+                    var user = _cUser.Login(loginModel.Email, loginModel.Password, loginModel.RememberMe).Result;
 
-                    if (user!=null)
-                    {                       
+                    if (user != null)
+                    {
                         var ret = LoginRedirect(user, returnUrl);
                         if (ret != null)
                         {
@@ -102,11 +102,11 @@ namespace OnlineCourse.Panel.Controllers
                 var reqCode = new UserReqVerCode(_provider, _msgSender, _historyService).RequestCode(new ReqVerifyCodeDto() { Email = loginModel.Email, Ip = WebHelper.GetRemoteIP });
                 if (reqCode == (byte)VerifyUserMessage.Success)
                 {
-                    this.AddNotification(_localizer[EnumExtention.GetDescription((LoginUserMessage)loginWorkFlow)].Value.ToString(), NotificationType.Success);
+                    this.AddNotification(EnumExtention.GetDescription((LoginUserMessage)loginWorkFlow), NotificationType.Success);
                 }
                 else
                 {
-                    this.AddNotification(_localizer[EnumExtention.GetDescription((LoginUserMessage)loginWorkFlow)].Value.ToString(), NotificationType.Error);
+                    this.AddNotification(EnumExtention.GetDescription((LoginUserMessage)loginWorkFlow), NotificationType.Error);
                 }
 
                 return RedirectToAction("SendCode", new { email = loginModel.Email });
@@ -133,6 +133,11 @@ namespace OnlineCourse.Panel.Controllers
                     if (user.AccessLevel == UserAccessLevel.Teacher)
                     {
                         return RedirectToAction("Index", "Home", new { area = "Teacher" });
+                    }
+
+                    if (user.AccessLevel == UserAccessLevel.Stusent)
+                    {
+                        return RedirectToAction("Index", "Home", new { area = "Student" });
                     }
                 }
                 if (string.IsNullOrEmpty(returnUrl))
@@ -315,7 +320,7 @@ namespace OnlineCourse.Panel.Controllers
                         var user = _unitOfWork.Users.GetByEmail(sendCode.Email).FirstOrDefault();
                         if (user != null && user.AccessLevel == (byte)UserAccessLevel.Stusent)
                         {
-                            IActionResult action = await Login(new LoginViewModel() { Email = user.Email, Password = EncryptDecrypt.Decrypt(user.Password), RememberMe = true }, "/Account/UpdateInfo");
+                            IActionResult action = Login(new LoginViewModel() { Email = user.Email, Password = EncryptDecrypt.Decrypt(user.Password), RememberMe = true }, "/Account/UpdateInfo");
                             return action;
                         }
 
