@@ -23,7 +23,7 @@ using SQLitePCL;
 namespace OnlineCourse.Panel.Areas.Teacher.Controllers
 {
     [Area("Teacher")]
-    [Authorize(Roles = "10,1")]
+    [Authorize(Roles = "1")]
     public class HomeController : Controller
     {
         private readonly ApplicationDbContext _context;
