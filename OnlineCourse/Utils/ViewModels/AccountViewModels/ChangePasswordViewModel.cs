@@ -12,19 +12,13 @@ namespace OnlineCourse.Panel.Utils.ViewModels.AccountViewModels
     {
         public int UserId { set; get; }
 
-        [RequiredIf( propertyName: "FromAdmin",desiredvalue:false, ErrorMessage = "{0} اجباریست.")]
-        [Display(Name = "رمز عبور قبلی")]
-        [StringLength(100, ErrorMessage = "حداقل طول {0} باید {1} کاراکتر باید باشد.", MinimumLength = 6)]
-        [DataType(DataType.Password)]
-        public string OldPass { get; set; }
-
-        [Required(ErrorMessage = "{0} اجباریست.")]
+        [Required(ErrorMessage = "{0} را وارد کنید.")]
         [Display(Name = "رمز عبور جدید")]
         [StringLength(100, ErrorMessage = "حداقل طول {0} باید {1} کاراکتر باید باشد.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         public string NewPass { get; set; }
 
-        [Required(ErrorMessage = "{0} اجباریست.")]
+        [Required(ErrorMessage = "{0} را وارد کنید.")]
         [Display(Name = "تکرار رمز عبور جدید")]
         [StringLength(100, ErrorMessage = "حداقل طول {0} باید {1} کاراکتر باید باشد.", MinimumLength = 6)]
         [DataType(DataType.Password)]
@@ -33,4 +27,15 @@ namespace OnlineCourse.Panel.Utils.ViewModels.AccountViewModels
 
         public bool FromAdmin { set; get; } = true;
     }
+
+    public class ChangePasswordClientViewModel:ChangePasswordViewModel
+    {
+
+        [Required(ErrorMessage = "{0} را وارد کنید.")]
+        [Display(Name = "رمز عبور قبلی")]
+        [StringLength(100, ErrorMessage = "حداقل طول {0} باید {1} کاراکتر باید باشد.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        public string OldPass { get; set; }
+    }
+
 }

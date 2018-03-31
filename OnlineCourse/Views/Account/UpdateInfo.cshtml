@@ -112,9 +112,8 @@
 </section>
 
 
-@Html.Partial("~/Views/Account/_ChangePassword.cshtml", new OnlineCourse.Panel.Utils.ViewModels.AccountViewModels.ChangePasswordViewModel() { Id = Model.Id })
+@Html.Partial("~/Areas/Admin/Views/Users/_ChangePassword.cshtml", new OnlineCourse.Panel.Utils.ViewModels.AccountViewModels.ChangePasswordViewModel() { UserId = Model.Id })
 
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }
-

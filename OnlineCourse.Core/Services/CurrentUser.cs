@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using OnlineCourse.Entity;
 using System;
+using OnlineCourse.Core.Extentions;
 
 namespace OnlineCourse.Core.Services
 {
@@ -109,6 +110,30 @@ namespace OnlineCourse.Core.Services
 
             return user;
         }
-        
+
+        public async Task<string> GetUserProfilePicPath()
+        {
+            string path = "";
+            var userId = await GetUserId();
+            if (userId != null)
+            {
+                var gal = await _unitOfWork.Galleries.GetUserProfileAsync(userId.Value);
+                if (gal?.Kind != null)
+                    path = EncryptDecrypt.GetUrlHash(gal.Id.ToString() + gal.PublicId + gal.Kind.Value) + gal.Ext;
+            }
+            return path;
+        }
+
+        public async Task<string> GetUserProfilePicPath(int userId)
+        {
+
+            string path = "";
+            var gal = await _unitOfWork.Galleries.GetUserProfileAsync(userId);
+            if (gal?.Kind != null)
+                path = EncryptDecrypt.GetUrlHash(gal.Id.ToString() + gal.PublicId + gal.Kind.Value) + gal.Ext;
+            return path;
+        }
+
+
     }
 }

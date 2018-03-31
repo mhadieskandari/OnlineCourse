@@ -28,23 +28,21 @@ namespace OnlineCourse.Core
     }
     public enum UpdateUserMessage
     {
-        [Description("UpdateAccuontSuccess")]
+        [Description("حساب کاربری با موفقیت ویرایش شد.")]
         Success = 0,
-        [Description("MobileAndEmailIsNull")]
+        [Description("مویایل یا ایمیل نباید خالی باشد.")]
         MobileAndEmailIsNull = 1,
-        [Description("EmailIsExist")]
+        [Description("ایمیل یافت نشد.")]
         EmailIsNotExist = 2,
-        [Description("MobileIsNotExist")]
+        [Description("شماره همراه یافت نشد.")]
         MobileIsNotExist = 3,
-        [Description("EmailPatternNotValid")]
+        [Description("ایمیل صحیح نیست.")]
         EmailPatternNotValid = 4,
-        [Description("MobilePatternNotValid")]
+        [Description("شماره همراه صحیح نیست.")]
         MobilePatternNotValid = 5,
-        [Description("PasswordIsNotValid")]
-        PasswordIsNotValid = 6,
-        [Description("IpIsNotValid")]
+        [Description("ip شما مجاز نمی باشد.")]
         IpIsNotValid = 7,
-        [Description("UpdateAccuontSuccess")]
+        [Description("حساب کاربری شما باموفقیت ویرایش شد,لطفا لوارد شوید.")]
         SuccessWithLogin = 8,
         //[Description("حساب کاربری با موفقیت ویرایش شد.")]
         //Exception = 8,
@@ -113,21 +111,21 @@ namespace OnlineCourse.Core
 
     public enum VerifyUserMessage
     {
-        [Description("VerificationSuccess")]
+        [Description("حساب شما با موفقیت فعال شد.")]
         Success = 0,
-        [Description("EmailIsNotExist")]
+        [Description("ایمیل یافت نشد.")]
         EmailIsNotExist = 1,
-        [Description("MobileIsNotExist")]
+        [Description("شماره همراه یافت نشد.")]
         MobileIsNotExist = 2,
-        [Description("VerificationCodeIsNotValid")]
+        [Description("کدفعال سازی معتبر نمیباشد.")]
         ActivationCodeInCorrect = 3,
-        [Description("AccountDisabled")]
+        [Description("حساب شما غیرفعال است.")]
         AccountDisabled = 4,
-        [Description("VerificationCodeExpired")]
+        [Description("کد فعال سازی منقضی شده است.")]
         ActivationCodeExpired = 5,
-        [Description("VerificationCodeSentNearly")]
+        [Description("کد فعال سازی به تازگی ارسال شده لطفا اندکی صبر کنید.")]
         ActivationCodeSend = 6,
-        [Description("IpNotValid")]
+        [Description("ip شما محدود شده است.")]
         IpNotValid = 7,
         [Description("Exception")]
         Exception = 8,

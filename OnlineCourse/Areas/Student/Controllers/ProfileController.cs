@@ -1,13 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using OnlineCourse.Core;
 using OnlineCourse.Core.Dtos;
 using OnlineCourse.Core.Extentions;
@@ -18,23 +20,21 @@ using OnlineCourse.Entity.Models;
 using OnlineCourse.Panel.Utils;
 using OnlineCourse.Panel.Utils.Extentions;
 using OnlineCourse.Panel.Utils.ViewModels.AccountViewModels;
-using SQLitePCL;
 
-namespace OnlineCourse.Panel.Areas.Teacher.Controllers
+namespace OnlineCourse.Panel.Areas.Student.Controllers
 {
-    [Area("Teacher")]
-    [Authorize(Roles = "1")]
-    public class HomeController : Controller
+    [Area("Student")]
+    [Authorize(Roles = "0")]
+    public class ProfileController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly CurrentUser _user;
-
         private readonly IServiceProvider _provider;
         private readonly HistoryService _historyService;
         private readonly MessageService _msgSender;
         private readonly IHostingEnvironment _hostingEnvironment;
 
-        public HomeController(ApplicationDbContext context, CurrentUser user,HistoryService historyService, IServiceProvider provider, IHostingEnvironment hostingEnvironment)
+        public  ProfileController(ApplicationDbContext context, CurrentUser user, HistoryService historyService, IServiceProvider provider, IHostingEnvironment hostingEnvironment)
         {
             _context = context;
             _user = user;
@@ -44,24 +44,18 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
             _hostingEnvironment = hostingEnvironment;
 
         }
-
-        public IActionResult Index()
+       
+        public async Task<IActionResult> Index()
         {
-            //return RedirectToAction("Index","InvoiceList");
-            return View();
-        }
-
-        public IActionResult Profile()
-        {
-            var user = _user.GetUser().Result;
+            var user =await _user.GetUser();
             return View(user);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, [Bind("Id,UserName,Email,Phone,FullName,City,Addrress")] User user, IFormFile image)
+        public IActionResult Index(int id, [Bind("Id,UserName,Email,FullName,Phone,City,Addrress")] User user, IFormFile image)
         {
-            if (id != user.Id)
+            if (id != user.Id ||user.Id!=_user.GetUserId().Result)
             {
                 return NotFound();
             }
@@ -80,7 +74,7 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
                             {
 
                                 Gallery gal;
-                                var dbgal = _context.Galleries.Where(g=>g.PublicId==user.Id && g.Kind== (byte)GalleryKind.UserProfile);
+                                var dbgal = _context.Galleries.Where(g => g.PublicId == user.Id && g.Kind == (byte)GalleryKind.UserProfile);
                                 int count = 0;
                                 if (dbgal != null && dbgal.Any())
                                 {
@@ -127,11 +121,6 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
             return View(user);
         }
 
-        public IActionResult NotFoundPage()
-        {
-            return View();
-        }
-
         [HttpPost]
         public async Task<IActionResult> ChangePassword(ChangePasswordClientViewModel model)
         {
@@ -139,7 +128,7 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
             {
                 try
                 {
-                    var dbUser =await _user.GetUser();
+                    var dbUser = await _user.GetUser();
                     if (dbUser != null)
                     {
                         var req = new UserChangePassword(_provider, _msgSender, _historyService).CahngePassword(new ChangePasswordDto() { UserName = dbUser.UserName, Password = model.OldPass, NewPassword = model.NewPass, ConfirmNewPassword = model.ConfirmNewPass, Ip = WebHelper.GetRemoteIP });
@@ -147,19 +136,19 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
                         {
 
                             this.AddNotification(EnumExtention.GetDescription((ChangePasswordUserMessage)req), NotificationType.Success);
-                            var returnUrl = Url.Action(nameof(Profile), "Home", new { area = "Teacher", id = model.UserId });
+                            var returnUrl = Url.Action(nameof(Index), "Profile", new { area = "Student"});
                             await _user.LogOutAsync();
-                            return RedirectToAction("Login", "Account", new { area = "", returnUrl = returnUrl /* , LoginViewModel = new LoginViewModel() { Email = _cUser.GetEmail() }*/});
+                            return RedirectToAction("Login", "Account", new { area = "", returnUrl = returnUrl });
                         }
                         this.AddNotification(EnumExtention.GetDescription((ChangePasswordUserMessage)req), NotificationType.Error);
-                        return RedirectToAction(nameof(Profile), new
+                        return RedirectToAction(nameof(Index), new
                         {
                             id = model.UserId
                         });
                     }
 
                     this.AddNotification("خطا", NotificationType.Error);
-                    return RedirectToAction(nameof(Profile), new
+                    return RedirectToAction(nameof(Index), new
                     {
                         id = model.UserId
                     });
@@ -174,12 +163,7 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
             }
             this.AddNotification("رمز عبور جدید و تکرار آن همخوانی ندارند.", NotificationType.Error);
 
-            return RedirectToAction(nameof(Profile), new
-            {
-                id = model.UserId
-            });
+            return RedirectToAction(nameof(Index));
         }
-
-
     }
 }

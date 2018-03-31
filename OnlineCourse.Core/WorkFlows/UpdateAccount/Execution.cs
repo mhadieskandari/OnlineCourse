@@ -12,15 +12,17 @@ namespace OnlineCourse.Core.WorkFlows.UpdateAccount
     {
         private readonly HistoryService _historyService;
 
-        public Execution(IServiceProvider serviceProvider, HistoryService historyService) : base(serviceProvider)
+        private readonly bool _isAdmin;
+
+
+        public Execution(IServiceProvider serviceProvider, HistoryService historyService, bool isAdmin) : base(serviceProvider)
         {
             _historyService = historyService;
+            _isAdmin = isAdmin;
         }
 
         public byte Execute(User user)
         {
-
-            bool withLogin = false;
             try
             {
                 using (var uw = CreateUnitOfWork())
@@ -28,80 +30,56 @@ namespace OnlineCourse.Core.WorkFlows.UpdateAccount
                     var dbuser = uw.Users.Get(user.Id);
 
                     var securitySpan = Guid.NewGuid().ToString();
-
-                    if ( dbuser.AccessLevel != user.AccessLevel)
+                    if (_isAdmin)
                     {
-                        dbuser.AccessLevel = user.AccessLevel;
-                        dbuser.SecuritySpan = securitySpan;
+                        if (dbuser.AccessLevel != user.AccessLevel)
+                        {
+                            dbuser.AccessLevel = user.AccessLevel;
+                            dbuser.SecuritySpan = securitySpan;
+                        }
+
+                        dbuser.Description = user.Description;
+
+                        if (user.ExpireDate != null && dbuser.ExpireDate != user.ExpireDate)
+                        {
+                            dbuser.ExpireDate = user.ExpireDate;
+                            dbuser.SecuritySpan = securitySpan;
+                        }
+
+                        if (dbuser.State != user.State)
+                        {
+                            dbuser.State = user.State;
+                            dbuser.SecuritySpan = securitySpan;
+                        }
+                        if (!string.IsNullOrEmpty(user.Mobile) && !dbuser.Mobile.Equals(user.Mobile))
+                        {
+                            dbuser.Mobile = user.Mobile;
+                            dbuser.ValidMobile = (byte)ValidationState.Invalid;
+                            if (dbuser.AccessLevel == UserAccessLevel.Stusent ||
+                                dbuser.AccessLevel == UserAccessLevel.Teacher)
+                            {
+                                dbuser.ActivationCode = null;
+                            }
+                        }
                     }
-                        
-                    //else
-                    //    dbuser.AccessLevel = (byte)UserAccessLevel.Customer;
 
                     dbuser.Addrress = user.Addrress;
                     dbuser.City = user.City;
-                    dbuser.Description = user.Description;
-
-                    
-
                     dbuser.Phone = user.Phone;
-
-
-
-                    if (user.ExpireDate != null && dbuser.ExpireDate != user.ExpireDate)
-                    {
-                        dbuser.ExpireDate = user.ExpireDate;
-                        dbuser.SecuritySpan = securitySpan;
-                    }
-                        
-
                     dbuser.FullName = user.FullName;
-                    
-                    if (dbuser.State != user.State)
-                    {
-                        dbuser.State = user.State;
-                        dbuser.SecuritySpan = securitySpan;
-                    }
-                        
-                    
-
-                    if (!string.IsNullOrEmpty(user.Password) && !EncryptDecrypt.Decrypt(dbuser.Password).Equals(user.Password))
-                    {
-                        dbuser.Password = EncryptDecrypt.Encrypt(user.Password);
-                        withLogin = true;
-                    }
-                        
-                    if (!string.IsNullOrEmpty(user.Mobile) && !dbuser.Mobile.Equals(user.Mobile))
-                    {
-                        dbuser.Mobile = user.Mobile;
-                        dbuser.ValidMobile = (byte)ValidationState.Invalid;
-                        if (dbuser.AccessLevel == UserAccessLevel.Stusent ||
-                            dbuser.AccessLevel == UserAccessLevel.Teacher)
-                        {
-                            dbuser.ActivationCode = null;
-                        }
-                        withLogin = true;
-                    }
+                   
                     if (!string.IsNullOrEmpty(user.Email) && !dbuser.Email.Equals(user.Email))
                     {
                         dbuser.Email = user.Email;
-                        //dbuser.ValidEmail = (byte)ValidationState.Invalid;
-
+                        dbuser.ValidEmail = (byte)ValidationState.Invalid;
                         if (dbuser.AccessLevel == UserAccessLevel.Stusent ||
                             dbuser.AccessLevel == UserAccessLevel.Teacher)
                         {
                             dbuser.ActivationCode = null;
                         }
-                        //withLogin = true;
                     }
-
-
                     uw.Users.Update(dbuser);
-                    var res = uw.Complete();
-
-                    if (res > 0 && withLogin)
-                        return (byte) UpdateUserMessage.SuccessWithLogin;
-
+                    uw.Complete();
                     return (byte)UpdateUserMessage.Success;
                 }
             }

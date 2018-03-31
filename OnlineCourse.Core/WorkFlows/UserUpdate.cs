@@ -10,12 +10,11 @@ namespace OnlineCourse.Core.WorkFlows
         private readonly Execution _execution;
         private readonly Validation _validate;
         private readonly Finally _finally;
-
-        public UserUpdate(IServiceProvider serviceProvider, MessageService authMessageSender, HistoryService historyService)
+        public UserUpdate(IServiceProvider serviceProvider, MessageService authMessageSender, HistoryService historyService,bool isAdmin=false)
             : base(serviceProvider)
         {
             _validate = new Validation(serviceProvider,historyService);
-            _execution=new Execution(serviceProvider,historyService);
+            _execution=new Execution(serviceProvider,historyService,isAdmin);
             _finally=new Finally(serviceProvider,historyService,authMessageSender);
         }
 

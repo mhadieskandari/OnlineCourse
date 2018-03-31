@@ -1,0 +1,96 @@
+﻿@model OnlineCourse.Entity.Models.User
+@{
+    ViewData["Title"] = "ویرایش پروفایل کاربری";
+}
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-md-8 col-lg-8 col-sm-12 col-xs-12 col-center-md">
+            <form asp-action="Index" method="Post" enctype="multipart/form-data">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <b>@ViewData["Title"]</b>
+                    </div>
+                    <div class="box-body">
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input asp-for="Id" type="hidden" />
+                        <div class="row">
+                            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                                <label asp-for="UserName" class="control-label"></label>
+
+                                <input asp-for="UserName" class="form-control" />
+                                <span asp-validation-for="UserName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                                <label asp-for="Email" class="control-label"></label>
+
+                                <input asp-for="Email" class="form-control" />
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                                <label asp-for="Phone" class="control-label"></label>
+
+                                <input asp-for="Phone" class="form-control" />
+                                <span asp-validation-for="Phone" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                                <label asp-for="FullName" class="control-label"></label>
+
+                                <input asp-for="FullName" class="form-control" />
+                                <span asp-validation-for="FullName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                                <label asp-for="Addrress" class="control-label"></label>
+
+                                <textarea asp-for="Addrress" class="form-control" rows="1"></textarea>
+                                <span asp-validation-for="Addrress" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                                @{
+                                    var path = await _user.GetUserProfilePicPath();
+                                }
+
+                                <label id="profile_image" class="control-label" data-toggle="popover"  data-html="true" data-content="<img src='/uploads/galleries/@(string.IsNullOrEmpty(path) ? "Admin.png" : path)' class='img-rounded' width='100' height='100'>">
+                                    <i class="fa fa-eye"></i> تصویر
+                                </label>
+                                <input type="file" name="Image" id="Image" class="form-control" />
+                                @*<span asp-validation-for="Image" class="text-danger"></span>*@
+                            </div>
+                            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                                <label class="control-label">تغییر رمز عبور</label>
+
+                                <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#changePass"><i class="fa fa-key" aria-hidden="true"></i></button>
+                            </div>
+
+                        </div>
+
+                        <div class="box-footer">
+                            <button type="submit" class="btn btn-success box-title"><i class="fa fa-save"></i></button>
+                            <a asp-action="Index" class="btn btn-info box-button"><i class="fa fa-backward"></i></a>
+                        </div>
+                    </div>
+            </form>
+        </div>
+    </div>
+    <!-- /.row -->
+</section>
+<!-- /.content -->
+@Html.Partial("~/Areas/Student/Views/Profile/_ChangePassword.cshtml", new OnlineCourse.Panel.Utils.ViewModels.AccountViewModels.ChangePasswordClientViewModel() { UserId = Model.Id })
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+    $(document).ready(function() {
+        $("#profile_image").popover({
+            animated: 'fade',
+            placement: 'bottom',
+            html: true,
+            trigger: "hover"
+        });
+        
+    });
+    </script>
+}
+

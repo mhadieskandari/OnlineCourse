@@ -278,12 +278,12 @@ namespace OnlineCourse.Panel.Controllers
 
                     if (req == (byte)VerifyUserMessage.Success || req == (byte)VerifyUserMessage.ActivationCodeSend)
                     {
-                        this.AddNotification(_localizer[EnumExtention.GetDescription((VerifyUserMessage)req)].Value.ToString(), NotificationType.Info);
+                        this.AddNotification(EnumExtention.GetDescription((VerifyUserMessage)req), NotificationType.Info);
                         return RedirectToAction("SendCode", sendCode);
                     }
                     else
                     {
-                        this.AddNotification(_localizer[EnumExtention.GetDescription((VerifyUserMessage)req)].Value.ToString(), NotificationType.Info);
+                        this.AddNotification(EnumExtention.GetDescription((VerifyUserMessage)req), NotificationType.Info);
                         return RedirectToAction("SendCode", sendCode);
                     }
                 }
@@ -318,13 +318,18 @@ namespace OnlineCourse.Panel.Controllers
                     if (req == (byte)VerifyUserMessage.Success)
                     {
                         var user = _unitOfWork.Users.GetByEmail(sendCode.Email).FirstOrDefault();
-                        if (user != null && user.AccessLevel == (byte)UserAccessLevel.Stusent)
+                        if (user != null && user.AccessLevel == UserAccessLevel.Stusent)
                         {
-                            IActionResult action = Login(new LoginViewModel() { Email = user.Email, Password = EncryptDecrypt.Decrypt(user.Password), RememberMe = true }, "/Account/UpdateInfo");
+                            IActionResult action = Login(new LoginViewModel() { Email = user.Email, Password = EncryptDecrypt.Decrypt(user.Password), RememberMe = true }, "/Student/Profile");
+                            return action;
+                        }
+                        else if (user != null && user.AccessLevel == UserAccessLevel.Teacher)
+                        {
+                            IActionResult action = Login(new LoginViewModel() { Email = user.Email, Password = EncryptDecrypt.Decrypt(user.Password), RememberMe = true }, "/Teacher/Profile");
                             return action;
                         }
 
-                        this.AddNotification(_localizer[EnumExtention.GetDescription((VerifyUserMessage)req)].Value.ToString(), NotificationType.Success);
+                        this.AddNotification(EnumExtention.GetDescription((VerifyUserMessage)req), NotificationType.Success);
                         return RedirectToAction("Login");
                     }
                     else
@@ -411,7 +416,7 @@ namespace OnlineCourse.Panel.Controllers
 
         [Authorize()]
         [HttpPost]
-        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        public async Task<IActionResult> ChangePassword(ChangePasswordClientViewModel model)
         {
             if (ModelState.IsValid)
             {

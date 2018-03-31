@@ -31,26 +31,10 @@ namespace OnlineCourse.Core.WorkFlows.UpdateAccount
                     return (byte)res;
                 }
             }
-            //else if (string.IsNullOrEmpty(user.Mobile))
-            //{
-            //    res = ValidateByEmail(user);
-            //    if (res != (byte)RegisterUserMessage.Success)
-            //    {
-            //        return res;
-            //    }
-            //}
             else
             {
                 return (byte)UpdateUserMessage.MobileAndEmailIsNull;
             }
-
-            if (!PublicValidator.PasswordCheck(user.Password))
-            {
-                return (byte)UpdateUserMessage.PasswordIsNotValid;
-            }
-
-
-
             return (byte)UpdateUserMessage.Success;
         }
 
@@ -70,11 +54,6 @@ namespace OnlineCourse.Core.WorkFlows.UpdateAccount
         {
             using (var uw = CreateUnitOfWork())
             {
-                //if (!Regex.IsMatch(user.Email, RegexConstatnts.EmailRegex))
-                //{
-                //    return (byte)RegisterUserMessage.EmailPatternNotValid;
-                //}
-                //else
                 try
                 {
                     var dbUser = uw.Users.Get(user.Id);
@@ -100,12 +79,6 @@ namespace OnlineCourse.Core.WorkFlows.UpdateAccount
         {
             using (var uw = CreateUnitOfWork())
             {
-
-                //if (!Regex.IsMatch(user.Mobile, RegexConstatnts.MobileRegex))
-                //{
-                //    return (byte)RegisterUserMessage.MobilePatternNotValid;
-                //}
-                //else 
                 try
                 {
                     if (uw.Users.IsExistEmail(user.Email))

@@ -27,7 +27,7 @@ namespace OnlineCourse.Panel.Utils.CustomValidationAttribute
             var propertyInfo = context.ObjectInstance.GetType().GetProperty(PropertyName);
             if (propertyInfo == null) return ValidationResult.Success;
             var dependentValue = propertyInfo.GetValue(context.ObjectInstance, null);
-            if (dependentValue.ToString() != DesiredValue.ToString())
+            if (dependentValue.ToString() == DesiredValue.ToString())
                 return ValidationResult.Success;
             return !_innerAttribute.IsValid(value) ? new ValidationResult(FormatErrorMessage(context.DisplayName), new[] { context.MemberName }) : ValidationResult.Success;
         }

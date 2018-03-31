@@ -20,7 +20,7 @@ namespace OnlineCourse.Core.WorkFlows.UpdateAccount
         {
             try
             {
-                _messageSender.SendEmailAsync(user.Email, "UpdateAccount", "UpdateAccount Suuccess");
+                _messageSender.SendEmailAsync(user.Email, "ویرایش پروفایل کاربر", "حساب کاربری شما با موفقیت ویرایش شد.");
                 return (byte)UpdateUserMessage.Success;
             }
             catch (Exception e)

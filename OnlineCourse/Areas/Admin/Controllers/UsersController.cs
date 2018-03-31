@@ -354,7 +354,7 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
                     var dbUser = _unitOfWork.Users.Get(model.UserId);
                     if (dbUser != null)
                     {
-                        var req = new UserChangePassword(_provider, _msgSender, _historyService).CahngePassword(new ChangePasswordDto() { UserName = dbUser.UserName, Password = model.OldPass, NewPassword = model.NewPass, ConfirmNewPassword = model.ConfirmNewPass, Ip = WebHelper.GetRemoteIP, IsAdmin = true });
+                        var req = new UserChangePassword(_provider, _msgSender, _historyService).CahngePassword(new ChangePasswordDto() { UserName = dbUser.UserName, NewPassword = model.NewPass, ConfirmNewPassword = model.ConfirmNewPass, Ip = WebHelper.GetRemoteIP, IsAdmin = true });
                         //if (req == (byte)ChangePasswordUserMessage.Success)
                         //{
 
