@@ -89,7 +89,7 @@ namespace OnlineCourse.Core.Extentions
 
         public static string GetUrlHash(string combination)
         {
-            using (var algorithm = SHA512.Create()) //or MD5 SHA256 etc.
+            using (var algorithm = SHA1.Create())
             {
                 var hashedBytes = algorithm.ComputeHash(Encoding.UTF8.GetBytes(combination));
                 return BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
@@ -98,7 +98,7 @@ namespace OnlineCourse.Core.Extentions
 
         public static string GetUrlHash(int id, int publicId, byte kind)
         {
-            using (var algorithm = SHA512.Create()) //or MD5 SHA256 etc.
+            using (var algorithm = SHA1.Create()) 
             {
                 var hashedBytes = algorithm.ComputeHash(Encoding.UTF8.GetBytes(id.ToString() + publicId + kind));
                 return BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();

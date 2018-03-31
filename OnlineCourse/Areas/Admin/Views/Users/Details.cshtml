@@ -55,10 +55,9 @@
                                 <label asp-for="State" class="col-md-3 control-label"></label>
                                 <div class="col-md-9">
                                     <span class="form-control">
-                                        @if (Model.State != null)
-                                        {
-                                            @EnumExtention.GetDescription((UserState)Model.State.Value)
-                                        }
+                                        
+                                            @EnumExtention.GetDescription(Model.State)
+                                        
                                     </span>
                                 </div>
                             </div>
