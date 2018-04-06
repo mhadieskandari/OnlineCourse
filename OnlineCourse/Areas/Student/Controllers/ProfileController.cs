@@ -24,7 +24,7 @@ using OnlineCourse.Panel.Utils.ViewModels.AccountViewModels;
 namespace OnlineCourse.Panel.Areas.Student.Controllers
 {
     [Area("Student")]
-    [Authorize(Roles = "0")]
+    [Authorize(Roles = "0,1,10")]
     public class ProfileController : Controller
     {
         private readonly ApplicationDbContext _context;

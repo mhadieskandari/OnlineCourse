@@ -31,18 +31,13 @@ namespace OnlineCourse.Core.WorkFlows.ReqVerCode
                     {
                         return (byte) VerifyUserMessage.ActivationCodeInCorrect;
                     }
-
-                    //if (item.ValidEmail == (byte) ValidationState.Valid)
-                    //    return (byte) VerifyUserMessage.Success;
-
                     if (!PublicValidator.IpCheck(reqVerifyCodeDto.Ip))
                         return (byte)VerifyUserMessage.IpNotValid;
-
-                    //if (item.LastRequestActivationCode.HasValue && item.LastRequestActivationCode.Value.Subtract(DateTime.Now).Minutes >20 )
-                    //    return (byte)VerifyUserMessage.ActivationCodeExpired;
-
+                    
+                    //todo this is a big bug check this and resolve fix bug
                     if (item.LastRequestActivationCode.HasValue && DateTime.Now.Subtract(item.LastRequestActivationCode.Value).Minutes < 2 && !string.IsNullOrEmpty(item.ActivationCode))
                         return (byte)VerifyUserMessage.ActivationCodeSend;
+                    //todo end
                 }
 
                 return (byte)VerifyUserMessage.Success;
