@@ -67,7 +67,8 @@ namespace OnlineCourse.Core.WorkFlows.UpdateAccount
                     dbuser.City = user.City;
                     dbuser.Phone = user.Phone;
                     dbuser.FullName = user.FullName;
-                   
+                    dbuser.Degree = user.Degree;
+
                     if (!string.IsNullOrEmpty(user.Email) && !dbuser.Email.Equals(user.Email))
                     {
                         dbuser.Email = user.Email;

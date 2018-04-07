@@ -73,6 +73,18 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
                 if (ModelState.IsValid)
                 {
                     var dbSection = _mapper.Map<Section>(section);
+
+                    var isExist =
+                        _context.Sections.Any(s => s.CourseId == dbSection.CourseId &&
+                                                   s.TeacherId == dbSection.TeacherId &&
+                                                   s.TermId == dbSection.TermId);
+
+                    if (isExist)
+                    {
+                        this.AddNotification("این دوره وجود دارد و امکان ایجاد ندارد.", NotificationType.Info);
+                        return View(section);
+                    }
+
                     _context.Add(dbSection);
 
                     await _context.SaveChangesAsync();

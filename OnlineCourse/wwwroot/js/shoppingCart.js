@@ -1,24 +1,17 @@
 ﻿// ***************************************************
 // Shopping Cart functions
 
-var shoppingCart = (function () {
+var courseCart = (function () {
     // Private methods and properties
     var cart = [];
 
-    function Item(id, name, price, count, mama, min, max, deliverDateTime) {
+    function Item(id, price) {
         this.id = id;
-        this.name = name;
         this.price = price;
-        this.mama = mama;
-        this.min = min;
-        this.max = max;
-        this.deliverDateTime = deliverDateTime;
-        this.count = parseInt(count);
     }
 
     function saveCart() {
-        setCookie("shoppingCart", JSON.stringify(cart));
-        //localStorage.setItem("shoppingCart", JSON.stringify(cart));
+        setCookie("Cart", JSON.stringify(cart));
     }
 
     function setCookie(key, value) {
@@ -35,7 +28,7 @@ var shoppingCart = (function () {
 
     function loadCart() {
         //cart = JSON.parse(localStorage.getItem("shoppingCart"));
-        var decode = getCookie("shoppingCart");
+        var decode = getCookie("Cart");
         if (decode !== null && decode !== 'e') {
             cart = JSON.parse( decode);
         }
@@ -70,45 +63,23 @@ var shoppingCart = (function () {
     // Public methods and properties
     var obj = {};
 
-    obj.addItemToCart = function (id, name, price, count, mama, min, max, deliverDateTime) {
+    obj.addItemToCart = function (id,  price) {
         console.log(indexOf(id));
         var i = indexOf(id);
         if (i===-1) {
-            count = min;
-            var item = new Item(id, name, price, count, mama, min, max, deliverDateTime);
+            var item = new Item(id,  price);
             cart.push(item);  
             saveCart();
-        } else {         
-            var cnt = parseInt(cart[i].count);
-            cnt += parseInt(count);
-            if (cnt <= max) {
-                cart[i].count = cnt;
-                saveCart();
-            } else {
-
-                alert("اتمام موجودی");
-            }
         }
     };
 
-    obj.setCountForItem = function (id, count) {
-        for (var i in cart) {
-            if (cart[i].id === id) {
-                cart[i].count = count;
-                break;
-            }
-        }
-        saveCart();
-    };
+    
 
 
     obj.removeItemFromCart = function (id) { // Removes one item
         for (var i in cart) {
             if (cart[i].id === id) { // "3" === 3 false
-                cart[i].count--; // cart[i].count --
-                if (cart[i].count === 0) {
-                    cart.splice(i, 1);
-                }
+                cart[i]=null; // cart[i].count --
                 break;
             }
         }

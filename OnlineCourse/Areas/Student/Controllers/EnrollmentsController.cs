@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -10,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using OnlineCourse.Core.Services;
 using OnlineCourse.Entity;
 using OnlineCourse.Entity.Models;
+using OnlineCourse.Panel.Utils.Extentions;
 
 namespace OnlineCourse.Panel.Areas.Student.Controllers
 {
@@ -64,13 +66,25 @@ namespace OnlineCourse.Panel.Areas.Student.Controllers
         }
 
         // GET: Student/Enrollments/Create
-        public IActionResult Create()
+        public async Task<IActionResult> SelectCourse()
         {
-            ViewData["PresentId"] = new SelectList(_context.Presents, "Id", "Id");
-            ViewData["StudentId"] = new SelectList(_context.Users, "Id", "Id");
-            //var degree = await _user.GetUserDegree();
-            //    && e.Present.Section.Course.Level == degree
-            return View();
+            //ViewData["PresentId"] = new SelectList(_context.Presents, "Id", "Id");
+            //ViewData["StudentId"] = new SelectList(_context.Users, "Id", "Id");
+
+
+            var degree = await _user.GetUserDegree();
+            if (degree == null)
+            {
+                this.AddNotification("لطفا مقطع تحصیلی خود را وارد کنید و مجددا تلاش کنید.",NotificationType.Error);
+                return RedirectToAction("Index", "Profile");
+            }
+            var model = _context.Presents.Where(p => p.Section.Course.Level == degree &&
+                                                     !_context.Enrollments.Any(e => e.PresentId == p.Id && e.Present.Section.Activity==ActiveState.Active))
+                                                     .Include(p=>p.Section).ThenInclude(p=>p.Course)
+                                                     .Include(p=>p.Section).ThenInclude(p=>p.Teacher)
+                                                     .Include(p=>p.Schedules);
+            
+            return View(model);
         }
 
         // POST: Student/Enrollments/Create
@@ -78,7 +92,7 @@ namespace OnlineCourse.Panel.Areas.Student.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Markdown,PresentId,Activity,StudentId")] Enrollment enrollment)
+        public async Task<IActionResult> SelectCourse([Bind("Id,Markdown,PresentId,Activity,StudentId")] Enrollment enrollment)
         {
             if (ModelState.IsValid)
             {

@@ -47,11 +47,11 @@ namespace OnlineCourse.Core.Services
             return user;
         }
 
-        public async Task<EducationLevel> GetUserDegree()
+        public async Task<EducationLevel?> GetUserDegree()
         {
 
-            var eLevel = (await _unitOfWork.Users.GetByEmailAsync(GetEmail())).Degree;
-            return eLevel.Value;
+            var degree =(await GetUser()).Degree;
+            return degree;
         }
 
         public async Task<string> GetUserName()

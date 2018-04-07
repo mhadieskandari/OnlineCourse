@@ -53,7 +53,7 @@ namespace OnlineCourse.Panel.Areas.Student.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Index(int id, [Bind("Id,UserName,Email,FullName,Phone,City,Addrress")] User user, IFormFile image)
+        public IActionResult Index(int id, [Bind("Id,UserName,Email,FullName,Phone,City,Addrress,Degree")] User user, IFormFile image)
         {
             if (id != user.Id ||user.Id!=_user.GetUserId().Result)
             {
