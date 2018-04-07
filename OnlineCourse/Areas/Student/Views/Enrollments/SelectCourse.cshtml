@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<OnlineCourse.Entity.Models.Present>
 @{
-    ViewData["Title"] = "انتخاب درس";
+    ViewData["Title"] = "انتخاب درس (قیمت ها به تومان می باشد)";
     Layout = "~/Areas/Student/Views/Shared/_Layout.cshtml";
 }
 <!-- Main content -->
@@ -61,7 +61,7 @@
                                     }
                                     @foreach (var item in Model)
                                     {
-                                        <tr data-id="@item.Id" data-totalCost="@((item.Section.TotalTime*item.Section.HourlyPrice).ToString("0"))">
+                                        <tr data-id="@item.Id" data-tc="@((item.Section.TotalTime*item.Section.HourlyPrice).ToString("0"))">
                                             <td class="PresentId">
                                                 @item.Id
                                             </td>
@@ -94,13 +94,13 @@
 
                                             </td>
                                             <td>
-                                                @((item.Section.TotalTime*item.Section.HourlyPrice).ToString("N0")) تومان
+                                                @((item.Section.TotalTime*item.Section.HourlyPrice).ToString("N0")) @*تومان*@
                                             </td>
                                             <td>
                                                 <input  class="paymentAmount"  type="number" name="paymentAmount[@indx]" />
                                             </td>
-                                            <td>
-                                                <span class="remain"></span>
+                                            <td class="remain">
+                                                @((item.Section.TotalTime * item.Section.HourlyPrice).ToString("N0"))
                                             </td>
                                             <td>
                                                 <input class="selectedCourse" type="checkbox" name="selected[@indx]" />
@@ -142,13 +142,13 @@
                 if ($(this).is(':checked')) {
                     var tr = $(this).closest("tr");
                     //var presentid = $(this).closest("tr").data("id");
-                    var totalcost = tr.data("totalCost");
+                    var totalcost = tr.data("tc");
                     var presentid = tr.data("id");
                     var payCost = tr.find(".paymentAmount").val();
                     var remain = totalcost - payCost;
-                    tr.find(".remain").innerHTML=remain;
+                    tr.find(".remain").html(commaSeparateNumber(remain));
 
-                    console.log(tr.data("totalCost"));
+                    console.log(totalcost);
                     console.log(remain);
                     console.log(presentid);
                     console.log(payCost);
@@ -157,6 +157,12 @@
                     
                 }
             });
+
+            $(".paymentAmount").change(function() {
+                console.log($(this).val());
+            });
+
+            console.log($(".paymentAmount"));
             courseCart.addItemToCart("1","100000");
         });
     </script>
