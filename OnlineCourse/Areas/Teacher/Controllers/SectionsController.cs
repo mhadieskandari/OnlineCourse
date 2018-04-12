@@ -49,7 +49,7 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
                 model = model.Where(s => s.Activity == activity);
 
 
-            return View(model);
+            return View(await model.ToListAsync());
         }
 
         // GET: Admin/Sections/Details/5

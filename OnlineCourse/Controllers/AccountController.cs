@@ -12,7 +12,6 @@ using OnlineCourse.Core.Services;
 using OnlineCourse.Core.WorkFlows;
 using OnlineCourse.Entity.Models;
 using Microsoft.AspNetCore.Mvc.Localization;
-using OnlineCourse.Panel.Utils.ViewModels.AccountViewModels;
 using OnlineCourse.Panel.Utils.Extentions;
 using OnlineCourse.Entity;
 
@@ -307,7 +306,7 @@ namespace OnlineCourse.Panel.Controllers
         [AllowAnonymous]
         [HttpPost]
         [ActionName("SendCode")]
-        public async Task<IActionResult> SendCodePost(SendCodeViewModel sendCode)
+        public IActionResult SendCodePost(SendCodeViewModel sendCode)
         {
             if (ModelState.IsValid)
             {

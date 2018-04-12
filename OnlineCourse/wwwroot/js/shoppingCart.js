@@ -5,9 +5,9 @@ var courseCart = (function () {
     // Private methods and properties
     var cart = [];
 
-    function Item(id, price) {
+    function Item(id, amount) {
         this.id = id;
-        this.price = price;
+        this.amount = amount;
     }
 
     function saveCart() {
@@ -63,11 +63,11 @@ var courseCart = (function () {
     // Public methods and properties
     var obj = {};
 
-    obj.addItemToCart = function (id,  price) {
+    obj.addItemToCart = function (id,  amount) {
         console.log(indexOf(id));
         var i = indexOf(id);
         if (i===-1) {
-            var item = new Item(id,  price);
+            var item = new Item(id,  amount);
             cart.push(item);  
             saveCart();
         }
@@ -117,7 +117,7 @@ var courseCart = (function () {
         var totalCost = 0;
         for (var i in cart) {
             if (cart.hasOwnProperty(i)) {
-                totalCost += cart[i].price * cart[i].count;
+                totalCost += cart[i].amount * cart[i].count;
             }
         }
         return totalCost.toFixed(2);
@@ -134,7 +134,7 @@ var courseCart = (function () {
             for (var p in item) {
                 itemCopy[p] = item[p];
             }
-            itemCopy.total = (item.price * item.count).toFixed(2);
+            itemCopy.total = (item.amount * item.count).toFixed(2);
             cartCopy.push(itemCopy);
         }
         return cartCopy;

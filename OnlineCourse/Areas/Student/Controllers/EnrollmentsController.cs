@@ -5,9 +5,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using OnlineCourse.Core.Services;
 using OnlineCourse.Entity;
 using OnlineCourse.Entity.Models;
@@ -17,27 +19,13 @@ namespace OnlineCourse.Panel.Areas.Student.Controllers
 {
     [Area("Student")]
     [Authorize(Roles = "0,1,10")]
-    public class EnrollmentsController : Controller
+    public class EnrollmentsController : BaseController
     {
-        private readonly ApplicationDbContext _context;
-        private readonly CurrentUser _user;
-        private readonly IServiceProvider _provider;
-        private readonly HistoryService _historyService;
-        private readonly MessageService _msgSender;
-        private readonly IHostingEnvironment _hostingEnvironment;
-
-        public EnrollmentsController(ApplicationDbContext context, CurrentUser user, HistoryService historyService, IServiceProvider provider, IHostingEnvironment hostingEnvironment)
+        // GET: Student/Enrollments
+        public EnrollmentsController(ApplicationDbContext context, CurrentUser user, HistoryService historyService, IServiceProvider provider, IHostingEnvironment hostingEnvironment, IHttpContextAccessor httpContextAccessor) : base(context, user, historyService, provider, hostingEnvironment, httpContextAccessor)
         {
-            _context = context;
-            _user = user;
-            _provider = provider;
-            _historyService = historyService;
-            _msgSender = new MessageService();
-            _hostingEnvironment = hostingEnvironment;
-            
         }
 
-        // GET: Student/Enrollments
         public async Task<IActionResult> Index()
         {
             var userid = (await _user.GetUser()).Id;
@@ -195,5 +183,8 @@ namespace OnlineCourse.Panel.Areas.Student.Controllers
         {
             return _context.Enrollments.Any(e => e.Id == id);
         }
+
+        
     }
+
 }

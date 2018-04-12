@@ -7,7 +7,7 @@
 <section class="content">
     <div class="row">
         <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-            <form asp-action="SelectCourse" method="Post">
+            <form asp-action="Index" asp-controller="CheckOut" method="post">
                 <div class="box box-default">
                     <div class="box-header with-border">
                         <b>@ViewData["Title"]</b>
@@ -138,32 +138,32 @@
 
         $(document).ready(function() {
             $(".selectedCourse").click(function() {
-                console.log($(this).is(':checked'));
                 if ($(this).is(':checked')) {
-                    var tr = $(this).closest("tr");
-                    //var presentid = $(this).closest("tr").data("id");
-                    var totalcost = tr.data("tc");
-                    var presentid = tr.data("id");
-                    var payCost = tr.find(".paymentAmount").val();
-                    var remain = totalcost - payCost;
-                    tr.find(".remain").html(commaSeparateNumber(remain));
-
-                    console.log(totalcost);
-                    console.log(remain);
-                    console.log(presentid);
-                    console.log(payCost);
-
+                    remain($(this), true);
                 } else {
-                    
+                    remain($(this), false);
                 }
             });
-
-            $(".paymentAmount").change(function() {
-                console.log($(this).val());
+            
+            $('.paymentAmount').on('input propertychange paste', function() {
+                remain($(this));
             });
 
-            console.log($(".paymentAmount"));
-            courseCart.addItemToCart("1","100000");
+            function remain(sender,add) {
+                var tr = $(sender).closest("tr");
+                //var presentid = $(this).closest("tr").data("id");
+                var totalcost = tr.data("tc");
+                var presentid = tr.data("id");
+                var payCost = tr.find(".paymentAmount").val();
+                var remain = totalcost - payCost;
+                tr.find(".remain").html(commaSeparateNumber(remain));
+                if (add) {
+                    courseCart.addItemToCart(presentid, payCost);
+                } else {
+                    courseCart.removeItem(presentid);
+                }
+                   
+            }
         });
     </script>
 

@@ -1,0 +1,97 @@
+﻿@model IEnumerable<OrderDetailViewModel>
+@{
+    ViewData["Title"] = "مشاهده صورت حساب نهایی و پرداخت";
+    Layout = "~/Areas/Student/Views/Shared/_Layout.cshtml";
+}
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+            <form asp-action="CheckOut" method="post">
+                <div class="box box-default">
+                    <div class="box-header with-border">
+                        <b>@ViewData["Title"]</b>
+                    </div>
+                    <div class="box-body">
+                        @if (!Model.Any())
+                        {
+                            <div>
+                                <hr />
+                                <p class="text-center">
+                                    <i class="fa fa-frown-o fa-3x" aria-hidden="true"></i>
+                                </p>
+                                <h4 class="text-center">هیچ درسی در مقطع شما ارایه نشده است که انتخاب نکرده باشید.</h4>
+                                <hr />
+                            </div>
+                        }
+                        else
+                        {
+                            <table class="table table-bordered table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            Id
+                                        </th>
+                                        <th>
+                                            نام درس
+                                        </th>
+                                        <th>
+                                            نام استاد
+                                        </th>
+                                        <th>
+                                            هزینه دوره
+                                        </th>
+                                        <th>
+                                            مبلغ پرداختی
+                                        </th>
+                                        <th>
+                                            مانده
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr data-id="@item.id">
+                                            <td class="PresentId">
+                                                @item.id
+                                            </td>
+                                            <td>
+                                                @item.coursename
+                                            </td>
+                                            <td>
+                                                @item.teachername
+                                            </td>
+                                            <td>
+                                                @(item.totalcost.ToString("N0"))
+                                            </td>
+                                            <td>
+                                                @(item.amount.ToString("N0"))
+                                            </td>
+                                            <td class="remain">
+                                                @(item.remincost.ToString("N0"))
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+
+                    </div>
+                    <div class="box-footer">
+                        @if (Model.Any())
+                        {
+                            <button type="submit" class="btn btn-success  box-button">پرداخت</button>
+                        }
+                        <a asp-action="Index" class="btn btn-info  box-title"><i class="fa fa-backward"></i></a>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- /.row -->
+</section>
+<!-- /.content -->
+
