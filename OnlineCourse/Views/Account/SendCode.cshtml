@@ -11,6 +11,7 @@
         </div>
         <form asp-controller="Account" asp-action="SendCode" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
             <div class="panel-body">
+                @Html.Partial("/Views/Shared/_Notifications.cshtml")
                 <span asp-validation-summary="All" class="text-danger"></span>
                 @if (string.IsNullOrEmpty(Model.Email))
                 {

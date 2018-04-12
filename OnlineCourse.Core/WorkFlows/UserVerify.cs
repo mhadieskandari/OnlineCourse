@@ -13,7 +13,7 @@ namespace OnlineCourse.Core.WorkFlows
         private readonly Finally _finally;
 
         public UserVerify(IServiceProvider serviceProvider, MessageService authMessageSender, HistoryService historyService)
-            : base(serviceProvider)
+            :  base(serviceProvider)
         {
             _validate = new Validation(serviceProvider,historyService);
             _execution=new Execution(serviceProvider,historyService);

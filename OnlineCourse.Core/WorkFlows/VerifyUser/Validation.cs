@@ -46,7 +46,7 @@ namespace OnlineCourse.Core.WorkFlows.VerifyUser
                     if (!PublicValidator.IpCheck(verifyDto.Ip))
                         return (byte)VerifyUserMessage.IpNotValid;
 
-                    if (item.LastRequestActivationCode.HasValue && DateTime.Now.Subtract(item.LastRequestActivationCode.Value).Minutes > 2 ) 
+                    if (item.LastRequestActivationCode.HasValue && DateTime.Now.Subtract(item.LastRequestActivationCode.Value).Minutes > 30 ) 
                         return (byte)VerifyUserMessage.ActivationCodeExpired;
 
                     if (!item.ActivationCode.Equals(verifyDto.VerificationCode))

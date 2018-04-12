@@ -44,7 +44,7 @@ namespace OnlineCourse.Core.Services
                     //Todo
                     uw.UnTracking();
                     uw.HistoryRepository.Insert(log);
-                    uw.Complete();
+                    var count=uw.Complete();
                 }
                 catch (Exception exception)
                 {

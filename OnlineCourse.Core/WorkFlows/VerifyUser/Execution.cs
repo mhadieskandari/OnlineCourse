@@ -36,12 +36,11 @@ namespace OnlineCourse.Core.WorkFlows.VerifyUser
                         dbUser.LastLoginIp = verifyDto.Ip;
                         dbUser.State = UserState.Verified;
                         dbUser.ValidMobile = (byte)ValidationState.Valid;
+                        uw.Complete();
 
-                        var count=uw.Complete();
-                        if(count>0) return (byte)
-                                VerifyUserMessage.Success;
+                        return (byte)VerifyUserMessage.Success;
                     }
-                    return (byte)VerifyUserMessage.Exception;
+                    throw new Exception("UserVerify:Executtion:Execute()");
                 }
                 catch (Exception e)
                 {

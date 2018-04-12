@@ -333,7 +333,8 @@ namespace OnlineCourse.Panel.Controllers
                     }
                     else
                     {
-                        this.AddNotification(_localizer[EnumExtention.GetDescription((VerifyUserMessage)req)].Value.ToString(), NotificationType.Error);
+                        this.AddNotification(EnumExtention.GetDescription((VerifyUserMessage)req), NotificationType.Error);
+                        return View(sendCode);
                     }
 
 
