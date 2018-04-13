@@ -97,14 +97,14 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
                     var dbSection = _mapper.Map<Section>(section);
 
 
-                    var isExist =
-                        _context.Sections.Any(s => s.CourseId == dbSection.CourseId &&
+                    var existSecrion =_context.Sections.FirstOrDefault(s => s.CourseId == dbSection.CourseId &&
                                                    s.TeacherId == dbSection.TeacherId &&
                                                    s.TermId == dbSection.TermId);
 
-                    if (isExist)
+                    if (existSecrion!=null)
                     {
-                        this.AddNotification("این دوره وجود دارد و امکان ایجاد ندارد.",NotificationType.Info);
+                        this.AddNotification("این دوره با id ="+existSecrion.Id+" وجود دارد و امکان ایجاد ندارد.",NotificationType.Info);
+                        section.IsEdit(_context);
                         return View(section);
                     }
 
@@ -127,6 +127,8 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
                     this.AddNotification("دوره با موفقیت ایجاد شد.", NotificationType.Success);
                     return RedirectToAction(nameof(Details),new {id=dbSection.Id});
                 }
+                this.AddNotification("خطایی رخ داده است.",NotificationType.Error);
+                section.IsEdit(_context);
                 return View(section);
             }
             catch (Exception e)

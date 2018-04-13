@@ -79,7 +79,7 @@ var courseCart = (function () {
     obj.removeItemFromCart = function (id) { // Removes one item
         for (var i in cart) {
             if (cart[i].id === id) { // "3" === 3 false
-                cart[i]=null; // cart[i].count --
+                cart.splice(i, 1); // cart[i].count --
                 break;
             }
         }

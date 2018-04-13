@@ -8,18 +8,20 @@ using Microsoft.EntityFrameworkCore;
 using OnlineCourse.Entity;
 using OnlineCourse.Entity.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using OnlineCourse.Core.Services;
+using OnlineCourse.Panel.Areas.Student.Controllers;
+using OnlineCourse.Panel.Utils.Extentions;
 
 namespace OnlineCourse.Panel.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize(Roles = "10")]
-    public class CoursesController : Controller
+    public class CoursesController : BaseController
     {
-        private readonly ApplicationDbContext _context;
-
-        public CoursesController(ApplicationDbContext context)
+        public CoursesController(ApplicationDbContext context, CurrentUser user, HistoryService historyService, IServiceProvider provider, IHostingEnvironment hostingEnvironment, IHttpContextAccessor httpContextAccessor) : base(context, user, historyService, provider, hostingEnvironment, httpContextAccessor)
         {
-            _context = context;
         }
 
         // GET: Admin/Courses
@@ -68,13 +70,29 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Level")] Course course)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _context.Add(course);
-                await _context.SaveChangesAsync();
+                if (ModelState.IsValid)
+                {
+                    var isExistCourse = await _context.Courses.AnyAsync(c => c.Name == course.Name && c.Level == course.Level);
+                    if (isExistCourse)
+                    {
+                        this.AddNotification("این درس قبلا ایجاد شده است.", NotificationType.Error);
+                        return View(course);
+                    }
+                    _context.Add(course);
+                    await _context.SaveChangesAsync();
+                    this.AddNotification("درس با موفقیت ایجاد شد.", NotificationType.Success);
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(course);
+            }
+            catch (Exception e)
+            {
+                _historyService.LogError(e,HistoryErrorType.Middle);
+                this.AddNotification("خطایی در ایجاد درس رخ داده است.", NotificationType.Success);
                 return RedirectToAction(nameof(Index));
             }
-            return View(course);
         }
 
         // GET: Admin/Courses/Edit/5
@@ -161,5 +179,6 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
         {
             return _context.Courses.Any(e => e.Id == id);
         }
+
     }
 }

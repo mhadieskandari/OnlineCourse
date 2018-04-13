@@ -23,31 +23,43 @@ namespace OnlineCourse.Panel.Utils.ViewModels.Areas.Admin
         }
 
         public int Id { get; set; }
-        [DisplayFormat(DataFormatString = "{0:0,0}", ApplyFormatInEditMode = true)]
-        [Display(Name = "زمان کل(ساعت)")]
+
+        //[DisplayFormat(DataFormatString = "{0:0,0}", ApplyFormatInEditMode = true)]
+        [DataType(DataType.Text)]
+        [Required(ErrorMessage = "{0} اجباریست")]
+        [Display(Name = "زمان کل")]
         public decimal TotalTime { get; set; }
-        [DisplayFormat(DataFormatString = "{0:0,0}", ApplyFormatInEditMode = true)]
-        [Display(Name = "هزینه ساعتی(تومان)")]
+
+        //[DisplayFormat(DataFormatString = "{0:0,0}", ApplyFormatInEditMode = true)]
+        [Display(Name = "هزینه ساعتی")]
+        [DataType(DataType.Text)]
+        [Required(ErrorMessage = "{0} اجباریست")]
         public decimal HourlyPrice { get; set; }
+
         [Display(Name = "نام درس")]
         [Required(ErrorMessage = "{0} اجباریست")]
         public int CourseId { get; set; }
+
         [Required(ErrorMessage = "{0} اجباریست")]
         [Display(Name = "نام ترم")]
         public int TermId { get; set; }
+
         [Required(ErrorMessage = "{0} اجباریست")]
         [Display(Name = "نام استاد")]
         public int TeacherId { get; set; }
+
         [Required(ErrorMessage = "{0} اجباریست")]
         [Display(Name = "وضعیت")]
-        public ActiveState? Activity { get; set; }
+        public ActiveState? Activity { get; set; } = ActiveState.DeActive;
 
         [Display(Name = "روزهای هفته")]
         [Required(ErrorMessage = "{0} اجباریست", AllowEmptyStrings = false)]
         public string WorkDays { set; get; }
+
         [Required(ErrorMessage = "{0} اجباریست")]
         [Display(Name = "ساعت شروع")]
         public string StartTime { set; get; }
+
         [Required(ErrorMessage = "{0} اجباریست")]
         [Display(Name = "ساعت پایان")]
         public  string EndTime { set; get; }

@@ -25,7 +25,7 @@ namespace OnlineCourse.Panel.Areas.Student.Controllers
 
         // Post: Student/Enrollments/Create
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var shoppingCartCookie = _httpContextAccessor.HttpContext.Request.Cookies["Cart"];
             if (!string.IsNullOrEmpty(shoppingCartCookie))
@@ -49,9 +49,9 @@ namespace OnlineCourse.Panel.Areas.Student.Controllers
                     var viewModel = new List<OrderDetailViewModel>();
                     foreach (var detail in invoiceModel)
                     {
-                        var model = _context.Presents.Include(p => p.Section).ThenInclude(p => p.Course)
+                        var model =await _context.Presents.Include(p => p.Section).ThenInclude(p => p.Course)
                             .Include(p => p.Section).ThenInclude(p => p.Teacher)
-                            .Include(p => p.Schedules).SingleOrDefault(p => p.Id == detail.id);
+                            .Include(p => p.Schedules).SingleOrDefaultAsync(p => p.Id == detail.id);
 
                         if (model != null)
                         {
