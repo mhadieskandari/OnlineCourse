@@ -110,6 +110,18 @@
                                             }
                                         </tr>
                                     }
+                                    <tr>
+                                        <td colspan="4">
+                                            <b>
+                                                تعداد خرید : <strong id="countOfCard"></strong> درس
+                                            </b>
+                                        </td>
+                                        <td colspan="4">
+                                            <b>
+                                                جمع خرید : <strong id="totalOfCard"></strong> تومان
+                                            </b>
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         }
@@ -136,9 +148,9 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script>
 
-        $(document).ready(function() {
+        $(document).ready(function () {
             initPage();
-            $(".selectedCourse").click(function() {
+            $(".selectedCourse").click(function () {
                 if ($(this).is(':checked')) {
                     remain($(this), true);
                 } else {
@@ -146,37 +158,51 @@
                 }
             });
 
-            $('.paymentAmount').on('input propertychange paste', function() {
+            $('.paymentAmount').on('input propertychange paste', function () {
                 remain($(this));
             });
 
-            function remain(sender,add) {
+            function remain(sender, add) {
                 var tr = $(sender).closest("tr");
-                //var presentid = $(this).closest("tr").data("id");
                 var totalcost = tr.data("tc");
                 var presentid = tr.data("id");
                 var payCost = tr.find(".paymentAmount").val();
                 var remain1 = totalcost - payCost;
                 tr.find(".remain").html(commaSeparateNumber(remain1));
+                refreshDb(presentid, payCost, add);
+            }
+
+            function refreshDb(presentid, payCost, add) {
                 if (add) {
                     courseCart.addItemToCart(presentid, payCost);
                 } else {
                     courseCart.removeItemFromCart(presentid);
                 }
-
+                setTotalFooter();
             }
+
+            function setTotalFooter() {
+                var count = parseInt(courseCart.countCart());
+                var total = parseInt(courseCart.totalCart());
+                $("#countOfCard").html(count);
+                $("#totalOfCard").html(commaSeparateNumber(total));
+            }
+
             function initPage() {
                 var cart = courseCart.listCart();
                 $.each(cart, function (index, value) {
-                   
+
                     var id = value.id;
                     var amount = value.amount;
 
                     var tr = $("tr[data-id='" + id + "']");
                     var checkbox = tr.find(".selectedCourse");
+                    var elAmount = tr.find(".paymentAmount");
+                    elAmount.val(amount);
                     checkbox.attr('checked', true);
+                    remain(checkbox, true);
                     console.log(tr.data("tc"));
-                    console.log("id:"+id+",amount:"+amount);
+                    console.log("id:" + id + ",amount:" + amount);
                 });
 
                 //console.log(cart);

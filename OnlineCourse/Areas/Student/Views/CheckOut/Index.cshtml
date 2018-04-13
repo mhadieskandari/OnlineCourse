@@ -74,6 +74,18 @@
                                             </td>
                                         </tr>
                                     }
+                                    <tr>
+                                        <td colspan="3">
+                                            <b>
+                                                تعداد خرید : <strong id="countOfCard"></strong> درس
+                                            </b>
+                                        </td>
+                                        <td colspan="3">
+                                            <b>
+                                                جمع خرید : <strong id="totalOfCard"></strong> تومان
+                                            </b>
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         }
@@ -95,3 +107,17 @@
 </section>
 <!-- /.content -->
 
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            setTotalFooter();
+            function setTotalFooter() {
+                var count = parseInt(courseCart.countCart());
+                var total = parseInt(courseCart.totalCart());
+                $("#countOfCard").html(count);
+                $("#totalOfCard").html(commaSeparateNumber(total));
+            }
+        });
+    </script>
+}

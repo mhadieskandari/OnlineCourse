@@ -106,8 +106,10 @@ var courseCart = (function () {
 
     obj.countCart = function () { // -> return total count
         var totalCount = 0;
-        for (var i in cart) {
-            totalCount += parseInt(cart[i].count);
+        for(var i in cart) {
+            if (cart.hasOwnProperty(i)) {
+                 ++totalCount;
+            }
         }
 
         return totalCount;
@@ -117,10 +119,10 @@ var courseCart = (function () {
         var totalCost = 0;
         for (var i in cart) {
             if (cart.hasOwnProperty(i)) {
-                totalCost += cart[i].amount * cart[i].count;
+                totalCost += cart[i].amount ;
             }
         }
-        return totalCost.toFixed(2);
+        return totalCost;
     };
 
     obj.listCart = function () { // -> array of Items
