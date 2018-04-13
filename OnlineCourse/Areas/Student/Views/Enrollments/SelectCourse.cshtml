@@ -94,10 +94,10 @@
 
                                             </td>
                                             <td>
-                                                @((item.Section.TotalTime*item.Section.HourlyPrice).ToString("N0")) @*تومان*@
+                                                @((item.Section.TotalTime * item.Section.HourlyPrice).ToString("N0")) @*تومان*@
                                             </td>
                                             <td>
-                                                <input  class="paymentAmount"  type="number" name="paymentAmount[@indx]" />
+                                                <input class="paymentAmount" type="number" name="paymentAmount[@indx]" />
                                             </td>
                                             <td class="remain">
                                                 @((item.Section.TotalTime * item.Section.HourlyPrice).ToString("N0"))
@@ -137,6 +137,7 @@
     <script>
 
         $(document).ready(function() {
+            initPage();
             $(".selectedCourse").click(function() {
                 if ($(this).is(':checked')) {
                     remain($(this), true);
@@ -144,7 +145,7 @@
                     remain($(this), false);
                 }
             });
-            
+
             $('.paymentAmount').on('input propertychange paste', function() {
                 remain($(this));
             });
@@ -155,14 +156,30 @@
                 var totalcost = tr.data("tc");
                 var presentid = tr.data("id");
                 var payCost = tr.find(".paymentAmount").val();
-                var remain = totalcost - payCost;
-                tr.find(".remain").html(commaSeparateNumber(remain));
+                var remain1 = totalcost - payCost;
+                tr.find(".remain").html(commaSeparateNumber(remain1));
                 if (add) {
                     courseCart.addItemToCart(presentid, payCost);
                 } else {
                     courseCart.removeItemFromCart(presentid);
                 }
+
+            }
+            function initPage() {
+                var cart = courseCart.listCart();
+                $.each(cart, function (index, value) {
                    
+                    var id = value.id;
+                    var amount = value.amount;
+
+                    var tr = $("tr[data-id='" + id + "']");
+                    var checkbox = tr.find(".selectedCourse");
+                    checkbox.attr('checked', true);
+                    console.log(tr.data("tc"));
+                    console.log("id:"+id+",amount:"+amount);
+                });
+
+                //console.log(cart);
             }
         });
     </script>

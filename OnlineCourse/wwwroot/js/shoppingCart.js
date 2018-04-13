@@ -134,7 +134,7 @@ var courseCart = (function () {
             for (var p in item) {
                 itemCopy[p] = item[p];
             }
-            itemCopy.total = (item.amount * item.count).toFixed(2);
+            //itemCopy.total = (item.amount * item.count).toFixed(2);
             cartCopy.push(itemCopy);
         }
         return cartCopy;
