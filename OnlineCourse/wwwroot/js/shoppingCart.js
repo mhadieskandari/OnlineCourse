@@ -119,7 +119,7 @@ var courseCart = (function () {
         var totalCost = 0;
         for (var i in cart) {
             if (cart.hasOwnProperty(i)) {
-                totalCost += cart[i].amount ;
+                totalCost += parseInt(cart[i].amount) ;
             }
         }
         return totalCost;
