@@ -11,9 +11,10 @@ using System;
 namespace OnlineCourse.Entity.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("13970126183143_ChangeFieldNameInvoiceInEnrolment")]
+    partial class ChangeFieldNameInvoiceInEnrolment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -191,7 +192,7 @@ namespace OnlineCourse.Entity.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Invoices");
+                    b.ToTable("Invoice");
                 });
 
             modelBuilder.Entity("OnlineCourse.Entity.Models.Payment", b =>

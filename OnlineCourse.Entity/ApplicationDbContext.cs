@@ -22,7 +22,7 @@ namespace OnlineCourse.Entity
         public DbSet<ClassRoomDetails> ClassRoomDetails { get; set; }
         public DbSet<ClassRoom> ClassRooms { get; set; }
         public DbSet<Present> Presents { get; set; }
-
+        public DbSet<Invoice> Invoices { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
