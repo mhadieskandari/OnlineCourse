@@ -12,8 +12,8 @@ namespace OnlineCourse.Entity.Models
         public int Id { get; set; }
         public int EnrollmentId { get; set; }
         public decimal Amount { get; set; }
-        public DateTime Date { get; set; }
-        public PayType Type { get; set; }
+        //public DateTime Date { get; set; }
+        //public PayType Type { get; set; }
 
         [ForeignKey("EnrollmentId")]
         public Enrollment Enrollment { get; set; }

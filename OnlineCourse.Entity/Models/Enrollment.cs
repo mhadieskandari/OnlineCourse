@@ -18,8 +18,10 @@ namespace OnlineCourse.Entity.Models
         public int StudentId { get; set; }
         [ForeignKey("StudentId")]
         public User Student { get; set; }
-
-        public ICollection<Payment> payments { set; get; }
+        public int InvoiceId { set; get; }
+        [ForeignKey("InvoiceId")]
+        public Invoice Order { set; get; }
+        public ICollection<Payment> Payments { set; get; }
 
     }
 }

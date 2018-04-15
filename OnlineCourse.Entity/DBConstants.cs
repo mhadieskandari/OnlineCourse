@@ -65,6 +65,17 @@ namespace OnlineCourse.Entity
 
     }
 
+    public enum BankId
+    {
+        [Description("ملت")]
+        Mellat = 0,
+        [Description("پارسیان")]
+        Parsian = 1,
+        [Description("ملی")]
+        Melli = 1,
+
+    }
+
     public enum TermState
     {
         [Description("غیرفعال")]
@@ -131,6 +142,18 @@ namespace OnlineCourse.Entity
         Cash = 1,
         [Description("فیش بانکی")]
         BankReceipt = 2
+    }
+
+    public enum PayState
+    {
+        [Description("درحال انتظار")]
+        Pending = 0,
+        [Description("موفق")]
+        Approved = 1,
+        [Description("ناموفق")]
+        DisApproved = 2,
+        [Description("بازگردانده شده")]
+        PayBack = 2
     }
 
     public enum TermType
