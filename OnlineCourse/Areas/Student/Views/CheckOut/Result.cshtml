@@ -1,0 +1,30 @@
+﻿@model Invoice
+
+@{
+    ViewData["Title"] = "نتیجه پرداخت";
+}
+
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-md-8 col-lg-8 col-sm-12 col-xs-12 col-center-md">
+            <form asp-action="Index" method="Post" enctype="multipart/form-data">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <b>@ViewData["Title"]</b>
+                    </div>
+                    <div class="box-body">
+                        @(EnumExtention.GetDescription(Model.PayState))
+                    </div>
+
+                    <div class="box-footer">
+                        <a asp-action="Index" asp-controller="Enrollments" class="btn btn-info box-button">مشاهده لیست دروس ثبت نام شده</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- /.row -->
+</section>
+<!-- /.content -->

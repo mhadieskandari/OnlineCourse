@@ -28,8 +28,9 @@ namespace OnlineCourse.Panel.Areas.Student.Controllers
         // Post: Student/Enrollments/Create
         [HttpGet]
         public async Task<IActionResult> Index()
-        {
+        { 
             var shoppingCartCookie = _httpContextAccessor.HttpContext.Request.Cookies["Cart"];
+           
             if (!string.IsNullOrEmpty(shoppingCartCookie))
             {
                 byte[] decodedBytes = Convert.FromBase64String(shoppingCartCookie);
@@ -169,6 +170,8 @@ namespace OnlineCourse.Panel.Areas.Student.Controllers
             var invoice = _context.Invoices.FirstOrDefault(i => i.Id == invoiceId);
             if (invoice != null)
             {
+                //todo check payment gatewaye to confirm payment
+
                 invoice.TransactionId = transactionId;
                 invoice.PayState = state;
                 _context.Update(invoice);
@@ -204,21 +207,23 @@ namespace OnlineCourse.Panel.Areas.Student.Controllers
                     }
                 }
             }
-
-
-
-
             return RedirectToAction(nameof(Result), new { invoiceid = invoiceId });
         }
 
         [HttpGet]
-        public IActionResult Result(int? invoiceId)
+        public async Task<IActionResult> Result(int? invoiceId)
         {
-            var invoice = _context.Invoices.Include(i => i.Enrollments).ThenInclude(e => e.Present).ThenInclude(p => p.Section).FirstOrDefaultAsync(i => i.Id == invoiceId);
-
-
-
-            return View();
+            var invoice = await _context.Invoices.Include(i => i.Enrollments).ThenInclude(e => e.Payments)/*ThenInclude(e => e.Present).ThenInclude(p => p.Section)*/.FirstOrDefaultAsync(i => i.Id == invoiceId);
+            if (invoice.PayState == PayState.Approved)
+            {
+                this.AddNotification("پرداخت با موفقیت انجام شد.", NotificationType.Success);
+                _httpContextAccessor.HttpContext.Response.Cookies.Append("Cart", "[]",new CookieOptions(){Expires = DateTime.Now.AddDays(-30)});
+            }
+            else
+            {
+                this.AddNotification("خطایی در پرداخت رخ داده است , در صورتی که مبلغ از حساب شما کسر شده و تا مدت 72 ساعت به حساب شما باز گردانده نشد با پشتیبانی تماس بگیرید. ", NotificationType.Error);
+            }
+            return View(invoice);
         }
     }
 
