@@ -23,5 +23,8 @@ namespace OnlineCourse.Entity.Models
 
         [ForeignKey("PresentId")]
         public Present Present { get; set; }
+
+        [NotMapped]
+        public string DayName => EnumExtentionEntity.GetDescription(DayOfWeek);
     }
 }

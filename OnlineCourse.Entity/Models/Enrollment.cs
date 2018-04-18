@@ -10,8 +10,11 @@ namespace OnlineCourse.Entity.Models
     {
         [Key]
         public int Id { get; set; }
+        [Display(Name = "تخفیف")]
+        [DisplayFormat(DataFormatString = "{0:N0}",ApplyFormatInEditMode = true,ConvertEmptyStringToNull =true)]
         public decimal Markdown { get; set; }
         public int PresentId { get; set; }
+        [Display(Name = "وضعیت")]
         public ActiveState Activity { get; set; }        
         [ForeignKey("PresentId")]
         public Present Present { get; set; }

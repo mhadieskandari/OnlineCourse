@@ -34,6 +34,8 @@ namespace OnlineCourse.Entity.Models
         [ForeignKey("TermId")]
         public Term Term { get; set; }
 
+        [Display(Name = "هزینه کلاس")]
+        public decimal TotalCost => TotalTime * HourlyPrice;
 
         public ICollection<Present> Presents { set; get; }
     }
