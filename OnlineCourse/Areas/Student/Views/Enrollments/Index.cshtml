@@ -11,7 +11,7 @@
     <div class="row">
         <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
             @Html.Partial("/Views/Shared/_Notifications.cshtml")
-            @Html.Partial("/Areas/Admin/Views/Sections/_Search.cshtml", new SectionSearchViewModel(_context))
+            @Html.Partial("/Areas/Student/Views/Enrollments/_Search.cshtml", new EnrollmentSearchViewModel(_context,_user))
 
             <div class="box">
                 <div class="box-header with-border">
@@ -41,7 +41,7 @@
                                         </th>
 
                                         <th>
-                                            @Html.DisplayNameFor(model => model.Activity)
+                                            @Html.DisplayNameFor(model => model.State)
                                         </th>
                                         <th>
                                             @Html.DisplayName("روزهای هفته")
@@ -70,7 +70,7 @@
                                             </td>
 
                                             <td>
-                                                @EnumExtention.GetDescription(item.Activity)
+                                                @EnumExtention.GetDescription(item.State)
                                             </td>
                                             <td>
                                                 @(item.Present.Schedules.Select(s => s.DayName).Aggregate((current, next) => current + "," + next))

@@ -122,7 +122,7 @@ namespace OnlineCourse.Panel.Areas.Student.Controllers
 
                         if (present != null)
                         {
-                            enrolments.Add(new Enrollment() { Activity = ActiveState.DeActive, InvoiceId = invoice.Id, PresentId = present.Id, StudentId = userId.Value, });
+                            enrolments.Add(new Enrollment() { State = EnrollmentState.NotPaid, InvoiceId = invoice.Id, PresentId = present.Id, StudentId = userId.Value, });
                         }
                     }
                     _context.Enrollments.AddRange(enrolments);

@@ -15,7 +15,7 @@ namespace OnlineCourse.Entity.Models
         public decimal Markdown { get; set; }
         public int PresentId { get; set; }
         [Display(Name = "وضعیت")]
-        public ActiveState Activity { get; set; }        
+        public EnrollmentState State { get; set; }        
         [ForeignKey("PresentId")]
         public Present Present { get; set; }
         public int StudentId { get; set; }

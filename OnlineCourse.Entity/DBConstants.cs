@@ -225,4 +225,18 @@ namespace OnlineCourse.Entity
         [Description("ارسال شده")]
         Sent = 1
     }
+
+    public enum EnrollmentState
+    {
+        [Description("پرداخت نشده")]
+        NotPaid = 0,
+        [Description("منتظر تایید")]
+        Waiting = 1,
+        [Description("درحال برگزاری")]
+        OnGoing = 2,
+        [Description("اتمام دوره")]
+        Finished = 3,
+        [Description("کنسل شده")]
+        Canceled = 10
+    }
 }
