@@ -1,4 +1,4 @@
-﻿@model IEnumerable<OnlineCourse.Entity.Models.Enrollment>
+﻿@model IEnumerable<Enrollment>
 
 @{
     ViewData["Title"] = "لیست دروس اخذ شده";
@@ -11,7 +11,7 @@
     <div class="row">
         <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
             @Html.Partial("/Views/Shared/_Notifications.cshtml")
-            @Html.Partial("/Areas/Student/Views/Enrollments/_Search.cshtml", new EnrollmentSearchViewModel(_context,_user))
+            @Html.Partial("/Areas/Student/Views/Enrollments/_Search.cshtml", new EnrollmentSearchViewModel(_context, _user))
 
             <div class="box">
                 <div class="box-header with-border">
@@ -90,6 +90,10 @@
 
                                             <td class="table-action">
                                                 <button class="btn btn-sm  btn-default" title="جزئیات"> <i class="fa fa-eye"></i></button>
+                                                @if (item.Payments.Sum(p => p.Amount) <= item.Present.Section.TotalCost)
+                                                {
+                                                    <button class="btn btn-sm  btn-success" title="پرداخت"> <i class="fa fa-dollar"></i></button>
+                                                }
                                             </td>
                                         </tr>
                                     }

@@ -21,9 +21,6 @@ namespace OnlineCourse.Entity.Models
         public int StudentId { get; set; }
         [ForeignKey("StudentId")]
         public User Student { get; set; }
-        public int InvoiceId { set; get; }
-        [ForeignKey("InvoiceId")]
-        public Invoice Invoice { set; get; }
         public ICollection<Payment> Payments { set; get; }
 
     }

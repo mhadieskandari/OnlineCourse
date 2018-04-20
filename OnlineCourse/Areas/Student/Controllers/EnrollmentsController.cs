@@ -34,7 +34,8 @@ namespace OnlineCourse.Panel.Areas.Student.Controllers
                 .Include(e => e.Present).ThenInclude(p => p.Schedules)
                 .Include(e => e.Student)
                 .Include(e => e.Payments);
-            return View(await enrols.ToListAsync());
+            var ret = await enrols.ToListAsync();
+            return View(ret);
         }
         
         // GET: Student/Enrollments/Create

@@ -22,13 +22,22 @@ namespace OnlineCourse.Panel.Areas.Student.Controllers
 
         public async Task<IActionResult> Index(int? invoiceId)
         {
-            var userid = await _user.GetUserId();
-            var invoices =_context.Invoices.Include(i=>i.Enrollments).ThenInclude(e=>e.Payments).Where(i => i.Enrollments.Any(e => e.StudentId == userid));
-            if (invoiceId.HasValue)
+            try
             {
-                invoices = invoices.Where(i => i.Id == invoiceId);
+                var userid = await _user.GetUserId();
+                var invoices = _context.Invoices.Include(i => i.Payments).ThenInclude(p=>p.Enrollment).ThenInclude(e=>e.Present).ThenInclude(p=>p.Section).ThenInclude(s=>s.Course).Where(i => i.Payments.Any(e => e.Enrollment.StudentId == userid));
+                if (invoiceId.HasValue)
+                {
+                    invoices = invoices.Where(i => i.Id == invoiceId);
+                }
+                return View(await invoices.ToListAsync());
             }
-            return View(await invoices.ToListAsync());
+            catch (Exception e)
+            {
+                _historyService.LogError(e,HistoryErrorType.Middle);
+                return View(null);
+            }
+
         }
     }
 }

@@ -29,6 +29,8 @@ namespace OnlineCourse.Core.Repositories.Interfaces
         byte? GetStateAccount(string email, string password);
         bool CanDelete(int id);
         Task<User> GetByEmailAsync(string email);
+        Task<int> GetIdByEmailAsync(string email);
+
         Task<bool> CanDeleteAsync(int id);
         Task<bool> ValidateLastChanged(string email, string lastChanged);
     }

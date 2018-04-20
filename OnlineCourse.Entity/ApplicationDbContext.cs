@@ -36,6 +36,10 @@ namespace OnlineCourse.Entity
                 .HasMany(c => c.ClassRoomDetails)
                 .WithOne(e => e.Student).OnDelete(DeleteBehavior.Restrict);
 
+            builder.Entity<User>()
+                .HasMany(c => c.ClassRoomDetails)
+                .WithOne(e => e.Student).OnDelete(DeleteBehavior.Restrict);
+
 
         }
 

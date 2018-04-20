@@ -34,7 +34,7 @@ namespace OnlineCourse.Entity.Models
         [Display(Name = "بانک")]
         public BankId BankId { set; get; }
 
-        public ICollection<Enrollment> Enrollments { set; get; }
+        public ICollection<Payment> Payments { set; get; }
 
     }
 }

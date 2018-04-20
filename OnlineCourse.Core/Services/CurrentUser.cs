@@ -34,10 +34,10 @@ namespace OnlineCourse.Core.Services
             return _httpContextAccessor.HttpContext.User.Identity.IsAuthenticated;
         }
 
-        public async Task<int?> GetUserId()
+        public async Task<int> GetUserId()
         {
-            var user = await _unitOfWork.Users.GetByEmailAsync(GetEmail());
-            return user?.Id;
+            var userid = await _unitOfWork.Users.GetIdByEmailAsync(GetEmail());
+            return userid;
         }
 
         public async Task<User> GetUser()
@@ -122,9 +122,8 @@ namespace OnlineCourse.Core.Services
         {
             string path = "";
             var userId = await GetUserId();
-            if (userId != null)
             {
-                var gal = await _unitOfWork.Galleries.GetUserProfileAsync(userId.Value);
+                var gal = await _unitOfWork.Galleries.GetUserProfileAsync(userId);
                 if (gal?.Kind != null)
                     path = EncryptDecrypt.GetUrlHash(gal.Id.ToString() + gal.PublicId + gal.Kind.Value) + gal.Ext;
             }

@@ -34,64 +34,107 @@
                         <div class="table-responsive">
                             <table class="table table-hover table-striped">
                                 <thead>
-                                <tr>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Id)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.BankId)
-                                    </th>
+                                    <tr>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Id)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.BankId)
+                                        </th>
 
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.PayType)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.PayState)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayName("زمان پرداخت")
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.TransactionId)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayName("هزینه پرداختی")
-                                    </th>
-                                    <th></th>
-                                </tr>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.PayType)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.PayState)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayName("زمان پرداخت")
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.TransactionId)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayName("هزینه پرداختی")
+                                        </th>
+                                        <th></th>
+                                    </tr>
                                 </thead>
                                 <tbody>
-                                @foreach (var item in Model)
-                                {
-                                    <tr>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Id)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.BankId)
-                                        </td>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Id)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.BankId)
+                                            </td>
 
-                                        <td>
-                                            @EnumExtention.GetDescription(item.PayType)
-                                        </td>
-                                        <td>
-                                            @EnumExtention.GetDescription(item.PayState)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.LastModifieDateTime)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.TransactionId)
-                                        </td>
-                                        <td>
-                                            @(item.Enrollments.Sum(m => m.Payments.Select(p => p.Amount).Sum()).ToString("N0")) تومان
-                                        </td>
-                                        <td class="table-action">
-                                            <button class="btn btn-sm  btn-default" title="جزئیات"> <i class="fa fa-eye"></i></button>
-                                            <button class="btn btn-sm  btn-info" title="بازبینی پرداخت"> <i class="fa fa-bank"></i></button>
-                                        </td>
-                                    </tr>
-                                }
+                                            <td>
+                                                @EnumExtention.GetDescription(item.PayType)
+                                            </td>
+                                            <td>
+                                                @EnumExtention.GetDescription(item.PayState)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.LastModifieDateTime)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.TransactionId)
+                                            </td>
+                                            <td>
+                                                @(item.Payments.Select(p => p.Amount).Sum().ToString("N0")) تومان
+                                            </td>
+                                            <td class="table-action">
+                                                <button data-toggle="collapse" data-target="#row@(item.Id)" class="btn btn-sm  btn-default" title="جزئیات"> <i class="fa fa-eye"></i></button>
+                                                <button class="btn btn-sm  btn-info" title="بازبینی پرداخت"> <i class="fa fa-bank"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr class="collapse" id="row@(item.Id)">
+                                            <td colspan="8">
+                                                <div class="box box-info box-solid">
+                                                    <div class="box-header with-border">
+                                                        <b class="box-title">جزئیات پرداخت </b>
+                                                    </div>
+                                                    <div class="box-body">
+                                                        @if (item.Payments.Any())
+                                                        {
+                                                            <table class="table table-hover table-bordered table-striped">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th style="width: 1px;">
+                                                                            Id
+                                                                        </th>
+                                                                        <th  style="width: 1px;">
+                                                                            InvoiceId
+                                                                        </th>
+                                                                        <th >
+                                                                            مبلغ
+                                                                        </th>
+                                                                        <th>
+                                                                            نام درس
+                                                                        </th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @foreach (var i in item.Payments)
+                                                                    {
+                                                                    <tr>
+                                                                        <td>@i.Id</td>
+                                                                        <td>@i.InvoiceId</td>
+                                                                        <td>@i.Amount.ToString("N0")</td>
+                                                                        <td>@i.Enrollment.Present.Section.Course.CourseName</td>
+                                                                    </tr>
+                                                                    }
+                                                                </tbody>
+                                                            </table>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
                                 </tbody>
                             </table>
                         </div>

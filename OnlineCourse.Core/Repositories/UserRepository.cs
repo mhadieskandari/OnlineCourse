@@ -104,11 +104,25 @@ namespace OnlineCourse.Core.Repositories
                 throw;
             }
         }
+
+        public async Task<int> GetIdByEmailAsync(string email)
+        {
+            try
+            {
+                var userId = await _context.Users.Where(m => m.Email.Equals(email)).Select(u => u.Id).SingleOrDefaultAsync();
+                return userId;
+            }
+            catch (Exception e)
+            {
+                _historyService.LogError(e, HistoryErrorType.Core);
+                throw;
+            }
+        }
         public User GetByMobile(string mobile)
         {
             try
             {
-                var res = _context.Users.Where(m => m.Mobile == mobile).FirstOrDefault();
+                var res = _context.Users.FirstOrDefault(m => m.Mobile == mobile);
                 return res;
             }
             catch (Exception e)

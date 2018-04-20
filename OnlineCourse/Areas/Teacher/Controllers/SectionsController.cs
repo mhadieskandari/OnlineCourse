@@ -32,8 +32,7 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
             _history = history;
             _user = user;
 
-            var tmpId = _user.GetUserId().Result;
-            if (tmpId != null) _userid = tmpId.Value;
+            _userid = _user.GetUserId().Result;
         }
 
         // GET: Admin/Sections

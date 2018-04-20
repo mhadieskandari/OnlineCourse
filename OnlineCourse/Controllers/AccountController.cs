@@ -354,16 +354,10 @@ namespace OnlineCourse.Panel.Controllers
         [HttpGet]
         public async Task<IActionResult> UpdateInfo()
         {
-
             var userId = await _cUser.GetUserId();
-            if (userId != null)
-            {
-                var user = await _unitOfWork.Users.GetAsync(userId.Value);
+            var user = await _unitOfWork.Users.GetAsync(userId);
                 var model = new UserUpdateViewModel() { Id = user.Id, Addrress = user.Addrress, City = user.City, Email = user.Email, FullName = user.FullName, Phone = user.Phone, UserName = user.UserName};
                 return View(model);
-            }
-            this.AddNotification("اطلاعات کاربری یافت نشد.", NotificationType.Error);
-            return RedirectToAction("NotFoundPage", "Home");
         }
 
         [Authorize()]
@@ -410,7 +404,7 @@ namespace OnlineCourse.Panel.Controllers
         public async Task<IActionResult> ChangePassword()
         {
             var userid = await _cUser.GetUserId();
-            var model = new ChangePasswordViewModel() { UserId = userid.Value };
+            var model = new ChangePasswordViewModel() { UserId = userid };
             return View(model);
         }
 

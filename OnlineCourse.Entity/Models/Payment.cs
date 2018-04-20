@@ -17,5 +17,9 @@ namespace OnlineCourse.Entity.Models
 
         [ForeignKey("EnrollmentId")]
         public Enrollment Enrollment { get; set; }
+
+        public int InvoiceId { set; get; }
+        [ForeignKey("InvoiceId")]
+        public Invoice Invoice { set; get; }
     }
 }
