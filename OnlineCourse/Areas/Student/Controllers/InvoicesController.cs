@@ -20,7 +20,7 @@ namespace OnlineCourse.Panel.Areas.Student.Controllers
         {
         }
 
-        public async Task<IActionResult> Index(int? invoiceId)
+        public async Task<IActionResult> Index(int? invoiceId,int? enrollmentId)
         {
             try
             {
@@ -29,6 +29,10 @@ namespace OnlineCourse.Panel.Areas.Student.Controllers
                 if (invoiceId.HasValue)
                 {
                     invoices = invoices.Where(i => i.Id == invoiceId);
+                }
+                if (enrollmentId.HasValue)
+                {
+                    invoices = invoices.Where(i => i.Payments.Any(p=>p.EnrollmentId==enrollmentId));
                 }
                 return View(await invoices.ToListAsync());
             }
