@@ -14,6 +14,7 @@ using OnlineCourse.Core.Services;
 using OnlineCourse.Entity;
 using OnlineCourse.Entity.Models;
 using OnlineCourse.Panel.Utils.Extentions;
+using OnlineCourse.Panel.Utils.ViewModels;
 
 namespace OnlineCourse.Panel.Areas.Student.Controllers
 {
@@ -39,7 +40,7 @@ namespace OnlineCourse.Panel.Areas.Student.Controllers
         }
         
         // GET: Student/Enrollments/Create
-        public async Task<IActionResult> SelectCourse()
+        public async Task<IActionResult> SelectCourse(int? enrollmentid)
         {
             //ViewData["PresentId"] = new SelectList(_context.Presents, "Id", "Id");
             //ViewData["StudentId"] = new SelectList(_context.Users, "Id", "Id");
@@ -51,13 +52,15 @@ namespace OnlineCourse.Panel.Areas.Student.Controllers
                 this.AddNotification("لطفا مقطع تحصیلی خود را وارد کنید و مجددا تلاش کنید.",NotificationType.Error);
                 return RedirectToAction("Index", "Profile");
             }
-            var model = _context.Presents.Where(p => p.Section.Course.Level == degree &&
-                                                     !_context.Enrollments.Any(e => e.PresentId == p.Id && e.Present.Section.Activity==ActiveState.Active))
+            var model = _context.Presents.Where(p => p.Section.Course.Level == degree /*&& !_context.Enrollments.Any(e => e.PresentId == p.Id && e.Present.Section.Activity==ActiveState.Active)*/)
                                                      .Include(p=>p.Section).ThenInclude(p=>p.Course)
                                                      .Include(p=>p.Section).ThenInclude(p=>p.Teacher)
-                                                     .Include(p=>p.Schedules);
+                                                     .Include(p=>p.Schedules)
+                                                     .Include(p=>p.Enrollments).ThenInclude(e=>e.Payments).AsQueryable();
+            if (enrollmentid.HasValue)
+                model = model.Where(p => p.Enrollments.Any(e => e.Id == enrollmentid.Value));
             
-            return View(model);
+            return View(model.OrderByDescending(p => p.Enrollments.Any()));
         }
 
         // POST: Student/Enrollments/Create

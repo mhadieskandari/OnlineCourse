@@ -29,7 +29,7 @@
                         <table class="table table-bordered table-striped table-hover">
                             <thead>
                                 <tr>
-                                    <th>
+                                    <th style="width: 1px;">
                                         Id
                                     </th>
                                     <th>
@@ -44,13 +44,16 @@
                                     <th>
                                         هزینه دوره
                                     </th>
-                                    <th>
+                                    <th  style="width: 1px;">
                                         مبلغ پرداختی
+                                    </th>
+                                    <th>
+                                        پرداخت شده
                                     </th>
                                     <th>
                                         مانده
                                     </th>
-                                    <th>
+                                    <th style="width: 1px;">
                                         انتخاب
                                     </th>
                                 </tr>
@@ -61,7 +64,13 @@
                                 }
                                 @foreach (var item in Model)
                                 {
-                                    <tr data-id="@item.Id" data-tc="@((item.Section.TotalTime*item.Section.HourlyPrice).ToString("0"))">
+                                    decimal payed = 0;
+                                    if (item.Enrollments.Any())
+                                    {
+                                        payed= item.Enrollments.Select(e => e.Payments.Select(p => p.Amount).Sum()).SingleOrDefault();
+                                    }
+
+                                    <tr class="@(item.Enrollments.Any()?"success":"")" data-id="@item.Id" data-tc="@((item.Section.TotalTime*item.Section.HourlyPrice).ToString("0"))" data-payed="@payed.ToString("0")">
                                         <td class="PresentId">
                                             @item.Id
                                         </td>
@@ -99,8 +108,11 @@
                                         <td>
                                             <input class="paymentAmount" type="number" name="paymentAmount[@indx]" />
                                         </td>
+                                        <td class="payed">
+                                            @payed.ToString("N0")
+                                        </td>
                                         <td class="remain">
-                                            @((item.Section.TotalTime * item.Section.HourlyPrice).ToString("N0"))
+                                            @((item.Section.TotalTime * item.Section.HourlyPrice -payed).ToString("N0"))
                                         </td>
                                         <td>
                                             <input class="selectedCourse" type="checkbox" name="selected[@indx]" />
@@ -116,7 +128,7 @@
                                             تعداد خرید : <strong id="countOfCard"></strong> درس
                                         </b>
                                     </td>
-                                    <td colspan="4">
+                                    <td colspan="5">
                                         <b>
                                             جمع خرید : <strong id="totalOfCard"></strong> تومان
                                         </b>
@@ -167,8 +179,10 @@
                 var totalcost = tr.data("tc");
                 var presentid = tr.data("id");
                 var payCost = tr.find(".paymentAmount").val();
-                var remain1 = totalcost - payCost;
+                var elPayed = tr.data("payed");
+                var remain1 = totalcost - payCost-elPayed;
                 tr.find(".remain").html(commaSeparateNumber(remain1));
+                tr.find(".payed").html(commaSeparateNumber(elPayed));
                 refreshDb(presentid, payCost, add);
             }
 
@@ -198,6 +212,7 @@
                     var tr = $("tr[data-id='" + id + "']");
                     var checkbox = tr.find(".selectedCourse");
                     var elAmount = tr.find(".paymentAmount");
+
                     elAmount.val(amount);
                     checkbox.attr('checked', true);
                     remain(checkbox, true);

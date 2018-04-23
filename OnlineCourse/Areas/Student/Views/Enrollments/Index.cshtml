@@ -93,7 +93,7 @@
                                                 <a class="btn btn-sm  btn-info" title="لیست پرداخت ها" asp-controller="Invoices" asp-action="Index" asp-route-enrollmentId="@item.Id" target="_blank"><i class="fa fa-dollar"></i></a>
                                                 @if (item.Payments.Sum(p => p.Amount) <= item.Present.Section.TotalCost)
                                                 {
-                                                <button class="btn btn-sm  btn-success" title="پرداخت">  <i class="fa fa-credit-card"></i></button>
+                                                    <a asp-controller="Enrollments" asp-action="SelectCourse" asp-route-enrollmentid="@item.Id" class="btn btn-sm  btn-success" title="پرداخت">  <i class="fa fa-credit-card"></i></a>
                                                 }
                                             </td>
                                         </tr>
