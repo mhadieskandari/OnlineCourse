@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BigBlueButton\BigBlueButton.csproj" />
     <ProjectReference Include="..\OnlineCourse.Core\OnlineCourse.Core.csproj" />
     <ProjectReference Include="..\OnlineCourse.Entity\OnlineCourse.Entity.csproj" />
   </ItemGroup>

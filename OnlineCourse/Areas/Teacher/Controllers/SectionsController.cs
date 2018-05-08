@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +10,9 @@ using OnlineCourse.Entity;
 using OnlineCourse.Entity.Models;
 using OnlineCourse.Panel.Utils.ViewModels.Areas.Admin;
 using AutoMapper;
+using BigBlueButton;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using OnlineCourse.Core.Services;
 using OnlineCourse.Panel.Utils.Extentions;
 
@@ -24,19 +27,21 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
         private readonly HistoryService _history;
         private readonly CurrentUser _user;
         private readonly int _userid;
+        public readonly IHttpContextAccessor _httpContextAccessor;
 
-        public SectionsController(ApplicationDbContext context, IMapper mapper, HistoryService history, CurrentUser user)
+
+        public SectionsController(ApplicationDbContext context, IMapper mapper, HistoryService history, CurrentUser user, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _mapper = mapper;
             _history = history;
             _user = user;
-
+            _httpContextAccessor = httpContextAccessor;
             _userid = _user.GetUserId().Result;
         }
 
         // GET: Admin/Sections
-        public async Task<IActionResult> Index(int? termId,int? courseId , ActiveState? activity)
+        public async Task<IActionResult> Index(int? termId, int? courseId, ActiveState? activity)
         {
             var model = _context.Sections.Include(t => t.Term).Include(c => c.Course).Include(u => u.Teacher)
                 .Where(s => s.TeacherId == _userid);
@@ -96,13 +101,13 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
                     var dbSection = _mapper.Map<Section>(section);
 
 
-                    var existSecrion =_context.Sections.FirstOrDefault(s => s.CourseId == dbSection.CourseId &&
-                                                   s.TeacherId == dbSection.TeacherId &&
-                                                   s.TermId == dbSection.TermId);
+                    var existSecrion = _context.Sections.FirstOrDefault(s => s.CourseId == dbSection.CourseId &&
+                                                    s.TeacherId == dbSection.TeacherId &&
+                                                    s.TermId == dbSection.TermId);
 
-                    if (existSecrion!=null)
+                    if (existSecrion != null)
                     {
-                        this.AddNotification("این دوره با id ="+existSecrion.Id+" وجود دارد و امکان ایجاد ندارد.",NotificationType.Info);
+                        this.AddNotification("این دوره با id =" + existSecrion.Id + " وجود دارد و امکان ایجاد ندارد.", NotificationType.Info);
                         section.IsEdit(_context);
                         return View(section);
                     }
@@ -124,9 +129,9 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
                     }
                     await _context.SaveChangesAsync();
                     this.AddNotification("دوره با موفقیت ایجاد شد.", NotificationType.Success);
-                    return RedirectToAction(nameof(Details),new {id=dbSection.Id});
+                    return RedirectToAction(nameof(Details), new { id = dbSection.Id });
                 }
-                this.AddNotification("خطایی رخ داده است.",NotificationType.Error);
+                this.AddNotification("خطایی رخ داده است.", NotificationType.Error);
                 section.IsEdit(_context);
                 return View(section);
             }
@@ -146,7 +151,7 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var isOwner = _context.Sections.Any(s => s.Presents.Any(p=>p.Id==schedule.PresentId) && s.TeacherId==_userid );
+                    var isOwner = _context.Sections.Any(s => s.Presents.Any(p => p.Id == schedule.PresentId) && s.TeacherId == _userid);
                     if (!isOwner)
                         return NotFound();
 
@@ -341,9 +346,76 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
 
         }
 
+
+
         private bool SectionExists(int id)
         {
             return _context.Sections.Any(e => e.Id == id);
         }
+
+        //[HttpPost]
+        public IActionResult CreateClass(int? presentId)
+        {
+            try
+            {
+
+                if (presentId == null)
+                {
+                    return NotFound();
+                }
+
+                var present = _context.Presents.SingleOrDefault(p => p.Id == presentId);
+
+                if (present == null)
+                {
+                    return NotFound();
+                }
+                var cls = new ClassRoom()
+                {
+                    ChangeTimePermit = 10,
+                    Date = DateTime.Now,
+                    StartedTime = DateTime.Now.TimeOfDay,
+                    Description = "",
+                    PresentId = present.Id,
+                    EndedTime = DateTime.Now.AddHours(2).TimeOfDay,
+                    Status = ClassStatus.NotStarted,
+                    Source = ""
+                };
+                _context.ClassRooms.Add(cls);
+                _context.SaveChanges();
+
+
+                //ServiceReference1.ServiceClient objtest = new ServiceReference1.ServiceClient();
+                //  string strresult=objtest.CreateRoom(5, 234, "testroom", "fd", "ghfg", "testing simply", 1);
+                DataTable dt = new DataTable();
+                BBB objBigBlueButton = new BBB();
+                //Console.WriteLine(ClsData.getSha1("createname=Test+Meeting&meetingID=abc123&attendeePW=111222&moderatorPW=33344404f3591a48c820cebfe5096e6cffd0b3"));
+                dt = objBigBlueButton.CreateMeeting("Mkalaiselvi", "a2b", "selvi", "kalai");
+                objBigBlueButton.JoinMeeting("Mkalaiselvi", "a2b", "kalai", true);
+                objBigBlueButton.JoinMeeting("Mkalaiselvi", "a2b", "selvi", true);
+                dt = objBigBlueButton.IsMeetingRunning("a2b");
+                dt = objBigBlueButton.getMeetings();
+                dt = objBigBlueButton.GetMeetingInfo("a2b", "kalai");
+                //dt = objBigBlueButton.EndMeeting("a2b", "kalai");
+                dt = objBigBlueButton.IsMeetingRunning("a2b");
+
+
+                //Console.ReadLine();
+                //var classroom = _context.ClassRooms.Include(c=>c.Present).ThenInclude(p=>p.Section).ThenInclude(s=>s.Course).SingleOrDefault(c => c.Id == cls.Id);
+                //if (classroom == null) throw new ArgumentNullException(nameof(classroom));
+                //var bbb = new BBB();
+                //bbb.CreateMeeting(classroom.Present.Section.Course.CourseName, classroom.Id.ToString(), "test", "test");
+                //var url=bbb.JoinMeeting(classroom.Id.ToString(), classroom.Id.ToString(), "test",false);
+                
+                return View();
+            }
+            catch (Exception e)
+            {
+                _history.LogError(e, HistoryErrorType.Middle);
+                this.AddNotification("خطا در ایجاد جلسه", NotificationType.Error);
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
     }
 }

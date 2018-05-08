@@ -1,0 +1,162 @@
+﻿@model OnlineCourse.Panel.Utils.ViewModels.Areas.Admin.SectionCreateViewModel
+@{
+    ViewData["Title"] = "ایجاد دوره";
+    Layout = "~/Areas/Teacher/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-md-6 col-lg-6 col-sm-8 col-xs-12 col-center-md">
+            @*@Html.Partial("/Views/Shared/_Notifications.cshtml")*@
+            <form asp-action="Create" method="Post">
+                <div class="box box-default">
+                    <div class="box-header with-border">
+                        <b>@ViewData["Title"]</b>
+                    </div>
+                    <div class="box-body">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div class="row">
+                            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                                <label asp-for="TotalTime" class="control-label"></label>
+                                <div class="input-group">
+                                    <input asp-for="TotalTime" class="form-control" placeholder="30" />
+                                    <span class="input-group-addon">ساعت</span>
+                                </div>
+                                <span asp-validation-for="TotalTime" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                                <label asp-for="HourlyPrice" class="control-label"></label>
+                                <div class="input-group">
+                                    <input asp-for="HourlyPrice" class="form-control" placeholder="15000" />
+                                    <span class="input-group-addon">تومان</span>
+                                </div>
+                                <span asp-validation-for="HourlyPrice" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-6 col-sm-12 col-xs-12 hidden">
+                                <label asp-for="TeacherId" class="control-label"></label>
+                                <select asp-for="TeacherId" class="form-control" asp-items="Model.Teachers"></select>
+                                <span asp-validation-for="TeacherId" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                                <label asp-for="TermId" class="control-label"></label>
+                                <select asp-for="TermId" class="form-control" asp-items="Model.Terms"></select>
+                                <span asp-validation-for="TermId" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                                <label asp-for="CourseId" class="control-label"></label>
+                                <select asp-for="CourseId" class="form-control" asp-items="Model.Courses"></select>
+                                <span asp-validation-for="CourseId" class="text-danger"></span>
+                            </div>
+                           
+                        </div>
+
+                        <div class="row" id="present[1]">
+                            <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                                <label asp-for="WorkDays" class="control-label"></label>
+                                <div id="WorkLine" style="margin: 5px;"></div>
+                                <input asp-for="WorkDays" class="form-control" type="hidden" />
+                                <span asp-validation-for="WorkDays" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                                <label asp-for="StartTime" class="control-label"></label>
+                                <input asp-for="StartTime" class="form-control piktime text-left" type="text" />
+
+                                <span asp-validation-for="StartTime" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+                                <label asp-for="EndTime" class="control-label"></label>
+                                <input asp-for="EndTime" class="form-control piktime ltr text-left" type="text" />
+
+                                <span asp-validation-for="EndTime" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-success  box-button"><i class="fa fa-save"></i></button>
+                        <a asp-action="Index" class="btn btn-info  box-title"><i class="fa fa-backward"></i></a>
+
+                    </div>
+                </div>
+
+            </form>
+
+
+
+
+        </div>
+
+
+    </div>
+    <!-- /.row -->
+</section>
+<!-- /.content -->
+
+
+@section Heads{
+    @*<link href="~/lib/pickadate.js-master/lib/themes/default.css" rel="stylesheet" />
+        <link href="~/lib/pickadate.js-master/lib/themes/default.time.css" rel="stylesheet" />*@
+    <link href="~/lib/pickadate.js-master/lib/themes/classic.css" rel="stylesheet" />
+    <link href="~/lib/pickadate.js-master/lib/themes/classic.time.css" rel="stylesheet" />
+
+
+    @*<style>
+            .form-control {
+                /*padding: 1px;*/
+                background-color: white !important;
+            }
+
+
+
+            @@media(max-width:992px) {
+                .showlargdown {
+                    display: block;
+                }
+
+                .ddtform-control {
+                    border: 0 !important;
+                }
+
+                #postCart {
+                    width: 100%;
+                }
+            }
+        </style>*@
+
+}
+
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+    <script src="~/lib/pickadate.js-master/lib/picker.js"></script>
+    <script src="~/lib/pickadate.js-master/lib/picker.date.js"></script>
+    <script src="~/lib/pickadate.js-master/lib/picker.time.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var wdays = $("#WorkLine").weekLine({
+                onChange: function() {
+                    var days = $(this).weekLine('getSelected', 'indexes');
+                    $("#WorkDays").val(days.toString());
+                }
+            });
+
+            wdays.weekLine("setSelected", $("#WorkDays").val());
+
+           
+
+            $('.piktime').each(function() {
+                $(this).pickatime({ format: 'H:i',min: [7, 30],max:[23,0]} /*{ interval: 30 }*/);
+            });
+
+
+        });
+    </script>
+
+}
