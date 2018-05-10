@@ -46,6 +46,29 @@ namespace BigBlueButton
                 return null;
             }
         }
+
+        public string CreateMeeting1(string meetingName, string meetingId, string attendeePw, string moderatorPw)
+        {
+            try
+            {
+                var strServerIpAddress = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerIPAddress.txt");
+                var strSalt = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerId.txt");
+                var strParameters = "name=" + meetingName + "&meetingID=" + meetingId + "&attendeePW=" + attendeePw + "&moderatorPW=" + moderatorPw;
+                var strSha1CheckSum = Sha1.GetSha1("create" + strParameters + strSalt);
+                var request = "http://" + strServerIpAddress + "/bigbluebutton/api/create?" + strParameters + "&checksum=" + strSha1CheckSum;
+                //var response = (HttpWebResponse)request.GetResponse();
+                //var sr = new StreamReader(response.GetResponseStream());
+                //var ds = new DataSet("DataSet1");
+                //ds.ReadXml(sr);
+                //return ds.Tables[0];
+                return request;
+            }
+            catch (Exception ex)
+            {
+                _log.Write(ex.Message);
+                return null;
+            }
+        }
         #endregion
 
         /// <summary>
@@ -78,11 +101,7 @@ namespace BigBlueButton
                     var sr = new StreamReader(response.GetResponseStream());
                     return sr.ReadToEnd();
                 }
-                else
-                {
-                    Process.Start("http://" + strServerIpAddress + "/bigbluebutton/api/join?" + strParameters + "&checksum=" + strSha1CheckSum);
-                    return "Showed Successfully";
-                }
+                return "http://" + strServerIpAddress + "/bigbluebutton/api/join?" + strParameters + "&checksum=" + strSha1CheckSum;
             }
             catch (Exception ex)
             {

@@ -390,14 +390,14 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
                 DataTable dt = new DataTable();
                 BBB objBigBlueButton = new BBB();
                 //Console.WriteLine(ClsData.getSha1("createname=Test+Meeting&meetingID=abc123&attendeePW=111222&moderatorPW=33344404f3591a48c820cebfe5096e6cffd0b3"));
-                dt = objBigBlueButton.CreateMeeting("Mkalaiselvi", "a2b", "selvi", "kalai");
-                objBigBlueButton.JoinMeeting("Mkalaiselvi", "a2b", "kalai", true);
-                objBigBlueButton.JoinMeeting("Mkalaiselvi", "a2b", "selvi", true);
-                dt = objBigBlueButton.IsMeetingRunning("a2b");
-                dt = objBigBlueButton.getMeetings();
-                dt = objBigBlueButton.GetMeetingInfo("a2b", "kalai");
-                //dt = objBigBlueButton.EndMeeting("a2b", "kalai");
-                dt = objBigBlueButton.IsMeetingRunning("a2b");
+                var url= objBigBlueButton.CreateMeeting1("Mkalaiselvi", "a2b", "selvi", "kalai");
+                //var url =objBigBlueButton.JoinMeeting("Mkalaiselvi", "a2b", "kalai", true);
+                //objBigBlueButton.JoinMeeting("Mkalaiselvi", "a2b", "selvi", true);
+                //dt = objBigBlueButton.IsMeetingRunning("a2b");
+                //dt = objBigBlueButton.getMeetings();
+                //dt = objBigBlueButton.GetMeetingInfo("a2b", "kalai");
+                ////dt = objBigBlueButton.EndMeeting("a2b", "kalai");
+                //dt = objBigBlueButton.IsMeetingRunning("a2b");
 
 
                 //Console.ReadLine();
@@ -407,7 +407,58 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
                 //bbb.CreateMeeting(classroom.Present.Section.Course.CourseName, classroom.Id.ToString(), "test", "test");
                 //var url=bbb.JoinMeeting(classroom.Id.ToString(), classroom.Id.ToString(), "test",false);
                 
-                return View();
+                return Redirect(url);
+            }
+            catch (Exception e)
+            {
+                _history.LogError(e, HistoryErrorType.Middle);
+                this.AddNotification("خطا در ایجاد جلسه", NotificationType.Error);
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
+
+        //[HttpPost]
+        public IActionResult JoinClass(int? classid)
+        {
+            try
+            {
+
+                //if (classid == null)
+                //{
+                //    return NotFound();
+                //}
+
+                //var kelas = _context.ClassRooms.SingleOrDefault(p => p.Id == classid);
+
+                //if (kelas == null)
+                //{
+                //    return NotFound();
+                //}
+
+
+                //ServiceReference1.ServiceClient objtest = new ServiceReference1.ServiceClient();
+                //  string strresult=objtest.CreateRoom(5, 234, "testroom", "fd", "ghfg", "testing simply", 1);
+                DataTable dt = new DataTable();
+                BBB objBigBlueButton = new BBB();
+                //Console.WriteLine(ClsData.getSha1("createname=Test+Meeting&meetingID=abc123&attendeePW=111222&moderatorPW=33344404f3591a48c820cebfe5096e6cffd0b3"));
+                var url = objBigBlueButton.JoinMeeting("Mkalaiselvi", "a2b", "kalai", true);
+                //objBigBlueButton.JoinMeeting("Mkalaiselvi", "a2b", "selvi", true);
+                //dt = objBigBlueButton.IsMeetingRunning("a2b");
+                //dt = objBigBlueButton.getMeetings();
+                //dt = objBigBlueButton.GetMeetingInfo("a2b", "kalai");
+                ////dt = objBigBlueButton.EndMeeting("a2b", "kalai");
+                //dt = objBigBlueButton.IsMeetingRunning("a2b");
+
+
+                //Console.ReadLine();
+                //var classroom = _context.ClassRooms.Include(c=>c.Present).ThenInclude(p=>p.Section).ThenInclude(s=>s.Course).SingleOrDefault(c => c.Id == cls.Id);
+                //if (classroom == null) throw new ArgumentNullException(nameof(classroom));
+                //var bbb = new BBB();
+                //bbb.CreateMeeting(classroom.Present.Section.Course.CourseName, classroom.Id.ToString(), "test", "test");
+                //var url=bbb.JoinMeeting(classroom.Id.ToString(), classroom.Id.ToString(), "test",false);
+
+                return Redirect(url);
             }
             catch (Exception e)
             {
