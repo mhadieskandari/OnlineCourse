@@ -1,3 +1,4 @@
+using BigBlueButton;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineCourse.Core;
@@ -9,13 +10,17 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
     [Authorize(Roles = "10")]
     public class HomeController : Controller
     {
+        private readonly BBB _bbb;
         public HomeController()
         {
+            _bbb=new BBB();
         }
 
         public IActionResult Index()
         {
-            //return RedirectToAction("Index","InvoiceList");
+            var b = _bbb.getMeetings();
+            var rows = b.Rows[0];
+
             return View();
         }
 

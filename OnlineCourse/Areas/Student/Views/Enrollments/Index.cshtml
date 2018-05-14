@@ -89,7 +89,7 @@
                                             </td>
 
                                             <td class="table-action">
-                                                <button class="btn btn-sm  btn-default" title="جزئیات"> <i class="fa fa-eye"></i></button>
+                                                <a class="btn btn-sm  btn-default" title="جزئیات" target="_blank" asp-action="Details" asp-route-enrollmentId="@item.Id"> <i class="fa fa-eye"></i></a>
                                                 <a class="btn btn-sm  btn-info" title="لیست پرداخت ها" asp-controller="Invoices" asp-action="Index" asp-route-enrollmentId="@item.Id" target="_blank"><i class="fa fa-dollar"></i></a>
                                                 @if (item.Payments.Sum(p => p.Amount) <= item.Present.Section.TotalCost)
                                                 {

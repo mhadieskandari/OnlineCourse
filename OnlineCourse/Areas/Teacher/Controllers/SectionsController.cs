@@ -12,34 +12,25 @@ using OnlineCourse.Panel.Utils.ViewModels.Areas.Admin;
 using AutoMapper;
 using BigBlueButton;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using OnlineCourse.Core.Services;
 using OnlineCourse.Panel.Utils.Extentions;
+using Microsoft.Extensions.Configuration;
+using OnlineCourse.Core;
+using OnlineCourse.Core.Extentions;
 
 namespace OnlineCourse.Panel.Areas.Teacher.Controllers
 {
     [Area("Teacher")]
     [Authorize(Roles = "1")]
-    public class SectionsController : Controller
+    public class SectionsController : BaseController
     {
-        private readonly ApplicationDbContext _context;
-        private readonly IMapper _mapper;
-        private readonly HistoryService _history;
-        private readonly CurrentUser _user;
         private readonly int _userid;
-        public readonly IHttpContextAccessor _httpContextAccessor;
-
-
-        public SectionsController(ApplicationDbContext context, IMapper mapper, HistoryService history, CurrentUser user, IHttpContextAccessor httpContextAccessor)
+        public SectionsController(ApplicationDbContext context, CurrentUser user, HistoryService historyService, IServiceProvider provider, IHostingEnvironment hostingEnvironment, IHttpContextAccessor httpContextAccessor, IMapper mapper, PublicConfig config) : base(context, user, historyService, provider, hostingEnvironment, httpContextAccessor, mapper, config)
         {
-            _context = context;
-            _mapper = mapper;
-            _history = history;
-            _user = user;
-            _httpContextAccessor = httpContextAccessor;
-            _userid = _user.GetUserId().Result;
+            _userid = user.GetUserId().Result;
         }
-
         // GET: Admin/Sections
         public async Task<IActionResult> Index(int? termId, int? courseId, ActiveState? activity)
         {
@@ -51,8 +42,6 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
                 model = model.Where(s => s.CourseId == courseId);
             if (activity.HasValue)
                 model = model.Where(s => s.Activity == activity);
-
-
             return View(await model.ToListAsync());
         }
 
@@ -364,7 +353,8 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
                     return NotFound();
                 }
 
-                var present = _context.Presents.SingleOrDefault(p => p.Id == presentId);
+
+                var present = _context.Presents.SingleOrDefault(p => p.Section.TeacherId == _userid && p.Id == presentId);
 
                 if (present == null)
                 {
@@ -375,11 +365,8 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
                     ChangeTimePermit = 10,
                     Date = DateTime.Now,
                     StartedTime = DateTime.Now.TimeOfDay,
-                    Description = "",
                     PresentId = present.Id,
-                    EndedTime = DateTime.Now.AddHours(2).TimeOfDay,
                     Status = ClassStatus.NotStarted,
-                    Source = ""
                 };
                 _context.ClassRooms.Add(cls);
                 _context.SaveChanges();
@@ -387,10 +374,10 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
 
                 //ServiceReference1.ServiceClient objtest = new ServiceReference1.ServiceClient();
                 //  string strresult=objtest.CreateRoom(5, 234, "testroom", "fd", "ghfg", "testing simply", 1);
-                DataTable dt = new DataTable();
-                BBB objBigBlueButton = new BBB();
-                //Console.WriteLine(ClsData.getSha1("createname=Test+Meeting&meetingID=abc123&attendeePW=111222&moderatorPW=33344404f3591a48c820cebfe5096e6cffd0b3"));
-                var url= objBigBlueButton.CreateMeeting1("Mkalaiselvi", "a2b", "selvi", "kalai");
+                //DataTable dt = new DataTable();
+                //BBB objBigBlueButton = new BBB();
+                ////Console.WriteLine(ClsData.getSha1("createname=Test+Meeting&meetingID=abc123&attendeePW=111222&moderatorPW=33344404f3591a48c820cebfe5096e6cffd0b3"));
+                //var url= objBigBlueButton.CreateMeeting1("Mkalaiselvi", "a2b", "selvi", "kalai");
                 //var url =objBigBlueButton.JoinMeeting("Mkalaiselvi", "a2b", "kalai", true);
                 //objBigBlueButton.JoinMeeting("Mkalaiselvi", "a2b", "selvi", true);
                 //dt = objBigBlueButton.IsMeetingRunning("a2b");
@@ -401,13 +388,19 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
 
 
                 //Console.ReadLine();
-                //var classroom = _context.ClassRooms.Include(c=>c.Present).ThenInclude(p=>p.Section).ThenInclude(s=>s.Course).SingleOrDefault(c => c.Id == cls.Id);
-                //if (classroom == null) throw new ArgumentNullException(nameof(classroom));
-                //var bbb = new BBB();
-                //bbb.CreateMeeting(classroom.Present.Section.Course.CourseName, classroom.Id.ToString(), "test", "test");
-                //var url=bbb.JoinMeeting(classroom.Id.ToString(), classroom.Id.ToString(), "test",false);
-                
-                return Redirect(url);
+                var classroom = _context.ClassRooms.Include(c => c.Present).ThenInclude(p => p.Section).ThenInclude(s => s.Course).AsNoTracking().SingleOrDefault(c => c.Id == cls.Id);
+                if (classroom == null) throw new ArgumentNullException(nameof(classroom));
+                var moderatorPwd = _config.BbbGetModeratorPassword();
+                var attendePwd = classroom.Id + "_" + classroom.PresentId + "_" + classroom.Present.Section.TeacherId;
+                var bbb = new BBB();
+                var createResult = bbb.CreateMeeting(/*classroom.Present.Section.Course.CourseName*/ classroom.Id.ToString(), classroom.Id.ToString(), attendePwd, moderatorPwd).Rows[0];
+
+                if (createResult != null && createResult[0].ToString().ToLower() == "SUCCESS".ToLower())
+                {
+                    var url = bbb.JoinMeeting(/*classroom.Present.Section.Course.CourseName*/ _user.GetFullName().Result, classroom.Id.ToString(), attendePwd, true);
+                    return Redirect(url);
+                }
+                return RedirectToAction(nameof(Index));
             }
             catch (Exception e)
             {

@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Internal;
@@ -24,31 +25,26 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
 {
     [Area("Teacher")]
     [Authorize(Roles = "1")]
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
-        private readonly ApplicationDbContext _context;
-        private readonly CurrentUser _user;
-
-        private readonly IServiceProvider _provider;
-        private readonly HistoryService _historyService;
-        private readonly MessageService _msgSender;
-        private readonly IHostingEnvironment _hostingEnvironment;
-
-        public HomeController(ApplicationDbContext context, CurrentUser user,HistoryService historyService, IServiceProvider provider, IHostingEnvironment hostingEnvironment)
+       public HomeController(ApplicationDbContext context, CurrentUser user, HistoryService history, IServiceProvider provider, IHostingEnvironment hostingEnvironment, IHttpContextAccessor httpContextAccessor, IMapper mapper, PublicConfig config) : base(context, user, history, provider, hostingEnvironment, httpContextAccessor, mapper, config)
         {
-            _context = context;
-            _user = user;
-            _provider = provider;
-            _historyService = historyService;
-            _msgSender = new MessageService();
-            _hostingEnvironment = hostingEnvironment;
-
         }
 
         public IActionResult Index()
         {
-            //return RedirectToAction("Index","InvoiceList");
-            return View();
+            try
+            {
+                var courses = _context.Presents.Include(p => p.Section).ThenInclude(s => s.Course).AsNoTracking().ToList();
+
+
+                return View(courses);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
 
@@ -56,8 +52,6 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
         {
             return View();
         }
-
-
 
     }
 }

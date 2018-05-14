@@ -20,6 +20,7 @@ namespace OnlineCourse.Entity.Models
 
         public ICollection<Section> Sections { set; get; }
 
+        [Display(Name = "نام درس")]
         public string CourseName => Name + " " + EnumExtentionEntity.GetDescription(Level);
     }
 }

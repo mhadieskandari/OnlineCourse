@@ -10,6 +10,7 @@ using OnlineCourse.Entity.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using OnlineCourse.Core;
 using OnlineCourse.Core.Services;
 using OnlineCourse.Panel.Areas.Student.Controllers;
 using OnlineCourse.Panel.Utils.Extentions;
@@ -20,7 +21,7 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
     [Authorize(Roles = "10")]
     public class CoursesController : BaseController
     {
-        public CoursesController(ApplicationDbContext context, CurrentUser user, HistoryService historyService, IServiceProvider provider, IHostingEnvironment hostingEnvironment, IHttpContextAccessor httpContextAccessor) : base(context, user, historyService, provider, hostingEnvironment, httpContextAccessor)
+        public CoursesController(ApplicationDbContext context, CurrentUser user, HistoryService historyService, IServiceProvider provider, IHostingEnvironment hostingEnvironment, IHttpContextAccessor httpContextAccessor,PublicConfig config) : base(context, user, historyService, provider, hostingEnvironment, httpContextAccessor,config)
         {
         }
 

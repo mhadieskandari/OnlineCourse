@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using OnlineCourse.Core;
 using OnlineCourse.Core.Extentions;
 using OnlineCourse.Core.Services;
 using OnlineCourse.Entity;
@@ -22,7 +23,7 @@ namespace OnlineCourse.Panel.Areas.Student.Controllers
     public class CheckOutController : BaseController
     {
         private readonly int _userId;
-        public CheckOutController(ApplicationDbContext context, CurrentUser user, HistoryService historyService, IServiceProvider provider, IHostingEnvironment hostingEnvironment, IHttpContextAccessor httpContextAccessor) : base(context, user, historyService, provider, hostingEnvironment, httpContextAccessor)
+        public CheckOutController(ApplicationDbContext context, CurrentUser user, HistoryService historyService, IServiceProvider provider, IHostingEnvironment hostingEnvironment, IHttpContextAccessor httpContextAccessor, PublicConfig config) : base(context, user, historyService, provider, hostingEnvironment, httpContextAccessor, config)
         {
             _userId = _user.GetUserId().Result;
         }
