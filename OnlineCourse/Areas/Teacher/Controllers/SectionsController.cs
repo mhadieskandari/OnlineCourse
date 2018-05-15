@@ -128,7 +128,7 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
             {
                 _history.LogError(e, HistoryErrorType.Middle);
                 this.AddNotification("خطایی در ایجاد دوره رخ داده است.", NotificationType.Error);
-                throw;
+                return RedirectToAction("Error", "Home");
             }
 
         }
@@ -162,7 +162,7 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
             {
                 _history.LogError(e, HistoryErrorType.Middle);
                 this.AddNotification("خطایی در ایجاد روز رخ داده است.", NotificationType.Error);
-                throw;
+                return RedirectToAction("Error", "Home");
             }
 
         }
@@ -259,19 +259,28 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
         // GET: Admin/Sections/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
-            }
 
-            var section = await _context.Sections
-                .SingleOrDefaultAsync(m => m.Id == id);
-            if (section == null)
+                if (id == null)
+                {
+                    return NotFound();
+                }
+
+                var section = await _context.Sections
+                    .SingleOrDefaultAsync(m => m.Id == id);
+                if (section == null)
+                {
+                    return NotFound();
+                }
+
+                return View(section);
+            }
+            catch (Exception e)
             {
-                return NotFound();
+                _history.LogError(e, HistoryErrorType.Middle);
+                return RedirectToAction("Error", "Home");
             }
-
-            return View(section);
         }
 
         // POST: Admin/Sections/Delete/5
@@ -279,10 +288,19 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var section = await _context.Sections.SingleOrDefaultAsync(m => m.Id == id);
-            _context.Sections.Remove(section);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                var section = await _context.Sections.SingleOrDefaultAsync(m => m.Id == id);
+                _context.Sections.Remove(section);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception e)
+            {
+                _history.LogError(e, HistoryErrorType.Middle);
+                return RedirectToAction("Error", "Home");
+            }
+
         }
 
         // POST: Admin/Sections/DeleteSchedul/5
@@ -308,7 +326,7 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
             catch (Exception e)
             {
                 _history.LogError(e, HistoryErrorType.Middle);
-                throw;
+                return RedirectToAction("Error", "Home");
             }
 
         }
@@ -330,7 +348,7 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
             catch (Exception e)
             {
                 _history.LogError(e, HistoryErrorType.Middle);
-                throw;
+                return RedirectToAction("Error", "Home");
             }
 
         }
@@ -342,18 +360,32 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
             return _context.Sections.Any(e => e.Id == id);
         }
 
-        //[HttpPost]
-        public IActionResult CreateClass(int? presentId)
+        public IActionResult PresentDetails(int presentId)
         {
             try
             {
-
-                if (presentId == null)
+                var classRooms = _context.ClassRooms.Where(c => c.PresentId == presentId && c.Present.Section.TeacherId == _userid).OrderByDescending(c=>c.Id).ToList();
+                if (classRooms.Any())
                 {
-                    return NotFound();
+                    return View(classRooms);
                 }
+                this.AddNotification("موردی با این مشخصات یافت نشد.", NotificationType.Error);
+                return RedirectToAction("NotFoundPage", "Home");
+            }
+            catch (Exception e)
+            {
+                _history.LogError(e, HistoryErrorType.Middle);
+                return RedirectToAction("Error", "Home");
+            }
+
+        }
 
 
+        //[HttpPost]
+        public IActionResult CreateClass(int presentId)
+        {
+            try
+            {
                 var present = _context.Presents.SingleOrDefault(p => p.Section.TeacherId == _userid && p.Id == presentId);
 
                 if (present == null)
@@ -370,36 +402,8 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
                 };
                 _context.ClassRooms.Add(cls);
                 _context.SaveChanges();
-
-
-                //ServiceReference1.ServiceClient objtest = new ServiceReference1.ServiceClient();
-                //  string strresult=objtest.CreateRoom(5, 234, "testroom", "fd", "ghfg", "testing simply", 1);
-                //DataTable dt = new DataTable();
-                //BBB objBigBlueButton = new BBB();
-                ////Console.WriteLine(ClsData.getSha1("createname=Test+Meeting&meetingID=abc123&attendeePW=111222&moderatorPW=33344404f3591a48c820cebfe5096e6cffd0b3"));
-                //var url= objBigBlueButton.CreateMeeting1("Mkalaiselvi", "a2b", "selvi", "kalai");
-                //var url =objBigBlueButton.JoinMeeting("Mkalaiselvi", "a2b", "kalai", true);
-                //objBigBlueButton.JoinMeeting("Mkalaiselvi", "a2b", "selvi", true);
-                //dt = objBigBlueButton.IsMeetingRunning("a2b");
-                //dt = objBigBlueButton.getMeetings();
-                //dt = objBigBlueButton.GetMeetingInfo("a2b", "kalai");
-                ////dt = objBigBlueButton.EndMeeting("a2b", "kalai");
-                //dt = objBigBlueButton.IsMeetingRunning("a2b");
-
-
-                //Console.ReadLine();
-                var classroom = _context.ClassRooms.Include(c => c.Present).ThenInclude(p => p.Section).ThenInclude(s => s.Course).AsNoTracking().SingleOrDefault(c => c.Id == cls.Id);
-                if (classroom == null) throw new ArgumentNullException(nameof(classroom));
-                var moderatorPwd = _config.BbbGetModeratorPassword();
-                var attendePwd = classroom.Id + "_" + classroom.PresentId + "_" + classroom.Present.Section.TeacherId;
-                var bbb = new BBB();
-                var createResult = bbb.CreateMeeting(_user.GetEmail(), classroom.Id.ToString(), attendePwd, moderatorPwd).Rows[0];
-
-                if (createResult != null && createResult[0].ToString().ToLower() == "SUCCESS".ToLower())
-                {
-                    var url = bbb.JoinMeeting(/*classroom.Present.Section.Course.CourseName*/ _user.GetEmail(), classroom.Id.ToString(), moderatorPwd, true);
-                    return Redirect(url);
-                }
+                
+               
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception e)
@@ -412,46 +416,33 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
 
 
         //[HttpPost]
-        public IActionResult JoinClass(int? classid)
+        public IActionResult JoinClass(int classid)
         {
             try
             {
+                var classroom = _context.ClassRooms.Include(c => c.Present).ThenInclude(p => p.Section).ThenInclude(s => s.Course).SingleOrDefault(c => c.Id == classid && c.Present.Section.TeacherId==_userid);
 
-                //if (classid == null)
-                //{
-                //    return NotFound();
-                //}
+                if (classroom == null)
+                {
+                    this.AddNotification("کلاسی با مشخصات فوق یافت نشد.",NotificationType.Error);
+                    return  RedirectToAction(nameof(Index));
+                }
 
-                //var kelas = _context.ClassRooms.SingleOrDefault(p => p.Id == classid);
+                
+                var moderatorPwd = _config.BbbGetModeratorPassword();
+                var attendePwd = classroom.Id + "_" + classroom.PresentId + "_" + classroom.Present.Section.TeacherId;
+                var bbb = new BBB();
+                var createResult = bbb.CreateMeeting(_user.GetEmail(), classroom.Id.ToString(), attendePwd, moderatorPwd).Rows[0];
 
-                //if (kelas == null)
-                //{
-                //    return NotFound();
-                //}
+                if (createResult != null && createResult[0].ToString().ToLower() == "SUCCESS".ToLower())
+                {
+                    classroom.Status=ClassStatus.OnGoing;
+                    _context.SaveChanges();
+                    var url = bbb.JoinMeeting(_user.GetEmail(), classroom.Id.ToString(), moderatorPwd, true);
+                    return Redirect(url);
+                }
 
-
-                //ServiceReference1.ServiceClient objtest = new ServiceReference1.ServiceClient();
-                //  string strresult=objtest.CreateRoom(5, 234, "testroom", "fd", "ghfg", "testing simply", 1);
-                DataTable dt = new DataTable();
-                BBB objBigBlueButton = new BBB();
-                //Console.WriteLine(ClsData.getSha1("createname=Test+Meeting&meetingID=abc123&attendeePW=111222&moderatorPW=33344404f3591a48c820cebfe5096e6cffd0b3"));
-                var url = objBigBlueButton.JoinMeeting("Mkalaiselvi", "a2b", "kalai", true);
-                //objBigBlueButton.JoinMeeting("Mkalaiselvi", "a2b", "selvi", true);
-                //dt = objBigBlueButton.IsMeetingRunning("a2b");
-                //dt = objBigBlueButton.getMeetings();
-                //dt = objBigBlueButton.GetMeetingInfo("a2b", "kalai");
-                ////dt = objBigBlueButton.EndMeeting("a2b", "kalai");
-                //dt = objBigBlueButton.IsMeetingRunning("a2b");
-
-
-                //Console.ReadLine();
-                //var classroom = _context.ClassRooms.Include(c=>c.Present).ThenInclude(p=>p.Section).ThenInclude(s=>s.Course).SingleOrDefault(c => c.Id == cls.Id);
-                //if (classroom == null) throw new ArgumentNullException(nameof(classroom));
-                //var bbb = new BBB();
-                //bbb.CreateMeeting(classroom.Present.Section.Course.CourseName, classroom.Id.ToString(), "test", "test");
-                //var url=bbb.JoinMeeting(classroom.Id.ToString(), classroom.Id.ToString(), "test",false);
-
-                return Redirect(url);
+                return RedirectToAction(nameof(Index));
             }
             catch (Exception e)
             {
