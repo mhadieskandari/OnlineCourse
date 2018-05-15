@@ -393,11 +393,11 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
                 var moderatorPwd = _config.BbbGetModeratorPassword();
                 var attendePwd = classroom.Id + "_" + classroom.PresentId + "_" + classroom.Present.Section.TeacherId;
                 var bbb = new BBB();
-                var createResult = bbb.CreateMeeting(/*classroom.Present.Section.Course.CourseName*/ classroom.Id.ToString(), classroom.Id.ToString(), attendePwd, moderatorPwd).Rows[0];
+                var createResult = bbb.CreateMeeting(_user.GetEmail(), classroom.Id.ToString(), attendePwd, moderatorPwd).Rows[0];
 
                 if (createResult != null && createResult[0].ToString().ToLower() == "SUCCESS".ToLower())
                 {
-                    var url = bbb.JoinMeeting(/*classroom.Present.Section.Course.CourseName*/ _user.GetFullName().Result, classroom.Id.ToString(), attendePwd, true);
+                    var url = bbb.JoinMeeting(/*classroom.Present.Section.Course.CourseName*/ _user.GetEmail(), classroom.Id.ToString(), moderatorPwd, true);
                     return Redirect(url);
                 }
                 return RedirectToAction(nameof(Index));

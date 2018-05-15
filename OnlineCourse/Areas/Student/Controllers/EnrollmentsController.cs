@@ -109,9 +109,9 @@ namespace OnlineCourse.Panel.Areas.Student.Controllers
             var bbb = new BBB();
             var createResult = bbb.IsMeetingRunning(classRoom.Id.ToString()).Rows[0];
 
-            if (createResult != null && createResult[0].ToString().ToLower() == "success" && bool.Parse(createResult[1].ToString()))
+            if (createResult != null && createResult[0].ToString().ToLower() == "success" /*&& bool.Parse(createResult[1].ToString())*/)
             {
-                var url = bbb.JoinMeeting(/*classroom.Present.Section.Course.CourseName*/ _user.GetFullName().Result, classRoom.Id.ToString(), attendePwd, true);
+                var url = bbb.JoinMeeting(/*classroom.Present.Section.Course.CourseName*/ _user.GetEmail(), classRoom.Id.ToString(), attendePwd, true);
                 return Redirect(url);
             }
 
