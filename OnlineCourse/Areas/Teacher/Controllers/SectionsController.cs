@@ -451,13 +451,13 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
                 return RedirectToAction(nameof(Index));
             }
         }
-        public IActionResult CreateHook()
+        public IActionResult CreateHook(string callbackurl)
         {
             try
             {
 
                 var bbb = new BBB();
-                var hooksResponse = bbb.CreateHooks("");
+                var hooksResponse = bbb.CreateHooks(callbackurl);
                
 
                 return RedirectToAction(nameof(Index));
