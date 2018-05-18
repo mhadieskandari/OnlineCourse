@@ -14,6 +14,7 @@ using BigBlueButton;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
 using OnlineCourse.Core.Services;
 using OnlineCourse.Panel.Utils.Extentions;
 using Microsoft.Extensions.Configuration;
@@ -438,6 +439,16 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
                 {
                     classroom.Status=ClassStatus.OnGoing;
                     _context.SaveChanges();
+                    
+                        var request = _httpContextAccessor.HttpContext.Request;
+                        UriBuilder uriBuilder = new UriBuilder();
+                        uriBuilder.Scheme = request.Scheme;
+                        uriBuilder.Host = request.Host.Host;
+                        uriBuilder.Path = "api/BigBlueButtonHooks/index";
+
+
+
+                    var hookres=bbb.CreateHooks(uriBuilder.Uri.ToString(), classroom.Id.ToString()).Rows[0];
                     var url = bbb.JoinMeeting(_user.GetEmail(), classroom.Id.ToString(), moderatorPwd, true);
                     return Redirect(url);
                 }
@@ -451,24 +462,24 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
                 return RedirectToAction(nameof(Index));
             }
         }
-        public IActionResult CreateHook(string callbackurl)
-        {
-            try
-            {
+        //public IActionResult CreateHook(string callbackurl)
+        //{
+        //    try
+        //    {
 
-                var bbb = new BBB();
-                var hooksResponse = bbb.CreateHooks(callbackurl);
+        //        var bbb = new BBB();
+        //        var hooksResponse = bbb.CreateHooks(callbackurl);
                
 
-                return Redirect(hooksResponse);
-            }
-            catch (Exception e)
-            {
-                _history.LogError(e, HistoryErrorType.Middle);
-                this.AddNotification("خطا در ایجاد جلسه", NotificationType.Error);
-                return RedirectToAction(nameof(Index));
-            }
-        }
+        //        return Redirect(hooksResponse);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        _history.LogError(e, HistoryErrorType.Middle);
+        //        this.AddNotification("خطا در ایجاد جلسه", NotificationType.Error);
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //}
 
         public IActionResult HookList()
         {

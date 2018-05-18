@@ -47,23 +47,23 @@ namespace BigBlueButton
             }
         }
 
-        public string CreateHooks(string callbackUrl)
+        public DataTable CreateHooks(string callbackUrl,string meetingId)
         {
             try
             {
                 var strServerIpAddress = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerIPAddress.txt");
                 var strSalt = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerId.txt");
-                var strParameters = "callbackURL=" + callbackUrl ;
+                var strParameters = "callbackURL=" + callbackUrl+"&meetingid="+meetingId ;
                 var strSha1CheckSum = Sha1.GetSha1("hooks/create" + strParameters + strSalt);
-                var res = "http://" + strServerIpAddress + "/bigbluebutton/api/hooks/create?" + strParameters +
-                          "&checksum=" + strSha1CheckSum;
-                return res;
-                //var request = (HttpWebRequest)WebRequest.Create("http://" + strServerIpAddress + "/bigbluebutton/api/hooks/create?" + strParameters + "&checksum=" + strSha1CheckSum);
-                //var response = (HttpWebResponse)request.GetResponse();
-                //var sr = new StreamReader(response.GetResponseStream());
-                //var ds = new DataSet("DataSet1");
-                //ds.ReadXml(sr);
-                //return ds.Tables[0];
+                //var res = "http://" + strServerIpAddress + "/bigbluebutton/api/hooks/create?" + strParameters +
+                //          "&checksum=" + strSha1CheckSum;
+                //return res;
+                var request = (HttpWebRequest)WebRequest.Create("http://" + strServerIpAddress + "/bigbluebutton/api/hooks/create?" + strParameters + "&checksum=" + strSha1CheckSum);
+                var response = (HttpWebResponse)request.GetResponse();
+                var sr = new StreamReader(response.GetResponseStream());
+                var ds = new DataSet("DataSet1");
+                ds.ReadXml(sr);
+                return ds.Tables[0];
             }
             catch (Exception ex)
             {
