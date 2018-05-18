@@ -451,6 +451,23 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
                 return RedirectToAction(nameof(Index));
             }
         }
+        public IActionResult CreateHook()
+        {
+            try
+            {
 
+                var bbb = new BBB();
+                var hooksResponse = bbb.CreateHooks("");
+               
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception e)
+            {
+                _history.LogError(e, HistoryErrorType.Middle);
+                this.AddNotification("خطا در ایجاد جلسه", NotificationType.Error);
+                return RedirectToAction(nameof(Index));
+            }
+        }
     }
 }

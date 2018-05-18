@@ -47,6 +47,28 @@ namespace BigBlueButton
             }
         }
 
+        public DataTable CreateHooks(string callbackUrl)
+        {
+            try
+            {
+                var strServerIpAddress = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerIPAddress.txt");
+                var strSalt = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerId.txt");
+                var strParameters = "calllbackURL=" + callbackUrl ;
+                var strSha1CheckSum = Sha1.GetSha1("create" + strParameters + strSalt);
+                var request = (HttpWebRequest)WebRequest.Create("http://" + strServerIpAddress + "/bigbluebutton/api/hooks/create?" + strParameters + "&checksum=" + strSha1CheckSum);
+                var response = (HttpWebResponse)request.GetResponse();
+                var sr = new StreamReader(response.GetResponseStream());
+                var ds = new DataSet("DataSet1");
+                ds.ReadXml(sr);
+                return ds.Tables[0];
+            }
+            catch (Exception ex)
+            {
+                _log.Write(ex.Message);
+                return null;
+            }
+        }
+
         public string CreateMeeting1(string meetingName, string meetingId, string attendeePw, string moderatorPw)
         {
             try
