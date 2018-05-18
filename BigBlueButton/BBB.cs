@@ -47,20 +47,45 @@ namespace BigBlueButton
             }
         }
 
-        public DataTable CreateHooks(string callbackUrl)
+        public string CreateHooks(string callbackUrl)
         {
             try
             {
                 var strServerIpAddress = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerIPAddress.txt");
                 var strSalt = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerId.txt");
-                var strParameters = "calllbackURL=" + callbackUrl ;
-                var strSha1CheckSum = Sha1.GetSha1("create" + strParameters + strSalt);
-                var request = (HttpWebRequest)WebRequest.Create("http://" + strServerIpAddress + "/bigbluebutton/api/hooks/create?" + strParameters + "&checksum=" + strSha1CheckSum);
-                var response = (HttpWebResponse)request.GetResponse();
-                var sr = new StreamReader(response.GetResponseStream());
-                var ds = new DataSet("DataSet1");
-                ds.ReadXml(sr);
-                return ds.Tables[0];
+                var strParameters = "callbackURL=" + callbackUrl ;
+                var strSha1CheckSum = Sha1.GetSha1("hooks/create" + strParameters + strSalt);
+                var res = "http://" + strServerIpAddress + "/bigbluebutton/api/hooks/create?" + strParameters +
+                          "&checksum=" + strSha1CheckSum;
+                return res;
+                //var request = (HttpWebRequest)WebRequest.Create("http://" + strServerIpAddress + "/bigbluebutton/api/hooks/create?" + strParameters + "&checksum=" + strSha1CheckSum);
+                //var response = (HttpWebResponse)request.GetResponse();
+                //var sr = new StreamReader(response.GetResponseStream());
+                //var ds = new DataSet("DataSet1");
+                //ds.ReadXml(sr);
+                //return ds.Tables[0];
+            }
+            catch (Exception ex)
+            {
+                _log.Write(ex.Message);
+                return null;
+            }
+        }
+        public string HooksList()
+        {
+            try
+            {
+                var strServerIpAddress = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerIPAddress.txt");
+                var strSalt = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerId.txt");
+                var strSha1CheckSum = Sha1.GetSha1("hooks/list" + strSalt);
+                var res = "http://" + strServerIpAddress + "/bigbluebutton/api/hooks/list?" + "checksum=" + strSha1CheckSum;
+                return res;
+                //var request = (HttpWebRequest)WebRequest.Create("http://" + strServerIpAddress + "/bigbluebutton/api/hooks/create?" + strParameters + "&checksum=" + strSha1CheckSum);
+                //var response = (HttpWebResponse)request.GetResponse();
+                //var sr = new StreamReader(response.GetResponseStream());
+                //var ds = new DataSet("DataSet1");
+                //ds.ReadXml(sr);
+                //return ds.Tables[0];
             }
             catch (Exception ex)
             {

@@ -460,7 +460,26 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
                 var hooksResponse = bbb.CreateHooks(callbackurl);
                
 
+                return Redirect(hooksResponse);
+            }
+            catch (Exception e)
+            {
+                _history.LogError(e, HistoryErrorType.Middle);
+                this.AddNotification("خطا در ایجاد جلسه", NotificationType.Error);
                 return RedirectToAction(nameof(Index));
+            }
+        }
+
+        public IActionResult HookList()
+        {
+            try
+            {
+
+                var bbb = new BBB();
+                var hooksResponse = bbb.HooksList();
+
+
+                return Redirect(hooksResponse);
             }
             catch (Exception e)
             {
