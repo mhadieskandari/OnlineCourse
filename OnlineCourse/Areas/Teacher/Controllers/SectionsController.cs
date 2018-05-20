@@ -443,12 +443,12 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
                         var request = _httpContextAccessor.HttpContext.Request;
                         UriBuilder uriBuilder = new UriBuilder();
                         uriBuilder.Scheme = request.Scheme;
-                        uriBuilder.Host = request.Host.Host;
+                        uriBuilder.Host = request.Host.Value;
                         uriBuilder.Path = "api/BigBlueButtonHooks/index";
                     uriBuilder.Query = "meetingid=" + classroom.Id;
 
-
-                    var hookres=bbb.CreateHooks(uriBuilder.Uri.ToString()/*, classroom.Id.ToString()*/).Rows[0];
+                    var callbackurl = uriBuilder.ToString();
+                    var hookres=bbb.CreateHooks(callbackurl/*, classroom.Id.ToString()*/).Rows[0];
                     var url = bbb.JoinMeeting(_user.GetEmail(), classroom.Id.ToString(), moderatorPwd, true);
                     return Redirect(url);
                 }
