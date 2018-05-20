@@ -18,7 +18,7 @@ namespace OnlineCourse.Panel.Areas.Api.Controllers
         public BigBlueButtonHooksController(ApplicationDbContext context, CurrentUser user, HistoryService history, IServiceProvider provider, IHostingEnvironment hostingEnvironment, IHttpContextAccessor httpContextAccessor, IMapper mapper, PublicConfig config) : base(context, user, history, provider, hostingEnvironment, httpContextAccessor, mapper, config)
         {
         }
-        public IActionResult index()
+        public IActionResult index(int? meetingid)
         {
             var req = _httpContextAccessor.HttpContext.Request;
             var ret = 123123;

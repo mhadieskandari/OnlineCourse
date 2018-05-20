@@ -445,10 +445,10 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
                         uriBuilder.Scheme = request.Scheme;
                         uriBuilder.Host = request.Host.Host;
                         uriBuilder.Path = "api/BigBlueButtonHooks/index";
+                    uriBuilder.Query = "meetingid=" + classroom.Id;
 
 
-
-                    var hookres=bbb.CreateHooks(uriBuilder.Uri.ToString(), classroom.Id.ToString()).Rows[0];
+                    var hookres=bbb.CreateHooks(uriBuilder.Uri.ToString()/*, classroom.Id.ToString()*/).Rows[0];
                     var url = bbb.JoinMeeting(_user.GetEmail(), classroom.Id.ToString(), moderatorPwd, true);
                     return Redirect(url);
                 }

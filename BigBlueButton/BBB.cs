@@ -47,13 +47,13 @@ namespace BigBlueButton
             }
         }
 
-        public DataTable CreateHooks(string callbackUrl,string meetingId)
+        public DataTable CreateHooks(string callbackUrl/*,string meetingId*/)
         {
             try
             {
                 var strServerIpAddress = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerIPAddress.txt");
                 var strSalt = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerId.txt");
-                var strParameters = "callbackURL=" + callbackUrl+"&meetingid="+meetingId ;
+                var strParameters = "callbackURL=" + callbackUrl;//+"&meetingid="+meetingId ;
                 var strSha1CheckSum = Sha1.GetSha1("hooks/create" + strParameters + strSalt);
                 //var res = "http://" + strServerIpAddress + "/bigbluebutton/api/hooks/create?" + strParameters +
                 //          "&checksum=" + strSha1CheckSum;
