@@ -365,7 +365,7 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
         {
             try
             {
-                var classRooms = _context.ClassRooms.Where(c => c.PresentId == presentId && c.Present.Section.TeacherId == _userid).OrderByDescending(c=>c.Id).ToList();
+                var classRooms = _context.ClassRooms.Where(c => c.PresentId == presentId && c.Present.Section.TeacherId == _userid).OrderByDescending(c => c.Id).ToList();
                 if (classRooms.Any())
                 {
                     return View(classRooms);
@@ -403,8 +403,8 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
                 };
                 _context.ClassRooms.Add(cls);
                 _context.SaveChanges();
-                
-               
+
+
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception e)
@@ -421,15 +421,15 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
         {
             try
             {
-                var classroom = _context.ClassRooms.Include(c => c.Present).ThenInclude(p => p.Section).ThenInclude(s => s.Course).SingleOrDefault(c => c.Id == classid && c.Present.Section.TeacherId==_userid);
+                var classroom = _context.ClassRooms.Include(c => c.Present).ThenInclude(p => p.Section).ThenInclude(s => s.Course).SingleOrDefault(c => c.Id == classid && c.Present.Section.TeacherId == _userid);
 
                 if (classroom == null)
                 {
-                    this.AddNotification("کلاسی با مشخصات فوق یافت نشد.",NotificationType.Error);
-                    return  RedirectToAction(nameof(Index));
+                    this.AddNotification("کلاسی با مشخصات فوق یافت نشد.", NotificationType.Error);
+                    return RedirectToAction(nameof(Index));
                 }
 
-                
+
                 var moderatorPwd = _config.BbbGetModeratorPassword();
                 var attendePwd = classroom.Id + "_" + classroom.PresentId + "_" + classroom.Present.Section.TeacherId;
                 var bbb = new BBB();
@@ -437,18 +437,19 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
 
                 if (createResult != null && createResult[0].ToString().ToLower() == "SUCCESS".ToLower())
                 {
-                    classroom.Status=ClassStatus.OnGoing;
+                    classroom.Status = ClassStatus.OnGoing;
                     _context.SaveChanges();
-                    
-                        var request = _httpContextAccessor.HttpContext.Request;
-                        UriBuilder uriBuilder = new UriBuilder();
-                        uriBuilder.Scheme = request.Scheme;
-                        uriBuilder.Host = request.Host.Value;
-                        uriBuilder.Path = "api/BigBlueButtonHooks/index";
+
+                    var request = _httpContextAccessor.HttpContext.Request;
+                    UriBuilder uriBuilder = new UriBuilder();
+                    uriBuilder.Scheme = request.Scheme;
+                    uriBuilder.Host = request.Host.Host;
+                    if (request.Host.Port != null) uriBuilder.Port = request.Host.Port.Value;
+                    uriBuilder.Path = "api/BigBlueButtonHooks/index";
                     uriBuilder.Query = "meetingid=" + classroom.Id;
 
                     var callbackurl = uriBuilder.ToString();
-                    var hookres=bbb.CreateHooks(callbackurl/*, classroom.Id.ToString()*/).Rows[0];
+                    var hookres = bbb.CreateHooks(callbackurl/*, classroom.Id.ToString()*/).Rows[0];
                     var url = bbb.JoinMeeting(_user.GetEmail(), classroom.Id.ToString(), moderatorPwd, true);
                     return Redirect(url);
                 }
@@ -469,7 +470,7 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
 
         //        var bbb = new BBB();
         //        var hooksResponse = bbb.CreateHooks(callbackurl);
-               
+
 
         //        return Redirect(hooksResponse);
         //    }
