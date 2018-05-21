@@ -437,8 +437,8 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
 
                 if (createResult != null && createResult[0].ToString().ToLower() == "SUCCESS".ToLower())
                 {
-                    classroom.Status = ClassStatus.OnGoing;
-                    _context.SaveChanges();
+                    //classroom.Status = ClassStatus.OnGoing;
+                    //_context.SaveChanges();
 
                     var request = _httpContextAccessor.HttpContext.Request;
                     UriBuilder uriBuilder = new UriBuilder();
