@@ -321,15 +321,11 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
                 {
                     _unitOfWork.Users.Remove(id);
                     _unitOfWork.Complete();
-                    this.AddNotification(_localizer["UserRemoved"].Value.ToString(), NotificationType.Success);
+                    this.AddNotification("کاربر با موفقیت حذف شد.", NotificationType.Success);
                     return RedirectToAction("Index");
                 }
-                else
-                {
-                    this.AddNotification(_localizer["UserHasRelatedData"].Value.ToString(), NotificationType.Error);
-                    return RedirectToAction("Delete", new { id = id });
-                }
-
+                this.AddNotification("امکان حذف کاربر این کاربر وجود ندارد. ", NotificationType.Error);
+                return RedirectToAction("Delete", new { id = id });
             }
             catch (Exception e)
             {

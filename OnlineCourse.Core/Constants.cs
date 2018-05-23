@@ -127,8 +127,10 @@ namespace OnlineCourse.Core
         ActivationCodeSend = 6,
         [Description("ip شما محدود شده است.")]
         IpNotValid = 7,
+        [Description("کد فعال سازی ارسال شد.")]
+        ReqVerCodeSend =8,
         [Description("Exception")]
-        Exception = 8,
+        Exception = 10,
     }
 
     public static class RegexConstatnts

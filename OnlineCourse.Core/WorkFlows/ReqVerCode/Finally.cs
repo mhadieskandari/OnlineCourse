@@ -30,9 +30,9 @@ namespace OnlineCourse.Core.WorkFlows.ReqVerCode
                     }
                     var res = _messageSender.Verification(usr.Mobile, usr.ActivationCode);
                     if (res > 0)
-                        return (byte)VerifyUserMessage.Success;
-                    else
-                        return (byte)VerifyUserMessage.Exception;
+                        return (byte)VerifyUserMessage.ReqVerCodeSend;
+
+                    return (byte)VerifyUserMessage.Exception;
                 }
             }
             catch (Exception e)

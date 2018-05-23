@@ -41,7 +41,7 @@ namespace OnlineCourse.Core.WorkFlows.ReqVerCode
 
                         var count=uw.Complete();
                         if(count>0) return (byte)
-                                VerifyUserMessage.Success;
+                                VerifyUserMessage.ReqVerCodeSend;
                     }
                     return (byte)VerifyUserMessage.Exception;
                 }

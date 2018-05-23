@@ -198,14 +198,14 @@ namespace OnlineCourse.Panel.Controllers
             if (res == (byte)RegisterUserMessage.Success)
             {
                 var reqCode = new UserReqVerCode(_provider, _msgSender, _historyService).RequestCode(new ReqVerifyCodeDto() { Email = registerViewModel.Email, Ip = WebHelper.GetRemoteIP });
-                if (reqCode == (byte)VerifyUserMessage.Success)
-                {
+                //if (reqCode == (byte)VerifyUserMessage.ActivationCodeSend)
+                //{
                     var msg = EnumExtention.GetDescription((VerifyUserMessage)reqCode);
                     this.AddNotification(_localizer[msg].Value.ToString(), NotificationType.Success);
                     return RedirectToAction("SendCode", new { email = registerViewModel.Email });
-                }
-                this.AddNotification("Success", NotificationType.Success);
-                return RedirectToAction("RequsetVerifyCode", new { email = registerViewModel.Email });
+                //}
+                //this.AddNotification("Success", NotificationType.Success);
+                //return RedirectToAction("RequsetVerifyCode", new { email = registerViewModel.Email });
             }
             else
             {
@@ -300,7 +300,10 @@ namespace OnlineCourse.Panel.Controllers
         [HttpGet]
         public IActionResult SendCode(SendCodeViewModel sendCode)
         {
-            return View(sendCode);
+            var user = _unitOfWork.Users.GetByEmail(sendCode.Email);
+            if (user.Any()) return View(sendCode);
+            this.AddNotification("کاربری با این مشخصات یافت نشد.",NotificationType.Error);
+            return RedirectToAction(nameof(Login));
         }
 
         [AllowAnonymous]

@@ -25,7 +25,7 @@ namespace OnlineCourse.Core.WorkFlows
             if (isvalid == (byte)VerifyUserMessage.Success)
             {
                 var reg = _execution.Execute(verifyDto);
-                if (reg == (byte)VerifyUserMessage.Success)
+                if (reg == (byte)VerifyUserMessage.ReqVerCodeSend)
                 {
                     var fnl = _finally.Finallize(verifyDto);
                     return fnl;
