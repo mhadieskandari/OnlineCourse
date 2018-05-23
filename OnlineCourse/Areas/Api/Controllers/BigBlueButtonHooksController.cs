@@ -26,51 +26,37 @@ namespace OnlineCourse.Panel.Areas.Api.Controllers
         public BigBlueButtonHooksController(ApplicationDbContext context, CurrentUser user, HistoryService history, IServiceProvider provider, IHostingEnvironment hostingEnvironment, IHttpContextAccessor httpContextAccessor, IMapper mapper, PublicConfig config) : base(context, user, history, provider, hostingEnvironment, httpContextAccessor, mapper, config)
         {
         }
-        public IActionResult Index(int? meetingid,string checksum)
+        public IActionResult Index(int? meetingid, string checksum)
         {
             try
             {
                 var req = _httpContextAccessor.HttpContext.Request.Form;
                 var eventModel = JsonConvert.DeserializeObject<Event>(req["event"]);
-
-
                 var meeting = _context.ClassRooms.SingleOrDefault(c => c.Id == meetingid.Value);
                 if (meeting == null)
                     return Json("there is not any meeting.");
                 switch (eventModel.header.name)
                 {
-                    case WebHookEvents.MeetingCreatedEvtMsg:
+                    case WebHookEvents.meeting_created_message:
                         meeting.Status = ClassStatus.OnGoing;
                         _context.SaveChanges();
                         break;
-                    case WebHookEvents.MeetingEndedEvtMsg:
+                    case WebHookEvents.meeting_destroyed_event:
                         meeting.Status = ClassStatus.Complete;
                         _context.SaveChanges();
                         break;
-                    case WebHookEvents.RecordingStatusChangedEvtMsg:
-
+                    case WebHookEvents.user_joined_message:
+                        meeting.Status = ClassStatus.OnGoing;
+                        _context.SaveChanges();
                         break;
-                    case WebHookEvents.UserBroadcastCamStartedEvtMsg:
-
+                    case WebHookEvents.user_left_message:
+                        if (eventModel.payload.user.presenter)
+                        {
+                            meeting.Status=ClassStatus.Complete;
+                            _context.SaveChanges();
+                        }
                         break;
-                    case WebHookEvents.UserBroadcastCamStoppedEvtMsg:
 
-                        break;
-                    case WebHookEvents.UserJoinedMeetingEvtMsg:
-
-                        break;
-                    case WebHookEvents.UserJoinedVoiceConfToClientEvtMsg:
-
-                        break;
-                    case WebHookEvents.UserLeftMeetingEvtMsg:
-
-                        break;
-                    case WebHookEvents.UserLeftVoiceConfToClientEvtMsg:
-
-                        break;
-                    case WebHookEvents.UserMutedVoiceEvtMsg:
-
-                        break;
                     case WebHookEvents.archive_started:
 
                         break;
@@ -94,9 +80,6 @@ namespace OnlineCourse.Panel.Areas.Api.Controllers
                     case WebHookEvents.post_publish_ended:
 
                         break;
-                    case WebHookEvents.published:
-
-                        break;
                     case WebHookEvents.post_archive_ended:
 
                         break;
@@ -112,12 +95,6 @@ namespace OnlineCourse.Panel.Areas.Api.Controllers
                     case WebHookEvents.post_process_started:
 
                         break;
-                    case WebHookEvents.unpublished:
-
-                        break;
-                    case WebHookEvents.deleted:
-
-                        break;
                     case WebHookEvents.sanity_ended:
 
                         break;
@@ -126,6 +103,50 @@ namespace OnlineCourse.Panel.Areas.Api.Controllers
                         break;
                     default:
                         break;
+
+
+
+                        //case WebHookEvents.published:
+
+                        //    break;
+                        //case WebHookEvents.unpublished:
+
+                        //    break;
+                        //case WebHookEvents.deleted:
+
+                        //    break;
+                        //case WebHookEvents.MeetingCreatedEvtMsg:
+                        //    meeting.Status = ClassStatus.OnGoing;
+                        //    _context.SaveChanges();
+                        //    break;
+                        //case WebHookEvents.MeetingEndedEvtMsg:
+                        //    meeting.Status = ClassStatus.Complete;
+                        //    _context.SaveChanges();
+                        //    break;
+                        //case WebHookEvents.RecordingStatusChangedEvtMsg:
+
+                        //    break;
+                        //case WebHookEvents.UserBroadcastCamStartedEvtMsg:
+
+                        //    break;
+                        //case WebHookEvents.UserBroadcastCamStoppedEvtMsg:
+
+                        //    break;
+                        //case WebHookEvents.UserJoinedMeetingEvtMsg:
+
+                        //    break;
+                        //case WebHookEvents.UserJoinedVoiceConfToClientEvtMsg:
+
+                        //    break;
+                        //case WebHookEvents.UserLeftMeetingEvtMsg:
+
+                        //    break;
+                        //case WebHookEvents.UserLeftVoiceConfToClientEvtMsg:
+
+                        //    break;
+                        //case WebHookEvents.UserMutedVoiceEvtMsg:
+
+                        //    break;
                 }
 
 

@@ -28,14 +28,14 @@ namespace OnlineCourse.Core.Extentions
                 {
                     if (string.IsNullOrEmpty(lastChanged) || !await unitOfWork.Users.ValidateLastChanged(username.Value, lastChanged))
                     {
-                        //context.RejectPrincipal();
+                        context.RejectPrincipal();
                         //await context.HttpContext.SignOutAsync("onlineCourseAthentication");
                         await user.LogOutAsync();
                     }
                 }
                 else
                 {
-                    //context.RejectPrincipal();
+                    context.RejectPrincipal();
                     //await context.HttpContext.SignOutAsync("onlineCourseAthentication");
 
                     await user.LogOutAsync();

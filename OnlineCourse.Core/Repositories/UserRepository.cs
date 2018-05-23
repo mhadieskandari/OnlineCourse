@@ -241,8 +241,8 @@ namespace OnlineCourse.Core.Repositories
             try
             {
                 var user = Get(id);
-                bool conflict = true; //user.Foods.Any() || user.Invoices.Any();
-                return !conflict;
+                bool conflict = user != null; 
+                return conflict;
             }
             catch (Exception e)
             {
