@@ -11,11 +11,17 @@ namespace OnlineCourse.Entity.Models
         [Key]
         public int Id { get; set; }
         public int PresentId { get; set; }
+        [Display(Name = "زمان شروع")]
         public TimeSpan StartedTime { get; set; }
+        [Display(Name = "زمان پایان")]
         public TimeSpan EndedTime { get; set; }
+        [Display(Name = "تاریخ")]
         public DateTime Date { get; set; }
+        [Display(Name = "توضیحات")]
         public string Description { get; set; }
+        [Display(Name = "وضعیت کلاس")]
         public ClassStatus Status { get; set; }
+        [Display(Name = "فایل")]
         public string Source { get; set; }
         public byte? ChangeTimePermit { get; set; }  //ValidationState
 

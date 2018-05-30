@@ -12,7 +12,9 @@ namespace OnlineCourse.Entity.Models
         public int Id { get; set; }
         public int ClassRoomId { get; set; }
         public int StudentId { get; set; }
+        [Display(Name = "فایل")]
         public string Source { get; set; }
+        [Display(Name = "نوع فایل")]
         public ClassDocKind Kind { get; set; }
 
         [ForeignKey("StudentId")]
