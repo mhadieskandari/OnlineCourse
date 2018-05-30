@@ -241,7 +241,7 @@ namespace OnlineCourse.Panel.Controllers
                 var res = (RecoveryUserMessage)recover.Recovery(user);
                 var msg = EnumExtention.GetDescription(res);
 
-                this.AddNotification(_localizer[msg].Value.ToString(), res == RecoveryUserMessage.Success ? NotificationType.Success : NotificationType.Error);
+                this.AddNotification(msg, res == RecoveryUserMessage.Success ? NotificationType.Success : NotificationType.Error);
                 return RedirectToAction("Login");
             }
             catch (Exception e)

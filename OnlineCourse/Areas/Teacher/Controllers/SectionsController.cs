@@ -35,7 +35,7 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
         // GET: Admin/Sections
         public async Task<IActionResult> Index(int? termId, int? courseId, ActiveState? activity)
         {
-            var model = _context.Sections.Include(t => t.Term).Include(c => c.Course).Include(u => u.Teacher)
+            var model = _context.Sections.Include(t => t.Term).Include(c => c.Course).Include(u => u.Teacher).Include(s=>s.Presents)
                 .Where(s => s.TeacherId == _userid);
             if (termId.HasValue)
                 model = model.Where(s => s.TermId == termId);
@@ -366,12 +366,8 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
             try
             {
                 var classRooms = _context.ClassRooms.Where(c => c.PresentId == presentId && c.Present.Section.TeacherId == _userid).OrderByDescending(c => c.Id).ToList();
-                if (classRooms.Any())
-                {
-                    return View(classRooms);
-                }
-                this.AddNotification("موردی با این مشخصات یافت نشد.", NotificationType.Error);
-                return RedirectToAction("NotFoundPage", "Home");
+               
+                return View(classRooms);
             }
             catch (Exception e)
             {
@@ -405,7 +401,7 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
                 _context.SaveChanges();
 
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(PresentDetails),new {presentId});
             }
             catch (Exception e)
             {

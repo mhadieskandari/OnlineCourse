@@ -1,3 +1,4 @@
+using System;
 using BigBlueButton;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,8 +19,16 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
 
         public IActionResult Index()
         {
-            var b = _bbb.getMeetings();
-            var rows = b.Rows[0];
+            try
+            {
+                var b = _bbb.getMeetings();
+                var rows = b.Rows[0];
+            }
+            catch (Exception e)
+            {
+                
+            }
+            
 
             return View();
         }
