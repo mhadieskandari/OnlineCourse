@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using AutoMapper;
 using BigBlueButton;
 using BigBlueButton.Models.WebHook;
@@ -16,6 +18,7 @@ using Newtonsoft.Json;
 using OnlineCourse.Core;
 using OnlineCourse.Core.Services;
 using OnlineCourse.Entity;
+using OnlineCourse.Panel.Utils.Extentions;
 using OnlineCourse.Panel.Utils.ViewModels;
 
 namespace OnlineCourse.Panel.Areas.Api.Controllers
@@ -32,6 +35,41 @@ namespace OnlineCourse.Panel.Areas.Api.Controllers
             {
                 var req = _httpContextAccessor.HttpContext.Request.Form;
                 var eventModel = JsonConvert.DeserializeObject<Event>(req["event"]);
+                var settings = new JsonSerializerSettings()
+                {
+                    ContractResolver = new OrderedContractResolver()
+                };
+
+                var eventt = "event={"+JsonConvert.SerializeObject(eventModel, Formatting.Indented, settings)+"}&timestamp=" + req["timestamp"];
+                eventt = eventt.Replace(Environment.NewLine, "").Replace(" ", "");
+                var encodedEvent = HttpUtility.UrlDecode(eventt); //System.Web.HttpUtility.UrlEncode(eventt);
+                var strSalt = System.IO.File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerId.txt");
+                var request = _httpContextAccessor.HttpContext.Request;
+
+                var uriBuilder = new UriBuilder
+                {
+                    Scheme = request.Scheme,
+                    Host = request.Host.Host,
+                    Path = "api/BigBlueButtonHooks/index",
+                    Query = "meetingid=" + meetingid
+                };
+
+                if (request.Host.Port != null)
+                {
+                    uriBuilder.Port = request.Host.Port.Value;
+                }
+
+                var callbackurl = uriBuilder.ToString();
+                var concatenation = callbackurl  + encodedEvent  + strSalt;
+                var sh1Concat = Sha1.GetSha1(concatenation);
+                if (checksum.Equals(sh1Concat))
+                {
+                    var ok = true;
+                }
+                string timestamp = req["timestamp"];
+
+
+
                 var meeting = _context.ClassRooms.SingleOrDefault(c => c.Id == meetingid.Value);
                 if (meeting == null)
                     return Json("there is not any meeting.");
@@ -149,54 +187,6 @@ namespace OnlineCourse.Panel.Areas.Api.Controllers
                         //    break;
                 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                //var eventt = req["event"].ToString();
-                ////eventt = eventt.Substring(1, eventt.Length - 1);
-                //eventt = "event=" + eventt + "&timestamp=" + req["timestamp"];
-
-                ////var eventForConcat = "event={\"payload\":" + JsonConvert.SerializeObject(eventModel.payload)+ ",\"header\":" + JsonConvert.SerializeObject(eventModel.header) + "}&timestamp=" + req["timestamp"];
-                ////var eventForConcat ="event="+ JsonConvert.SerializeObject(eventModel) + "&timestamp=" + req["timestamp"];
-                //var strSalt = System.IO.File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerId.txt");
-                //var request = _httpContextAccessor.HttpContext.Request;
-
-                //var uriBuilder = new UriBuilder
-                //{
-                //    Scheme = request.Scheme,
-                //    Host = request.Host.Host,
-                //    Path = "api/BigBlueButtonHooks/index",
-                //    Query = "meetingid=" + meetingid
-                //};
-
-                //if (request.Host.Port != null)
-                //{
-                //    uriBuilder.Port=request.Host.Port.Value;
-                //}
-
-                //var callbackurl = uriBuilder.ToString();
-                //var concatenation = callbackurl +"&"+ eventt + "&" + strSalt;
-                //var sh1Concat = Sha1.GetSha1(concatenation);
-                //if (checksum.Equals(sh1Concat))
-                //{
-                //    var ok = true;
-                //}
-                //string timestamp = req["timestamp"];
                 return Json("ok");
             }
             catch (Exception e)

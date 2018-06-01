@@ -417,7 +417,7 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
         {
             try
             {
-                var classroom = _context.ClassRooms.Include(c => c.Present).ThenInclude(p => p.Section).ThenInclude(s => s.Course).SingleOrDefault(c => c.Id == classid && c.Present.Section.TeacherId == _userid);
+                var classroom = _context.ClassRooms.Include(c => c.Present).ThenInclude(p => p.Section).ThenInclude(s => s.Course).AsNoTracking().SingleOrDefault(c => c.Id == classid && c.Present.Section.TeacherId == _userid);
 
                 if (classroom == null)
                 {
@@ -429,18 +429,22 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
                 var moderatorPwd = _config.BbbGetModeratorPassword();
                 var attendePwd = classroom.Id + "_" + classroom.PresentId + "_" + classroom.Present.Section.TeacherId;
                 var bbb = new BBB();
-                var createResult = bbb.CreateMeeting(_user.GetEmail(), classroom.Id.ToString(), attendePwd, moderatorPwd).Rows[0];
+
+                var request = _httpContextAccessor.HttpContext.Request;
+                var uriBuilder = new UriBuilder();
+                uriBuilder.Scheme = request.Scheme;
+                uriBuilder.Host = request.Host.Host;
+                if (request.Host.Port != null) uriBuilder.Port = request.Host.Port.Value;
+                uriBuilder.Path = "Teacher/Sections/PresentDetails";
+                uriBuilder.Query = "presentId=" + classroom.PresentId;
+
+                var createResult = bbb.CreateMeeting(_user.GetEmail(), classroom.Id.ToString(), attendePwd, moderatorPwd, uriBuilder.ToString(),"").Rows[0];
 
                 if (createResult != null && createResult[0].ToString().ToLower() == "SUCCESS".ToLower())
                 {
                     //classroom.Status = ClassStatus.OnGoing;
                     //_context.SaveChanges();
 
-                    var request = _httpContextAccessor.HttpContext.Request;
-                    UriBuilder uriBuilder = new UriBuilder();
-                    uriBuilder.Scheme = request.Scheme;
-                    uriBuilder.Host = request.Host.Host;
-                    if (request.Host.Port != null) uriBuilder.Port = request.Host.Port.Value;
                     uriBuilder.Path = "api/BigBlueButtonHooks/index";
                     uriBuilder.Query = "meetingid=" + classroom.Id;
 

@@ -17,6 +17,7 @@ namespace BigBlueButton
 
        
         #region "CreateMeeting"      
+
         /// <summary>
         /// Creates the Meeting
         /// </summary>
@@ -24,14 +25,24 @@ namespace BigBlueButton
         /// <param name="meetingId">Creates the Meeting with the Specified MeetingId</param>
         /// <param name="attendeePw">Creates the Meeting with the Specified AttendeeePassword</param>
         /// <param name="moderatorPw">Creates the Meeting with the Specified ModeratorPassword</param>
+        /// <param name="logoutUrl"></param>
+        /// <param name="welcome"></param>
         /// <returns></returns>
-        public DataTable CreateMeeting(string meetingName, string meetingId, string attendeePw, string moderatorPw)
+        public DataTable  CreateMeeting(string meetingName, string meetingId, string attendeePw, string moderatorPw,string logoutUrl,string welcome)
         {
             try
             {
                 var strServerIpAddress = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerIPAddress.txt");
                 var strSalt = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerId.txt");
                 var strParameters = "name=" + meetingName + "&meetingID=" + meetingId + "&attendeePW=" + attendeePw + "&moderatorPW=" + moderatorPw;
+                if (!string.IsNullOrEmpty(logoutUrl))
+                {
+                    strParameters += "&logoutURL=" + logoutUrl;
+                }
+                if (!string.IsNullOrEmpty(welcome))
+                {
+                    strParameters += "&welcome=" + welcome;
+                }
                 var strSha1CheckSum = Sha1.GetSha1("create" + strParameters + strSalt);
                 var request = (HttpWebRequest)WebRequest.Create("http://" + strServerIpAddress + "/bigbluebutton/api/create?" + strParameters + "&checksum=" + strSha1CheckSum);
                 var response = (HttpWebResponse)request.GetResponse();
