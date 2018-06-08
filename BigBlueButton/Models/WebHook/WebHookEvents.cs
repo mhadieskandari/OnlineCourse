@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BigBlueButton.Models.WebHook
+﻿namespace BigBlueButton.Models.WebHook
 {
     public static class WebHookEvents
     {

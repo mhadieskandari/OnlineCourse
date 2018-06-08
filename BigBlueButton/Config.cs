@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BigBlueButton
+﻿namespace BigBlueButton
 {
     public class Config
     {
