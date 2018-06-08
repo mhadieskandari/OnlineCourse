@@ -13,7 +13,8 @@ namespace OnlineCourse.Panel.Utils.Extentions
     {
         protected override System.Collections.Generic.IList<JsonProperty> CreateProperties(System.Type type, MemberSerialization memberSerialization)
         {
-            return base.CreateProperties(type, memberSerialization).OrderBy(p => Encoding.ASCII.GetString(Encoding.ASCII.GetBytes(p.PropertyName))).ToList();
+            var ret= base.CreateProperties(type, memberSerialization).OrderBy(p => Encoding.ASCII.GetString(Encoding.ASCII.GetBytes(p.PropertyName))).ToList();
+            return ret;
         }
     }
 }

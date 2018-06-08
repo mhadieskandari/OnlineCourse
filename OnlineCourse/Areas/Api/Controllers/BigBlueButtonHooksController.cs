@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -33,17 +34,21 @@ namespace OnlineCourse.Panel.Areas.Api.Controllers
         {
             try
             {
-                var req = _httpContextAccessor.HttpContext.Request.Form;
+
+                 var req = _httpContextAccessor.HttpContext.Request.Form;
                 var eventModel = JsonConvert.DeserializeObject<Event>(req["event"]);
                 var settings = new JsonSerializerSettings()
                 {
-                    ContractResolver = new OrderedContractResolver()
+                    ContractResolver = new OrderedContractResolver(),
+                    NullValueHandling = NullValueHandling.Ignore,
+                    
+                    //Culture = CultureInfo.CurrentCulture,
                 };
 
-                var eventt = "event={"+JsonConvert.SerializeObject(eventModel, Formatting.Indented, settings)+"}&timestamp=" + req["timestamp"];
-                eventt = eventt.Replace(Environment.NewLine, "").Replace(" ", "");
-                var encodedEvent = HttpUtility.UrlDecode(eventt); //System.Web.HttpUtility.UrlEncode(eventt);
-                var strSalt = System.IO.File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerId.txt");
+                var eventt = "event="+JsonConvert.SerializeObject(eventModel,Formatting.None, settings)+"&timestamp=" + req["timestamp"];
+                //eventt = eventt.Replace(Environment.NewLine, "").Replace(" ", "");
+
+               var strSalt = System.IO.File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerId.txt");
                 var request = _httpContextAccessor.HttpContext.Request;
 
                 var uriBuilder = new UriBuilder
@@ -60,8 +65,10 @@ namespace OnlineCourse.Panel.Areas.Api.Controllers
                 }
 
                 var callbackurl = uriBuilder.ToString();
-                var concatenation = callbackurl  + encodedEvent  + strSalt;
+                var concatenation = callbackurl  + eventt + strSalt;
                 var sh1Concat = Sha1.GetSha1(concatenation);
+               
+
                 if (checksum.Equals(sh1Concat))
                 {
                     var ok = true;
@@ -73,119 +80,119 @@ namespace OnlineCourse.Panel.Areas.Api.Controllers
                 var meeting = _context.ClassRooms.SingleOrDefault(c => c.Id == meetingid.Value);
                 if (meeting == null)
                     return Json("there is not any meeting.");
-                switch (eventModel.header.name)
-                {
-                    case WebHookEvents.meeting_created_message:
-                        meeting.Status = ClassStatus.OnGoing;
-                        _context.SaveChanges();
-                        break;
-                    case WebHookEvents.meeting_destroyed_event:
-                        meeting.Status = ClassStatus.Complete;
-                        _context.SaveChanges();
-                        break;
-                    case WebHookEvents.user_joined_message:
-                        meeting.Status = ClassStatus.OnGoing;
-                        _context.SaveChanges();
-                        break;
-                    case WebHookEvents.user_left_message:
-                        if (eventModel.payload.user.presenter)
-                        {
-                            meeting.Status=ClassStatus.Complete;
-                            _context.SaveChanges();
-                        }
-                        break;
+                //switch (eventModel.header.name)
+                //{
+                //    case WebHookEvents.meeting_created_message:
+                //        meeting.Status = ClassStatus.OnGoing;
+                //        _context.SaveChanges();
+                //        break;
+                //    case WebHookEvents.meeting_destroyed_event:
+                //        meeting.Status = ClassStatus.Complete;
+                //        _context.SaveChanges();
+                //        break;
+                //    case WebHookEvents.user_joined_message:
+                //        meeting.Status = ClassStatus.OnGoing;
+                //        _context.SaveChanges();
+                //        break;
+                //    case WebHookEvents.user_left_message:
+                //        if (eventModel.payload.user.presenter)
+                //        {
+                //            meeting.Status=ClassStatus.Complete;
+                //            _context.SaveChanges();
+                //        }
+                //        break;
 
-                    case WebHookEvents.archive_started:
+                //    case WebHookEvents.archive_started:
 
-                        break;
-                    case WebHookEvents.archive_ended:
+                //        break;
+                //    case WebHookEvents.archive_ended:
 
-                        break;
-                    case WebHookEvents.process_ended:
+                //        break;
+                //    case WebHookEvents.process_ended:
 
-                        break;
-                    case WebHookEvents.process_started:
+                //        break;
+                //    case WebHookEvents.process_started:
 
-                        break;
+                //        break;
 
-                    case WebHookEvents.post_archive_started:
+                //    case WebHookEvents.post_archive_started:
 
-                        break;
+                //        break;
 
-                    case WebHookEvents.post_publish_started:
+                //    case WebHookEvents.post_publish_started:
 
-                        break;
-                    case WebHookEvents.post_publish_ended:
+                //        break;
+                //    case WebHookEvents.post_publish_ended:
 
-                        break;
-                    case WebHookEvents.post_archive_ended:
+                //        break;
+                //    case WebHookEvents.post_archive_ended:
 
-                        break;
-                    case WebHookEvents.publish_started:
+                //        break;
+                //    case WebHookEvents.publish_started:
 
-                        break;
-                    case WebHookEvents.publish_ended:
+                //        break;
+                //    case WebHookEvents.publish_ended:
 
-                        break;
-                    case WebHookEvents.post_process_ended:
+                //        break;
+                //    case WebHookEvents.post_process_ended:
 
-                        break;
-                    case WebHookEvents.post_process_started:
+                //        break;
+                //    case WebHookEvents.post_process_started:
 
-                        break;
-                    case WebHookEvents.sanity_ended:
+                //        break;
+                //    case WebHookEvents.sanity_ended:
 
-                        break;
-                    case WebHookEvents.sanity_started:
+                //        break;
+                //    case WebHookEvents.sanity_started:
 
-                        break;
-                    default:
-                        break;
+                //        break;
+                //    default:
+                //        break;
 
 
 
-                        //case WebHookEvents.published:
+                //        //case WebHookEvents.published:
 
-                        //    break;
-                        //case WebHookEvents.unpublished:
+                //        //    break;
+                //        //case WebHookEvents.unpublished:
 
-                        //    break;
-                        //case WebHookEvents.deleted:
+                //        //    break;
+                //        //case WebHookEvents.deleted:
 
-                        //    break;
-                        //case WebHookEvents.MeetingCreatedEvtMsg:
-                        //    meeting.Status = ClassStatus.OnGoing;
-                        //    _context.SaveChanges();
-                        //    break;
-                        //case WebHookEvents.MeetingEndedEvtMsg:
-                        //    meeting.Status = ClassStatus.Complete;
-                        //    _context.SaveChanges();
-                        //    break;
-                        //case WebHookEvents.RecordingStatusChangedEvtMsg:
+                //        //    break;
+                //        //case WebHookEvents.MeetingCreatedEvtMsg:
+                //        //    meeting.Status = ClassStatus.OnGoing;
+                //        //    _context.SaveChanges();
+                //        //    break;
+                //        //case WebHookEvents.MeetingEndedEvtMsg:
+                //        //    meeting.Status = ClassStatus.Complete;
+                //        //    _context.SaveChanges();
+                //        //    break;
+                //        //case WebHookEvents.RecordingStatusChangedEvtMsg:
 
-                        //    break;
-                        //case WebHookEvents.UserBroadcastCamStartedEvtMsg:
+                //        //    break;
+                //        //case WebHookEvents.UserBroadcastCamStartedEvtMsg:
 
-                        //    break;
-                        //case WebHookEvents.UserBroadcastCamStoppedEvtMsg:
+                //        //    break;
+                //        //case WebHookEvents.UserBroadcastCamStoppedEvtMsg:
 
-                        //    break;
-                        //case WebHookEvents.UserJoinedMeetingEvtMsg:
+                //        //    break;
+                //        //case WebHookEvents.UserJoinedMeetingEvtMsg:
 
-                        //    break;
-                        //case WebHookEvents.UserJoinedVoiceConfToClientEvtMsg:
+                //        //    break;
+                //        //case WebHookEvents.UserJoinedVoiceConfToClientEvtMsg:
 
-                        //    break;
-                        //case WebHookEvents.UserLeftMeetingEvtMsg:
+                //        //    break;
+                //        //case WebHookEvents.UserLeftMeetingEvtMsg:
 
-                        //    break;
-                        //case WebHookEvents.UserLeftVoiceConfToClientEvtMsg:
+                //        //    break;
+                //        //case WebHookEvents.UserLeftVoiceConfToClientEvtMsg:
 
-                        //    break;
-                        //case WebHookEvents.UserMutedVoiceEvtMsg:
+                //        //    break;
+                //        //case WebHookEvents.UserMutedVoiceEvtMsg:
 
-                        //    break;
-                }
+                //        //    break;
+                //}
 
                 return Json("ok");
             }

@@ -3,6 +3,8 @@ using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
+using System.Text;
+using System.Web;
 
 namespace BigBlueButton
 {
@@ -14,6 +16,7 @@ namespace BigBlueButton
         {
             _log = new Log(AppDomain.CurrentDomain.BaseDirectory + "log.txt", 1000);
         }
+
 
        
         #region "CreateMeeting"      
@@ -34,17 +37,18 @@ namespace BigBlueButton
             {
                 var strServerIpAddress = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerIPAddress.txt");
                 var strSalt = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerId.txt");
-                var strParameters = "name=" + meetingName + "&meetingID=" + meetingId + "&attendeePW=" + attendeePw + "&moderatorPW=" + moderatorPw;
+                var strParameters = "name=" +HttpUtility.UrlEncode(meetingName,Encoding.UTF8)  + "&meetingID=" + HttpUtility.UrlEncode(meetingId, Encoding.UTF8) + "&attendeePW=" + HttpUtility.UrlEncode(attendeePw, Encoding.UTF8) + "&moderatorPW=" + HttpUtility.UrlEncode(moderatorPw, Encoding.UTF8);
                 if (!string.IsNullOrEmpty(logoutUrl))
                 {
-                    strParameters += "&logoutURL=" + logoutUrl;
+                    strParameters += "&logoutURL=" + HttpUtility.UrlEncode(logoutUrl, Encoding.UTF8);
                 }
                 if (!string.IsNullOrEmpty(welcome))
                 {
-                    strParameters += "&welcome=" + welcome;
+                    strParameters += "&welcome=" + HttpUtility.UrlEncode(welcome, Encoding.UTF8);
                 }
                 var strSha1CheckSum = Sha1.GetSha1("create" + strParameters + strSalt);
                 var request = (HttpWebRequest)WebRequest.Create("http://" + strServerIpAddress + "/bigbluebutton/api/create?" + strParameters + "&checksum=" + strSha1CheckSum);
+                //request.ContentType = "text/plain; charset=UTF-8";
                 var response = (HttpWebResponse)request.GetResponse();
                 var sr = new StreamReader(response.GetResponseStream());
                 var ds = new DataSet("DataSet1");

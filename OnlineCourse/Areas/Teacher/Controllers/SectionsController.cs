@@ -431,16 +431,18 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
                 var bbb = new BBB();
 
                 var request = _httpContextAccessor.HttpContext.Request;
-                var uriBuilder = new UriBuilder();
-                uriBuilder.Scheme = request.Scheme;
-                uriBuilder.Host = request.Host.Host;
+                var uriBuilder = new UriBuilder
+                {
+                    Scheme = request.Scheme,
+                    Host = request.Host.Host
+                };
                 if (request.Host.Port != null) uriBuilder.Port = request.Host.Port.Value;
                 uriBuilder.Path = "Teacher/Sections/PresentDetails";
                 uriBuilder.Query = "presentId=" + classroom.PresentId;
 
-                var createResult = bbb.CreateMeeting(_user.GetEmail(), classroom.Id.ToString(), attendePwd, moderatorPwd, uriBuilder.ToString(),"").Rows[0];
+                var createResult = bbb.CreateMeeting(_user.GetEmail(), classroom.Id.ToString(), attendePwd, moderatorPwd, uriBuilder.ToString(),"").Rows[0];//"به کلاس ما خوش آمدید."
 
-                if (createResult != null && createResult[0].ToString().ToLower() == "SUCCESS".ToLower())
+                if (createResult != null && string.Equals(createResult[0].ToString(), "SUCCESS"))
                 {
                     //classroom.Status = ClassStatus.OnGoing;
                     //_context.SaveChanges();
@@ -453,8 +455,8 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
                     var url = bbb.JoinMeeting(_user.GetEmail(), classroom.Id.ToString(), moderatorPwd, true);
                     return Redirect(url);
                 }
-
-                return RedirectToAction(nameof(Index));
+                this.AddErrorNotification("خطا در ایجاد جلسه");
+                return RedirectToAction(nameof(PresentDetails),new {presentid= classroom.PresentId });
             }
             catch (Exception e)
             {
