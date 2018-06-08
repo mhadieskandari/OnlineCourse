@@ -461,7 +461,8 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
             catch (Exception e)
             {
                 _history.LogError(e, HistoryErrorType.Middle);
-                this.AddNotification("خطا در ایجاد جلسه", NotificationType.Error);
+                //this.AddNotification("خطا در ایجاد جلسه", NotificationType.Error);
+                this.AddNotification(e.Message, NotificationType.Error);
                 return RedirectToAction(nameof(Index));
             }
         }
