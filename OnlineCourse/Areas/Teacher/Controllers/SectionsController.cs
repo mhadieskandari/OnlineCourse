@@ -428,8 +428,7 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
 
                 var moderatorPwd = _config.BbbGetModeratorPassword();
                 var attendePwd = classroom.Id + "_" + classroom.PresentId + "_" + classroom.Present.Section.TeacherId;
-                var bbb = new BBB();
-
+                var bbb = new BBB(_config.BbbGetServerIpAddress(), _config.BbbGetServerId());
                 var request = _httpContextAccessor.HttpContext.Request;
                 var uriBuilder = new UriBuilder
                 {
@@ -490,7 +489,7 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
             try
             {
 
-                var bbb = new BBB();
+                var bbb = new BBB(_config.BbbGetServerIpAddress(),_config.BbbGetServerId());
                 var hooksResponse = bbb.HooksList();
 
 

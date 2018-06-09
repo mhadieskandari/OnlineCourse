@@ -106,7 +106,7 @@ namespace OnlineCourse.Panel.Areas.Student.Controllers
             
             var moderatorPwd = _config.BbbGetModeratorPassword();
             var attendePwd = classRoom.Id + "_" + classRoom.PresentId + "_" + classRoom.Present.Section.TeacherId;
-            var bbb = new BBB();
+            var bbb = new BBB(_config.BbbGetServerIpAddress(), _config.BbbGetServerId());
             var createResult = bbb.IsMeetingRunning(classRoom.Id.ToString()).Rows[0];
 
             if (createResult != null && createResult[0].ToString().ToLower() == "success" /*&& bool.Parse(createResult[1].ToString())*/)

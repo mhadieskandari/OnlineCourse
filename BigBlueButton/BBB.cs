@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data;
-using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -11,9 +10,13 @@ namespace BigBlueButton
     public class BBB
     {
         private readonly Log _log;
+        private string _serverIpAddress;
+        private string _serverId;
 
-        public BBB()
+        public BBB( string serverIpAddress, string serverId)
         {
+            this._serverIpAddress = serverIpAddress;
+            this._serverId = serverId;
             _log = new Log(AppDomain.CurrentDomain.BaseDirectory + "log.txt", 1000);
         }
 
@@ -35,8 +38,8 @@ namespace BigBlueButton
         {
             try
             {
-                var strServerIpAddress = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerIPAddress.txt");
-                var strSalt = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerId.txt");
+                var strServerIpAddress = GetServerIpAddress();//File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerIPAddress.txt");
+                var strSalt = GetSalt();//File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerId.txt");
                 var strParameters = "name=" +HttpUtility.UrlEncode(meetingName,Encoding.UTF8)  + "&meetingID=" + HttpUtility.UrlEncode(meetingId, Encoding.UTF8) + "&attendeePW=" + HttpUtility.UrlEncode(attendeePw, Encoding.UTF8) + "&moderatorPW=" + HttpUtility.UrlEncode(moderatorPw, Encoding.UTF8);
                 if (!string.IsNullOrEmpty(logoutUrl))
                 {
@@ -66,8 +69,8 @@ namespace BigBlueButton
         {
             try
             {
-                var strServerIpAddress = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerIPAddress.txt");
-                var strSalt = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerId.txt");
+                var strServerIpAddress = GetServerIpAddress();//File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerIPAddress.txt");
+                var strSalt = GetSalt(); //File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerId.txt");
                 var strParameters = "callbackURL=" + callbackUrl;//+"&meetingid="+meetingId ;
                 var strSha1CheckSum = Sha1.GetSha1("hooks/create" + strParameters + strSalt);
                 //var res = "http://" + strServerIpAddress + "/bigbluebutton/api/hooks/create?" + strParameters +
@@ -90,8 +93,8 @@ namespace BigBlueButton
         {
             try
             {
-                var strServerIpAddress = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerIPAddress.txt");
-                var strSalt = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerId.txt");
+                var strServerIpAddress = GetServerIpAddress();// File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerIPAddress.txt");
+                var strSalt = GetSalt();//File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerId.txt");
                 var strSha1CheckSum = Sha1.GetSha1("hooks/list" + strSalt);
                 var res = "http://" + strServerIpAddress + "/bigbluebutton/api/hooks/list?" + "checksum=" + strSha1CheckSum;
                 return res;
@@ -152,8 +155,8 @@ namespace BigBlueButton
         {
             try
             {
-                var strServerIpAddress = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerIPAddress.txt");
-                var strSalt = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerId.txt");
+                var strServerIpAddress = GetServerIpAddress();// File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerIPAddress.txt");
+                var strSalt = GetSalt(); //File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerId.txt");
                 var strParameters = "fullName=" + meetingName + "&meetingID=" + meetingId + "&password=" + password;
                 var strSha1CheckSum = Sha1.GetSha1("join" + strParameters + strSalt);
                 if (!showInBrowser)
@@ -316,6 +319,14 @@ namespace BigBlueButton
         #endregion
 
 
+        public string GetSalt()
+        {
+            return _serverId;
+        }
 
+        public string GetServerIpAddress()
+        {
+            return _serverIpAddress;
+        }
     }
 }

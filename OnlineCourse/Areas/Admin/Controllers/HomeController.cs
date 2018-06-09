@@ -14,20 +14,20 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
         private readonly BBB _bbb;
         public HomeController()
         {
-            _bbb=new BBB();
+            //_bbb=new BBB();
         }
 
         public IActionResult Index()
         {
-            try
-            {
-                var b = _bbb.getMeetings();
-                var rows = b.Rows[0];
-            }
-            catch (Exception e)
-            {
+            //try
+            //{
+            //    var b = _bbb.getMeetings();
+            //    var rows = b.Rows[0];
+            //}
+            //catch (Exception e)
+            //{
                 
-            }
+            //}
             
 
             return View();
