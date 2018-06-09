@@ -38,8 +38,8 @@ namespace BigBlueButton
         {
             try
             {
-                var strServerIpAddress = GetServerIpAddress();//File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerIPAddress.txt");
-                var strSalt = GetSalt();//File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerId.txt");
+                var strServerIpAddress = GetServerIpAddress();//_serverIpAddress;
+                var strSalt = GetSalt();//_serverId;
                 var strParameters = "name=" +HttpUtility.UrlEncode(meetingName,Encoding.UTF8)  + "&meetingID=" + HttpUtility.UrlEncode(meetingId, Encoding.UTF8) + "&attendeePW=" + HttpUtility.UrlEncode(attendeePw, Encoding.UTF8) + "&moderatorPW=" + HttpUtility.UrlEncode(moderatorPw, Encoding.UTF8);
                 if (!string.IsNullOrEmpty(logoutUrl))
                 {
@@ -69,8 +69,8 @@ namespace BigBlueButton
         {
             try
             {
-                var strServerIpAddress = GetServerIpAddress();//File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerIPAddress.txt");
-                var strSalt = GetSalt(); //File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerId.txt");
+                var strServerIpAddress = GetServerIpAddress();//_serverIpAddress;
+                var strSalt = GetSalt(); //_serverId;
                 var strParameters = "callbackURL=" + callbackUrl;//+"&meetingid="+meetingId ;
                 var strSha1CheckSum = Sha1.GetSha1("hooks/create" + strParameters + strSalt);
                 //var res = "http://" + strServerIpAddress + "/bigbluebutton/api/hooks/create?" + strParameters +
@@ -93,8 +93,8 @@ namespace BigBlueButton
         {
             try
             {
-                var strServerIpAddress = GetServerIpAddress();// File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerIPAddress.txt");
-                var strSalt = GetSalt();//File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerId.txt");
+                var strServerIpAddress = GetServerIpAddress();// _serverIpAddress;
+                var strSalt = GetSalt();//_serverId;
                 var strSha1CheckSum = Sha1.GetSha1("hooks/list" + strSalt);
                 var res = "http://" + strServerIpAddress + "/bigbluebutton/api/hooks/list?" + "checksum=" + strSha1CheckSum;
                 return res;
@@ -116,8 +116,8 @@ namespace BigBlueButton
         {
             try
             {
-                var strServerIpAddress = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerIPAddress.txt");
-                var strSalt = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerId.txt");
+                var strServerIpAddress = _serverIpAddress;
+                var strSalt = _serverId;
                 var strParameters = "name=" + meetingName + "&meetingID=" + meetingId + "&attendeePW=" + attendeePw + "&moderatorPW=" + moderatorPw;
                 var strSha1CheckSum = Sha1.GetSha1("create" + strParameters + strSalt);
                 var request = "http://" + strServerIpAddress + "/bigbluebutton/api/create?" + strParameters + "&checksum=" + strSha1CheckSum;
@@ -155,8 +155,8 @@ namespace BigBlueButton
         {
             try
             {
-                var strServerIpAddress = GetServerIpAddress();// File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerIPAddress.txt");
-                var strSalt = GetSalt(); //File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerId.txt");
+                var strServerIpAddress = GetServerIpAddress();// _serverIpAddress;
+                var strSalt = GetSalt(); //_serverId;
                 var strParameters = "fullName=" + meetingName + "&meetingID=" + meetingId + "&password=" + password;
                 var strSha1CheckSum = Sha1.GetSha1("join" + strParameters + strSalt);
                 if (!showInBrowser)
@@ -192,8 +192,8 @@ namespace BigBlueButton
         {
             try
             {
-                var strServerIpAddress = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerIPAddress.txt");
-                var strSalt = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerId.txt");
+                var strServerIpAddress = _serverIpAddress; //_serverIpAddress;
+                var strSalt = _serverId; //_serverId;
                 var strParameters = "meetingID=" + meetingId;
                 var strSha1CheckSum = Sha1.GetSha1("isMeetingRunning" + strParameters + strSalt);
                 var request = (HttpWebRequest)WebRequest.Create("http://" + strServerIpAddress + "/bigbluebutton/api/isMeetingRunning?" + strParameters + "&checksum=" + strSha1CheckSum);
@@ -228,8 +228,8 @@ namespace BigBlueButton
         {
             try
             {
-                var strServerIpAddress = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerIPAddress.txt");
-                var strSalt = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerId.txt");
+                var strServerIpAddress = _serverIpAddress;
+                var strSalt = _serverId;
                 var strParameters = "meetingID=" + meetingId + "&password=" + moderatorPassword;
                 var strSha1CheckSum = Sha1.GetSha1("getMeetingInfo" + strParameters + strSalt);
                 var request = (HttpWebRequest)WebRequest.Create("http://" + strServerIpAddress + "/bigbluebutton/api/getMeetingInfo?" + strParameters + "&checksum=" + strSha1CheckSum);
@@ -264,8 +264,8 @@ namespace BigBlueButton
         {
             try
             {
-                var strServerIpAddress = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerIPAddress.txt");
-                var strSalt = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerId.txt");
+                var strServerIpAddress = _serverIpAddress;
+                var strSalt = _serverId;
                 var strParameters = "meetingID=" + meetingId + "&password=" + moderatorPassword;
                 var strSha1CheckSum = Sha1.GetSha1("end" + strParameters + strSalt);
                 var request = (HttpWebRequest)WebRequest.Create("http://" + strServerIpAddress + "/bigbluebutton/api/end?" + strParameters + "&checksum=" + strSha1CheckSum);
@@ -298,8 +298,8 @@ namespace BigBlueButton
         {
             try
             {
-                var strServerIpAddress = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerIPAddress.txt");
-                var strSalt = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ServerId.txt");
+                var strServerIpAddress = _serverIpAddress;
+                var strSalt = _serverId;
                 var r = new Random(0);
                 var strParameters = "random=" + r.Next(100).ToString();
                 var strSha1CheckSum = Sha1.GetSha1("getMeetings" + strParameters + strSalt);

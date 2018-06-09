@@ -439,7 +439,7 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
                 uriBuilder.Path = "Teacher/Sections/PresentDetails";
                 uriBuilder.Query = "presentId=" + classroom.PresentId;
 
-                var createResult = bbb.CreateMeeting(_user.GetEmail(), classroom.Id.ToString(), attendePwd, moderatorPwd, uriBuilder.ToString(),"").Rows[0];//"به کلاس ما خوش آمدید."
+                var createResult = bbb.CreateMeeting(_user.GetEmail(), classroom.Id.ToString(), attendePwd, moderatorPwd, uriBuilder.ToString(),"سلام").Rows[0];//"به کلاس ما خوش آمدید."
 
                 if (createResult != null && string.Equals(createResult[0].ToString(), "SUCCESS"))
                 {
