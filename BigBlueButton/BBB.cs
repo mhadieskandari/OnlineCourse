@@ -2,6 +2,7 @@
 using System.Data;
 using System.IO;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Web;
 
@@ -13,7 +14,7 @@ namespace BigBlueButton
         private string _serverIpAddress;
         private string _serverId;
 
-        public BBB( string serverIpAddress, string serverId)
+        public BBB(string serverIpAddress, string serverId)
         {
             this._serverIpAddress = serverIpAddress;
             this._serverId = serverId;
@@ -21,7 +22,7 @@ namespace BigBlueButton
         }
 
 
-       
+
         #region "CreateMeeting"      
 
         /// <summary>
@@ -34,29 +35,47 @@ namespace BigBlueButton
         /// <param name="logoutUrl"></param>
         /// <param name="welcome"></param>
         /// <returns></returns>
-        public DataTable  CreateMeeting(string meetingName, string meetingId, string attendeePw, string moderatorPw,string logoutUrl,string welcome)
+        public DataTable CreateMeeting(string meetingName, string meetingId, string attendeePw, string moderatorPw, string logoutUrl, string welcome, bool record = false)
         {
             try
             {
                 var strServerIpAddress = GetServerIpAddress();//_serverIpAddress;
                 var strSalt = GetSalt();//_serverId;
-                var strParameters = "name=" +HttpUtility.UrlEncode(meetingName,Encoding.UTF8)  + "&meetingID=" + HttpUtility.UrlEncode(meetingId, Encoding.UTF8) + "&attendeePW=" + HttpUtility.UrlEncode(attendeePw, Encoding.UTF8) + "&moderatorPW=" + HttpUtility.UrlEncode(moderatorPw, Encoding.UTF8);
+                var strParameters = "allowStartStopRecording=false" +
+                    "&attendeePW=" + WebUtility.UrlEncode(attendeePw) +
+                    "&autoStartRecording=false";
+                //var strParameters= "allowStartStopRecording=false&attendeePW=ap&autoStartRecording=false&meetingID=%D8%AA%D8%B3%D8%AA+%D8%AB%D8%A8%D8%AA+%D9%86%D8%A7%D9%85&moderatorPW=mp&name=%D8%AA%D8%B3%D8%AA+%D8%AB%D8%A8%D8%AA+%D9%86%D8%A7%D9%85&record=false";
+                //var strParameters= "allowStartStopRecording=false&attendeePW=ap&autoStartRecording=false&meetingID=%D8%AA%D8%B3%D8%AA+%D9%81%D8%A7%D8%B5%D9%84%D9%87&moderatorPW=mp&name=%D8%AA%D8%B3%D8%AA+%D9%81%D8%A7%D8%B5%D9%84%D9%87&record=false";
                 if (!string.IsNullOrEmpty(logoutUrl))
                 {
-                    strParameters += "&logoutURL=" + HttpUtility.UrlEncode(logoutUrl, Encoding.UTF8);
+                    strParameters += "&logoutURL=" +logoutUrl;
                 }
+                strParameters += "&meetingID=" + WebUtility.UrlEncode(meetingId) +
+                    "&moderatorPW=" + WebUtility.UrlEncode(moderatorPw) +
+                    "&name=" + WebUtility.UrlEncode(meetingName);
+                strParameters += "&record=" + record.ToString().ToLower();
                 if (!string.IsNullOrEmpty(welcome))
                 {
-                    strParameters += "&welcome=" + HttpUtility.UrlEncode(welcome, Encoding.UTF8);
+                    strParameters += "&welcome=" + WebUtility.UrlEncode(welcome);
                 }
-                var strSha1CheckSum = Sha1.GetSha1("create" + strParameters + strSalt);
-                var request = (HttpWebRequest)WebRequest.Create("http://" + strServerIpAddress + "/bigbluebutton/api/create?" + strParameters + "&checksum=" + strSha1CheckSum);
-                //request.ContentType = "text/plain; charset=UTF-8";
-                var response = (HttpWebResponse)request.GetResponse();
-                var sr = new StreamReader(response.GetResponseStream());
-                var ds = new DataSet("DataSet1");
-                ds.ReadXml(sr);
-                return ds.Tables[0];
+
+                //var strParameters = "meetingID=%D8%B1%DB%8C%D8%A7%D8%B6%DB%8C+%D8%A7%D9%88%D9%84&moderatorPW=Qq12345678%2540&name=%D8%B1%DB%8C%D8%A7%D8%B6%DB%8C+%D9%BE%D8%A7%DB%8C%D9%87+%D8%A7%D9%88%D9%84";
+
+                var concatenate = "create" + strParameters + strSalt;
+                var strSha1CheckSum = Sha1.GetSha1(concatenate);
+                var url = "http://" + strServerIpAddress + "/bigbluebutton/api/create?" + strParameters + "&checksum=" + strSha1CheckSum;
+                var request = (HttpWebRequest)WebRequest.Create(url);
+                request.ContentType = "application/x-www-form-urlencoded";
+                using (var response = (HttpWebResponse)request.GetResponse())
+                {
+                    var tt=response.ContentType;
+                    using (var sr = new StreamReader(response.GetResponseStream()))
+                    {
+                        var ds = new DataSet("DataSet1");
+                        ds.ReadXml(sr);
+                        return ds.Tables[0];
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -118,7 +137,7 @@ namespace BigBlueButton
             {
                 var strServerIpAddress = _serverIpAddress;
                 var strSalt = _serverId;
-                var strParameters = "name=" + meetingName + "&meetingID=" + meetingId + "&attendeePW=" + attendeePw + "&moderatorPW=" + moderatorPw;
+                var strParameters = "name=" + WebUtility.UrlEncode(meetingName) + "&meetingID=" + WebUtility.UrlEncode(meetingId) + "&attendeePW=" + WebUtility.UrlEncode(attendeePw) + "&moderatorPW=" + WebUtility.UrlEncode(moderatorPw);
                 var strSha1CheckSum = Sha1.GetSha1("create" + strParameters + strSalt);
                 var request = "http://" + strServerIpAddress + "/bigbluebutton/api/create?" + strParameters + "&checksum=" + strSha1CheckSum;
                 //var response = (HttpWebResponse)request.GetResponse();
@@ -157,7 +176,7 @@ namespace BigBlueButton
             {
                 var strServerIpAddress = GetServerIpAddress();// _serverIpAddress;
                 var strSalt = GetSalt(); //_serverId;
-                var strParameters = "fullName=" + meetingName + "&meetingID=" + meetingId + "&password=" + password;
+                var strParameters = "fullName=" + WebUtility.UrlEncode(meetingName) + "&meetingID=" + WebUtility.UrlEncode(meetingId) + "&password=" + WebUtility.UrlEncode(password);
                 var strSha1CheckSum = Sha1.GetSha1("join" + strParameters + strSalt);
                 if (!showInBrowser)
                 {

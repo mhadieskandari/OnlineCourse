@@ -48,8 +48,8 @@ namespace OnlineCourse.Panel.Controllers
         {
             if (_cUser.IsAuthenticated())
             {
-                var user =_cUser.GetUser().Result;
-                var ret =LoginRedirect(user, returnUrl);
+                var user = _cUser.GetUser().Result;
+                var ret = LoginRedirect(user, returnUrl);
                 if (ret != null)
                 {
                     return ret;
@@ -120,7 +120,7 @@ namespace OnlineCourse.Panel.Controllers
             return View();
         }
 
-        private IActionResult LoginRedirect(User user,string returnUrl)
+        private IActionResult LoginRedirect(User user, string returnUrl)
         {
             if (user != null)
             {
@@ -174,43 +174,52 @@ namespace OnlineCourse.Panel.Controllers
         [HttpPost]
         public IActionResult Register(RegisterViewModel registerViewModel)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return View(registerViewModel);
-            }
 
-            var level = (registerViewModel.IsTeacher != null && registerViewModel.IsTeacher.Value == 1) ? UserAccessLevel.Teacher : UserAccessLevel.Stusent;
-            var user = new User()
-            {
-                UserName = registerViewModel.Email,
-                Email = registerViewModel.Email,
-                FullName = registerViewModel.FullName,
-                Mobile = registerViewModel.Mobile,
-                Password = registerViewModel.Password,
-                State = UserState.Pending,
-                RegisterDate = DateTime.Now,
-                LastLoginIp = WebHelper.GetRemoteIP,
-                AccessLevel = level
-            };
+                if (!ModelState.IsValid)
+                {
+                    return View(registerViewModel);
+                }
 
-            var register = new UserRegistration(_provider, _msgSender, _historyService);
-            var res = register.Register(user);
-            if (res == (byte)RegisterUserMessage.Success)
-            {
-                var reqCode = new UserReqVerCode(_provider, _msgSender, _historyService).RequestCode(new ReqVerifyCodeDto() { Email = registerViewModel.Email, Ip = WebHelper.GetRemoteIP });
-                //if (reqCode == (byte)VerifyUserMessage.ActivationCodeSend)
-                //{
+                var level = (registerViewModel.IsTeacher != null && registerViewModel.IsTeacher.Value == 1) ? UserAccessLevel.Teacher : UserAccessLevel.Stusent;
+                var user = new User()
+                {
+                    UserName = registerViewModel.Email,
+                    Email = registerViewModel.Email,
+                    FullName = registerViewModel.FullName,
+                    Mobile = registerViewModel.Mobile,
+                    Password = registerViewModel.Password,
+                    State = UserState.Pending,
+                    RegisterDate = DateTime.Now,
+                    LastLoginIp = WebHelper.GetRemoteIP,
+                    AccessLevel = level
+                };
+
+                var register = new UserRegistration(_provider, _msgSender, _historyService);
+                var res = register.Register(user);
+                if (res == (byte)RegisterUserMessage.Success)
+                {
+                    var reqCode = new UserReqVerCode(_provider, _msgSender, _historyService).RequestCode(new ReqVerifyCodeDto() { Email = registerViewModel.Email, Ip = WebHelper.GetRemoteIP });
+                    //if (reqCode == (byte)VerifyUserMessage.ActivationCodeSend)
+                    //{
                     var msg = EnumExtention.GetDescription((VerifyUserMessage)reqCode);
                     this.AddNotification(_localizer[msg].Value.ToString(), NotificationType.Success);
                     return RedirectToAction("SendCode", new { email = registerViewModel.Email });
-                //}
-                //this.AddNotification("Success", NotificationType.Success);
-                //return RedirectToAction("RequsetVerifyCode", new { email = registerViewModel.Email });
+                    //}
+                    //this.AddNotification("Success", NotificationType.Success);
+                    //return RedirectToAction("RequsetVerifyCode", new { email = registerViewModel.Email });
+                }
+                else
+                {
+                    this.AddNotification(EnumExtention.GetDescription((RegisterUserMessage)res), NotificationType.Error);
+                    return View(registerViewModel);
+                }
             }
-            else
+            catch (Exception e)
             {
-                this.AddNotification(EnumExtention.GetDescription((RegisterUserMessage)res), NotificationType.Error);
-                return View(registerViewModel);
+                _historyService.LogError(e, HistoryErrorType.UI);
+                return RedirectToAction("ErrorPage", "Home");
             }
         }
 
@@ -225,30 +234,39 @@ namespace OnlineCourse.Panel.Controllers
         [HttpPost]
         public IActionResult ForgotPassword(ForgotPasswordViewModel forgotPasswordViewModel)
         {
-            if (!ModelState.IsValid)
-            {
-                return View();
-            }
-
-            var user = new User()
-            {
-                Mobile = forgotPasswordViewModel.Mobile
-            };
-
             try
             {
-                var recover = new UserResetPassword(_provider, _msgSender, _historyService);
-                var res = (RecoveryUserMessage)recover.Recovery(user);
-                var msg = EnumExtention.GetDescription(res);
 
-                this.AddNotification(msg, res == RecoveryUserMessage.Success ? NotificationType.Success : NotificationType.Error);
-                return RedirectToAction("Login");
+                if (!ModelState.IsValid)
+                {
+                    return View();
+                }
+
+                var user = new User()
+                {
+                    Mobile = forgotPasswordViewModel.Mobile
+                };
+
+                try
+                {
+                    var recover = new UserResetPassword(_provider, _msgSender, _historyService);
+                    var res = (RecoveryUserMessage)recover.Recovery(user);
+                    var msg = EnumExtention.GetDescription(res);
+
+                    this.AddNotification(msg, res == RecoveryUserMessage.Success ? NotificationType.Success : NotificationType.Error);
+                    return RedirectToAction("Login");
+                }
+                catch (Exception e)
+                {
+                    this.AddNotification(e.Message, NotificationType.Error);
+                    _historyService.LogError(e, HistoryErrorType.Middle);
+                    return View(forgotPasswordViewModel);
+                }
             }
             catch (Exception e)
             {
-                this.AddNotification(e.Message, NotificationType.Error);
-                _historyService.LogError(e, HistoryErrorType.Middle);
-                return View(forgotPasswordViewModel);
+                _historyService.LogError(e, HistoryErrorType.UI);
+                return RedirectToAction("ErrorPage", "Home");
             }
 
 
@@ -269,41 +287,59 @@ namespace OnlineCourse.Panel.Controllers
         [HttpPost]
         public IActionResult RequsetVerifyCode(SendCodeViewModel sendCode)
         {
-            if (ModelState.IsValid)
+            try
             {
-                try
+                if (ModelState.IsValid)
                 {
-                    var req = new UserReqVerCode(_provider, _msgSender, _historyService).RequestCode(new ReqVerifyCodeDto() { Email = sendCode.Email, Ip = sendCode.Ip });
+                    try
+                    {
+                        var req = new UserReqVerCode(_provider, _msgSender, _historyService).RequestCode(new ReqVerifyCodeDto() { Email = sendCode.Email, Ip = sendCode.Ip });
 
-                    if (req == (byte)VerifyUserMessage.Success || req == (byte)VerifyUserMessage.ActivationCodeSend)
-                    {
-                        this.AddNotification(EnumExtention.GetDescription((VerifyUserMessage)req), NotificationType.Info);
-                        return RedirectToAction("SendCode", sendCode);
+                        if (req == (byte)VerifyUserMessage.Success || req == (byte)VerifyUserMessage.ActivationCodeSend)
+                        {
+                            this.AddNotification(EnumExtention.GetDescription((VerifyUserMessage)req), NotificationType.Info);
+                            return RedirectToAction("SendCode", sendCode);
+                        }
+                        else
+                        {
+                            this.AddNotification(EnumExtention.GetDescription((VerifyUserMessage)req), NotificationType.Info);
+                            return RedirectToAction("SendCode", sendCode);
+                        }
                     }
-                    else
+                    catch (Exception e)
                     {
-                        this.AddNotification(EnumExtention.GetDescription((VerifyUserMessage)req), NotificationType.Info);
-                        return RedirectToAction("SendCode", sendCode);
+                        this.AddNotification(e.Message, NotificationType.Error);
+                        _historyService.LogError(e, HistoryErrorType.Middle);
+                        return RedirectToAction("ErrorPage", "Home");
                     }
                 }
-                catch (Exception e)
-                {
-                    this.AddNotification(e.Message, NotificationType.Error);
-                    _historyService.LogError(e, HistoryErrorType.Middle);
-                    return RedirectToAction("ErrorPage", "Home");
-                }
+                return View(sendCode);
             }
-            return View(sendCode);
+            catch (Exception e)
+            {
+                _historyService.LogError(e, HistoryErrorType.UI);
+                return RedirectToAction("ErrorPage", "Home");
+            }
+
         }
 
         [AllowAnonymous]
         [HttpGet]
         public IActionResult SendCode(SendCodeViewModel sendCode)
         {
-            var user = _unitOfWork.Users.GetByEmail(sendCode.Email);
-            if (user.Any()) return View(sendCode);
-            this.AddNotification("کاربری با این مشخصات یافت نشد.",NotificationType.Error);
-            return RedirectToAction(nameof(Login));
+            try
+            {
+
+                var user = _unitOfWork.Users.GetByEmail(sendCode.Email);
+                if (user.Any()) return View(sendCode);
+                this.AddNotification("کاربری با این مشخصات یافت نشد.", NotificationType.Error);
+                return RedirectToAction(nameof(Login));
+            }
+            catch (Exception e)
+            {
+                _historyService.LogError(e, HistoryErrorType.UI);
+                return RedirectToAction("ErrorPage", "Home");
+            }
         }
 
         [AllowAnonymous]
@@ -311,45 +347,54 @@ namespace OnlineCourse.Panel.Controllers
         [ActionName("SendCode")]
         public IActionResult SendCodePost(SendCodeViewModel sendCode)
         {
-            if (ModelState.IsValid)
+            try
             {
-                try
+                if (ModelState.IsValid)
                 {
-                    var req = new UserVerify(_provider, _msgSender, _historyService).Update(new VerifyDto() { Email = sendCode.Email, Ip = sendCode.Ip, VerificationCode = sendCode.Code });
-
-                    if (req == (byte)VerifyUserMessage.Success)
+                    try
                     {
-                        var user = _unitOfWork.Users.GetByEmail(sendCode.Email).FirstOrDefault();
-                        if (user != null && user.AccessLevel == UserAccessLevel.Stusent)
+                        var req = new UserVerify(_provider, _msgSender, _historyService).Update(new VerifyDto() { Email = sendCode.Email, Ip = sendCode.Ip, VerificationCode = sendCode.Code });
+
+                        if (req == (byte)VerifyUserMessage.Success)
                         {
-                            IActionResult action = Login(new LoginViewModel() { Email = user.Email, Password = EncryptDecrypt.Decrypt(user.Password), RememberMe = true }, "/Student/Profile");
-                            return action;
+                            var user = _unitOfWork.Users.GetByEmail(sendCode.Email).FirstOrDefault();
+                            if (user != null && user.AccessLevel == UserAccessLevel.Stusent)
+                            {
+                                IActionResult action = Login(new LoginViewModel() { Email = user.Email, Password = EncryptDecrypt.Decrypt(user.Password), RememberMe = true }, "/Student/Profile");
+                                return action;
+                            }
+                            else if (user != null && user.AccessLevel == UserAccessLevel.Teacher)
+                            {
+                                IActionResult action = Login(new LoginViewModel() { Email = user.Email, Password = EncryptDecrypt.Decrypt(user.Password), RememberMe = true }, "/Teacher/Profile");
+                                return action;
+                            }
+
+                            this.AddNotification(EnumExtention.GetDescription((VerifyUserMessage)req), NotificationType.Success);
+                            return RedirectToAction("Login");
                         }
-                        else if (user != null && user.AccessLevel == UserAccessLevel.Teacher)
+                        else
                         {
-                            IActionResult action = Login(new LoginViewModel() { Email = user.Email, Password = EncryptDecrypt.Decrypt(user.Password), RememberMe = true }, "/Teacher/Profile");
-                            return action;
+                            this.AddNotification(EnumExtention.GetDescription((VerifyUserMessage)req), NotificationType.Error);
+                            return View(sendCode);
                         }
 
-                        this.AddNotification(EnumExtention.GetDescription((VerifyUserMessage)req), NotificationType.Success);
-                        return RedirectToAction("Login");
+
                     }
-                    else
+                    catch (Exception e)
                     {
-                        this.AddNotification(EnumExtention.GetDescription((VerifyUserMessage)req), NotificationType.Error);
-                        return View(sendCode);
+                        this.AddNotification(e.Message, NotificationType.Error);
+                        _historyService.LogError(e, HistoryErrorType.Middle);
+                        return RedirectToAction("ErrorPage", "Home");
                     }
-
-
                 }
-                catch (Exception e)
-                {
-                    this.AddNotification(e.Message, NotificationType.Error);
-                    _historyService.LogError(e, HistoryErrorType.Middle);
-                    return RedirectToAction("ErrorPage", "Home");
-                }
+                return View(sendCode);
             }
-            return View(sendCode);
+            catch (Exception e)
+            {
+                _historyService.LogError(e, HistoryErrorType.UI);
+                return RedirectToAction("ErrorPage", "Home");
+            }
+
         }
 
 
@@ -357,48 +402,66 @@ namespace OnlineCourse.Panel.Controllers
         [HttpGet]
         public async Task<IActionResult> UpdateInfo()
         {
-            var userId = await _cUser.GetUserId();
-            var user = await _unitOfWork.Users.GetAsync(userId);
-                var model = new UserUpdateViewModel() { Id = user.Id, Addrress = user.Addrress, City = user.City, Email = user.Email, FullName = user.FullName, Phone = user.Phone, UserName = user.UserName};
+            try
+            {
+                var userId = await _cUser.GetUserId();
+                var user = await _unitOfWork.Users.GetAsync(userId);
+                var model = new UserUpdateViewModel() { Id = user.Id, Addrress = user.Addrress, City = user.City, Email = user.Email, FullName = user.FullName, Phone = user.Phone, UserName = user.UserName };
                 return View(model);
+            }
+            catch (Exception e)
+            {
+                _historyService.LogError(e, HistoryErrorType.UI);
+                return RedirectToAction("ErrorPage", "Home");
+            }
+
         }
 
         [Authorize()]
         [HttpPost]
         public async Task<IActionResult> UpdateInfo(UserUpdateViewModel user)
         {
-            if (ModelState.IsValid)
+            try
             {
-                try
+                if (ModelState.IsValid)
                 {
-                    var req = new UserUpdate(_provider, _msgSender, _historyService).Update(new User() { Id = user.Id, Addrress = user.Addrress, City = user.City, Email = user.Email, FullName = user.FullName,Phone = user.Phone, UserName = user.UserName});
-
-                    if (req == (byte)UpdateUserMessage.SuccessWithLogin)
+                    try
                     {
+                        var req = new UserUpdate(_provider, _msgSender, _historyService).Update(new User() { Id = user.Id, Addrress = user.Addrress, City = user.City, Email = user.Email, FullName = user.FullName, Phone = user.Phone, UserName = user.UserName });
 
-                        this.AddNotification(EnumExtention.GetDescription((UpdateUserMessage)req), NotificationType.Success);
-                        await _cUser.LogOutAsync();
-                        return RedirectToAction("Login", new LoginViewModel() { Email = user.Email });
+                        if (req == (byte)UpdateUserMessage.SuccessWithLogin)
+                        {
+
+                            this.AddNotification(EnumExtention.GetDescription((UpdateUserMessage)req), NotificationType.Success);
+                            await _cUser.LogOutAsync();
+                            return RedirectToAction("Login", new LoginViewModel() { Email = user.Email });
+                        }
+                        else if (req == (byte)UpdateUserMessage.Success)
+                        {
+                            this.AddNotification(EnumExtention.GetDescription((UpdateUserMessage)req), NotificationType.Success);
+                        }
+                        else
+                        {
+                            this.AddNotification(EnumExtention.GetDescription((UpdateUserMessage)req), NotificationType.Error);
+                        }
+
+
                     }
-                    else if (req == (byte)UpdateUserMessage.Success)
+                    catch (Exception e)
                     {
-                        this.AddNotification(EnumExtention.GetDescription((UpdateUserMessage)req), NotificationType.Success);
+                        this.AddNotification(e.Message, NotificationType.Error);
+                        _historyService.LogError(e, HistoryErrorType.Middle);
+                        return RedirectToAction("ErrorPage", "Home");
                     }
-                    else
-                    {
-                        this.AddNotification(EnumExtention.GetDescription((UpdateUserMessage)req), NotificationType.Error);
-                    }
-
-
                 }
-                catch (Exception e)
-                {
-                    this.AddNotification(e.Message, NotificationType.Error);
-                    _historyService.LogError(e, HistoryErrorType.Middle);
-                    return RedirectToAction("ErrorPage", "Home");
-                }
+                return View(user);
             }
-            return View(user);
+            catch (Exception e)
+            {
+                _historyService.LogError(e, HistoryErrorType.UI);
+                return RedirectToAction("ErrorPage", "Home");
+            }
+
         }
 
 
@@ -406,19 +469,29 @@ namespace OnlineCourse.Panel.Controllers
         [HttpGet]
         public async Task<IActionResult> ChangePassword()
         {
-            var userid = await _cUser.GetUserId();
-            var model = new ChangePasswordViewModel() { UserId = userid };
-            return View(model);
+            try
+            {
+                var userid = await _cUser.GetUserId();
+                var model = new ChangePasswordViewModel() { UserId = userid };
+                return View(model);
+            }
+            catch (Exception e)
+            {
+                _historyService.LogError(e, HistoryErrorType.UI);
+                return RedirectToAction("ErrorPage", "Home");
+            }
+
         }
 
         [Authorize()]
         [HttpPost]
         public async Task<IActionResult> ChangePassword(ChangePasswordClientViewModel model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                try
+                if (ModelState.IsValid)
                 {
+
                     var req = new UserChangePassword(_provider, _msgSender, _historyService).CahngePassword(new ChangePasswordDto() { UserName = _cUser.GetEmail(), Password = model.OldPass, NewPassword = model.NewPass, ConfirmNewPassword = model.ConfirmNewPass, Ip = WebHelper.GetRemoteIP });
 
                     if (req == (byte)ChangePasswordUserMessage.Success)
@@ -430,15 +503,16 @@ namespace OnlineCourse.Panel.Controllers
                     }
 
                     this.AddNotification(_localizer[EnumExtention.GetDescription((ChangePasswordUserMessage)req)].Value.ToString(), NotificationType.Error);
+
+
                 }
-                catch (Exception e)
-                {
-                    this.AddNotification(e.Message, NotificationType.Error);
-                    _historyService.LogError(e, HistoryErrorType.Middle);
-                    return RedirectToAction("ErrorPage", "Home");
-                }
+                return RedirectToAction("UpdateInfo");
             }
-            return RedirectToAction("UpdateInfo");
+            catch (Exception e)
+            {
+                _historyService.LogError(e, HistoryErrorType.UI);
+                return RedirectToAction("ErrorPage", "Home");
+            }
         }
 
 

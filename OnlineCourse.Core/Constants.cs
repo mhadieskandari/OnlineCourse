@@ -11,7 +11,7 @@ namespace OnlineCourse.Core
         Success = 0,
         [Description("مویایل یا ایمیل نباید خالی باشد.")]
         MobileAndEmailIsNull = 1,
-        [Description("ایمیل یافت نشد.")]
+        [Description("ایمیل مورد نظر مجاز نمی باشد.")]
         EmailIsExist = 2,
         [Description("شماره همراه یافت نشد.")]
         MobileIsExist = 3,

@@ -439,7 +439,7 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
                 uriBuilder.Path = "Teacher/Sections/PresentDetails";
                 uriBuilder.Query = "presentId=" + classroom.PresentId;
 
-                var createResult = bbb.CreateMeeting(_user.GetEmail(), classroom.Id.ToString(), attendePwd, moderatorPwd, uriBuilder.ToString(),"").Rows[0];//"به کلاس ما خوش آمدید."
+                var createResult = bbb.CreateMeeting( classroom.Present.Section.Course.CourseName,classroom.Id.ToString(), attendePwd, moderatorPwd, uriBuilder.ToString(),"خوش آمدید").Rows[0];
 
                 if (createResult != null && string.Equals(createResult[0].ToString(), "SUCCESS"))
                 {
@@ -450,8 +450,8 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
                     uriBuilder.Query = "meetingid=" + classroom.Id;
 
                     var callbackurl = uriBuilder.ToString();
-                    //var hookres = bbb.CreateHooks(callbackurl/*, classroom.Id.ToString()*/).Rows[0];
-                    var url = bbb.JoinMeeting(_user.GetEmail(), classroom.Id.ToString(), moderatorPwd, true);
+                    var hookres = bbb.CreateHooks(callbackurl/*, classroom.Id.ToString()*/).Rows[0];
+                    var url = bbb.JoinMeeting(_user.GetFullName().Result, classroom.Id.ToString(), moderatorPwd, true);
                     return Redirect(url);
                 }
                 this.AddErrorNotification("خطا در ایجاد جلسه");

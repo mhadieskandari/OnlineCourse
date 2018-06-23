@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
+using System.Web;
+using BigBlueButton;
 using Microsoft.AspNetCore.Mvc;
 using OnlineCourse.Models;
 
@@ -32,6 +35,11 @@ namespace OnlineCourse.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public IActionResult ErrorPage()
+        {
+            return View();
         }
     }
 }
