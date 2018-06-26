@@ -38,19 +38,20 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
             try
             {
                 var courses = _context.Presents.Include(p => p.Section ).ThenInclude(s => s.Course).AsNoTracking().Where(p=> p.Section.TeacherId == _userid).ToList();
-
-
                 return View(courses);
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-                throw;
+                _history.LogError(e,HistoryErrorType.UI);
+                this.AddNotification("خطا در اتصال به پایگاه داده",NotificationType.Error);
+                return RedirectToAction("ErrorPage");
             }
         }
-
-
         public IActionResult NotFoundPage()
+        {
+            return View();
+        }
+        public IActionResult ErrorPage()
         {
             return View();
         }

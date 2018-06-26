@@ -34,7 +34,7 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
         private readonly MessageService _msgSender;
         private readonly IHostingEnvironment _hostingEnvironment;
 
-        public  ProfileController(ApplicationDbContext context, CurrentUser user, HistoryService historyService, IServiceProvider provider, IHostingEnvironment hostingEnvironment)
+        public ProfileController(ApplicationDbContext context, CurrentUser user, HistoryService historyService, IServiceProvider provider, IHostingEnvironment hostingEnvironment)
         {
             _context = context;
             _user = user;
@@ -44,89 +44,95 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
             _hostingEnvironment = hostingEnvironment;
 
         }
-       
+
         public async Task<IActionResult> Index()
         {
-            var user =await _user.GetUser();
-            return View(user);
+            try
+            {
+                var user = await _user.GetUser();
+                return View(user);
+            }
+            catch (Exception e)
+            {
+                this.AddNotification(e.Message, NotificationType.Error);
+                _historyService.LogError(e, HistoryErrorType.Middle);
+                return RedirectToAction("Error", "Home");
+            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Index(int id, [Bind("Id,UserName,Email,FullName,Phone,City,Addrress")] User user, IFormFile image)
         {
-            if (id != user.Id ||user.Id!=_user.GetUserId().Result)
+            try
             {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
+                if (id != user.Id || user.Id != _user.GetUserId().Result)
                 {
-                    using (var res = new UserUpdate(_provider, _msgSender, _historyService))
+                    return NotFound();
+                }
+                if (!ModelState.IsValid) return View(user);
+
+                using (var res = new UserUpdate(_provider, _msgSender, _historyService))
+                {
+                    var msg = (UpdateUserMessage)res.Update(user);
+                    if (msg != UpdateUserMessage.Success) return RedirectToAction("Index");
+
+                    this.AddNotification(EnumExtention.GetDescription(msg), NotificationType.Success);
+                    if (image == null) return RedirectToAction("Index");
+
+                    Gallery gal;
+                    var dbgal = _context.Galleries.Where(g => g.PublicId == user.Id && g.Kind == (byte)GalleryKind.UserProfile);
+                    var count = 0;
+                    if (!dbgal.Any())
                     {
-                        var msg = (UpdateUserMessage)res.Update(user);
-                        if (msg == UpdateUserMessage.Success)
+                        gal = new Gallery()
                         {
-                            this.AddNotification(EnumExtention.GetDescription(msg), NotificationType.Success);
-                            if (image != null)
-                            {
-
-                                Gallery gal;
-                                var dbgal = _context.Galleries.Where(g => g.PublicId == user.Id && g.Kind == (byte)GalleryKind.UserProfile);
-                                int count = 0;
-                                if (dbgal != null && dbgal.Any())
-                                {
-                                    gal = dbgal.FirstOrDefault();
-                                    gal.POrder = 1;
-                                    gal.Ext = Path.GetExtension(image.FileName);
-                                    _context.Galleries.Update(gal);
-                                    count = _context.SaveChanges();
-                                }
-                                else
-                                {
-                                    gal = new Gallery()
-                                    {
-                                        Kind = (byte)GalleryKind.UserProfile,
-                                        PublicId = user.Id,
-                                        State = (byte)GeneralState.Disable,
-                                        Title = user.FullName,
-                                        Ext = Path.GetExtension(image.FileName),
-                                        POrder = 1
-                                    };
-                                    _context.Galleries.Add(gal);
-                                    count = _context.SaveChanges();
-                                }
-                                if (count > 0)
-                                {
-                                    var filePath = new Uploder(_hostingEnvironment, _historyService).UploadGallery(EncryptDecrypt.GetUrlHash(gal.Id.ToString() + gal.PublicId + gal.Kind), image);
-
-                                    if (string.IsNullOrEmpty(filePath))
-                                        this.AddNotification("تصویر باموفقیت ویرایش شد.", NotificationType.Error);
-                                }
-                                return RedirectToAction("Index");
-                            }
-                        }
-                        return RedirectToAction("Index");
+                            Kind = (byte)GalleryKind.UserProfile,
+                            PublicId = user.Id,
+                            State = (byte)GeneralState.Disable,
+                            Title = user.FullName,
+                            Ext = Path.GetExtension(image.FileName),
+                            POrder = 1
+                        };
+                        _context.Galleries.Add(gal);
+                        count = _context.SaveChanges();
                     }
-                }
-                catch (DbUpdateConcurrencyException e)
-                {
-                    _historyService.LogError(e, HistoryErrorType.Middle);
-                    this.AddNotification(e.Message, NotificationType.Error);
-                    return View();
+                    else
+                    {
+                        gal = dbgal.FirstOrDefault();
+                        if (gal != null)
+                        {
+                            gal.POrder = 1;
+                            gal.Ext = Path.GetExtension(image.FileName);
+                            _context.Galleries.Update(gal);
+                            count = _context.SaveChanges();
+                        }
+
+                    }
+                    if (count <= 0) return RedirectToAction("Index");
+
+                    var filePath = new Uploder(_hostingEnvironment, _historyService).UploadGallery(EncryptDecrypt.GetUrlHash(gal.Id.ToString() + gal.PublicId + gal.Kind), image);
+
+                    if (string.IsNullOrEmpty(filePath))
+                        this.AddNotification("تصویر باموفقیت ویرایش شد.", NotificationType.Error);
+                    return RedirectToAction("Index");
                 }
             }
-            return View(user);
+            catch (DbUpdateConcurrencyException e)
+            {
+                _historyService.LogError(e, HistoryErrorType.Middle);
+                this.AddNotification(e.Message, NotificationType.Error);
+                return View();
+            }
+
         }
 
         [HttpPost]
         public async Task<IActionResult> ChangePassword(ChangePasswordClientViewModel model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                try
+                if (ModelState.IsValid)
                 {
                     var dbUser = await _user.GetUser();
                     if (dbUser != null)
@@ -134,9 +140,8 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
                         var req = new UserChangePassword(_provider, _msgSender, _historyService).CahngePassword(new ChangePasswordDto() { UserName = dbUser.UserName, Password = model.OldPass, NewPassword = model.NewPass, ConfirmNewPassword = model.ConfirmNewPass, Ip = WebHelper.GetRemoteIP });
                         if (req == (byte)ChangePasswordUserMessage.Success)
                         {
-
                             this.AddNotification(EnumExtention.GetDescription((ChangePasswordUserMessage)req), NotificationType.Success);
-                            var returnUrl = Url.Action(nameof(Index), "Profile", new { area = "Student"});
+                            var returnUrl = Url.Action(nameof(Index), "Profile", new { area = "Student" });
                             await _user.LogOutAsync();
                             return RedirectToAction("Login", "Account", new { area = "", returnUrl = returnUrl });
                         }
@@ -146,24 +151,22 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
                             id = model.UserId
                         });
                     }
-
                     this.AddNotification("خطا", NotificationType.Error);
                     return RedirectToAction(nameof(Index), new
                     {
                         id = model.UserId
                     });
+                }
 
-                }
-                catch (Exception e)
-                {
-                    this.AddNotification(e.Message, NotificationType.Error);
-                    _historyService.LogError(e, HistoryErrorType.Middle);
-                    return RedirectToAction("Error", "Home");
-                }
+                this.AddNotification("رمز عبور جدید و تکرار آن همخوانی ندارند.", NotificationType.Error);
+                return RedirectToAction(nameof(Index));
             }
-            this.AddNotification("رمز عبور جدید و تکرار آن همخوانی ندارند.", NotificationType.Error);
-
-            return RedirectToAction(nameof(Index));
+            catch (Exception e)
+            {
+                this.AddNotification(e.Message, NotificationType.Error);
+                _historyService.LogError(e, HistoryErrorType.Middle);
+                return RedirectToAction("Error", "Home");
+            }
         }
     }
 }

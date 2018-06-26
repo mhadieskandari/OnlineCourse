@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Web;
+using BigBlueButton.Models.WebHook;
 
 namespace BigBlueButton
 {
@@ -21,7 +22,12 @@ namespace BigBlueButton
             _log = new Log(AppDomain.CurrentDomain.BaseDirectory + "log.txt", 1000);
         }
 
-
+        public bool WebHookCheckSumIsOk(string eventt, string callBackUrl, string checkSum)
+        {
+            var concatenation = callBackUrl + eventt + GetSalt();
+            var sh1Concat = Sha1.GetSha1(concatenation);
+            return sh1Concat.Equals(checkSum);
+        }
 
         #region "CreateMeeting"      
 
@@ -48,7 +54,7 @@ namespace BigBlueButton
                 //var strParameters= "allowStartStopRecording=false&attendeePW=ap&autoStartRecording=false&meetingID=%D8%AA%D8%B3%D8%AA+%D9%81%D8%A7%D8%B5%D9%84%D9%87&moderatorPW=mp&name=%D8%AA%D8%B3%D8%AA+%D9%81%D8%A7%D8%B5%D9%84%D9%87&record=false";
                 if (!string.IsNullOrEmpty(logoutUrl))
                 {
-                    strParameters += "&logoutURL=" +logoutUrl;
+                    strParameters += "&logoutURL=" + logoutUrl;
                 }
                 strParameters += "&meetingID=" + WebUtility.UrlEncode(meetingId) +
                     "&moderatorPW=" + WebUtility.UrlEncode(moderatorPw) +
@@ -68,7 +74,7 @@ namespace BigBlueButton
                 request.ContentType = "application/x-www-form-urlencoded";
                 using (var response = (HttpWebResponse)request.GetResponse())
                 {
-                    var tt=response.ContentType;
+                    var tt = response.ContentType;
                     using (var sr = new StreamReader(response.GetResponseStream()))
                     {
                         var ds = new DataSet("DataSet1");
@@ -347,5 +353,7 @@ namespace BigBlueButton
         {
             return _serverIpAddress;
         }
+
+
     }
 }
