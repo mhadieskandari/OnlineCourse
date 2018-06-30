@@ -10,6 +10,9 @@ using OnlineCourse.Entity.Models;
 using OnlineCourse.Panel.Utils.ViewModels.Areas.Admin;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using OnlineCourse.Core;
 using OnlineCourse.Core.Services;
 using OnlineCourse.Panel.Utils.Extentions;
 
@@ -17,48 +20,76 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize(Roles = "10")]
-    public class SectionsController : Controller
+    public class SectionsController : BaseController
     {
-        private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
-        private readonly HistoryService _history;
 
-        public SectionsController(ApplicationDbContext context, IMapper mapper, HistoryService history)
+        public SectionsController(ApplicationDbContext context, CurrentUser user, HistoryService historyService, IServiceProvider provider, IHostingEnvironment hostingEnvironment, IHttpContextAccessor httpContextAccessor, PublicConfig config,IMapper mapper) : 
+            base(context, user, historyService, provider, hostingEnvironment, httpContextAccessor, config)
         {
-            _context = context;
             _mapper = mapper;
-            _history = history;
         }
 
         // GET: Admin/Sections
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Sections.Include(t => t.Term).Include(c => c.Course).Include(u => u.Teacher).ToListAsync());
+            try
+            {
+
+                return View(await _context.Sections.Include(t => t.Term).Include(c => c.Course).Include(u => u.Teacher).ToListAsync());
+            }
+            catch (Exception e)
+            {
+                _historyService.LogError(e, HistoryErrorType.UI);
+                this.AddNotification("خطا در اتصال به پایگاه داده", NotificationType.Error);
+                return RedirectToAction("ErrorPage","Home");
+            }
+
         }
 
         // GET: Admin/Sections/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
+                if (id == null)
+                {
+                    return NotFound();
+                }
+
+                var section = await _context.Sections.Include(s => s.Presents).ThenInclude(p => p.Schedules).Include(s => s.Course).Include(s => s.Teacher).Include(s => s.Term)
+                    .SingleOrDefaultAsync(m => m.Id == id);
+                if (section == null)
+                {
+                    return NotFound();
+                }
+
+                return View(section);
+            }
+            catch (Exception e)
+            {
+                _historyService.LogError(e, HistoryErrorType.UI);
+                this.AddNotification("خطا در اتصال به پایگاه داده", NotificationType.Error);
+                return RedirectToAction("ErrorPage","Home");
             }
 
-            var section = await _context.Sections.Include(s => s.Presents).ThenInclude(p => p.Schedules).Include(s => s.Course).Include(s => s.Teacher).Include(s => s.Term)
-                .SingleOrDefaultAsync(m => m.Id == id);
-            if (section == null)
-            {
-                return NotFound();
-            }
-
-            return View(section);
         }
 
         // GET: Admin/Sections/Create
         public IActionResult Create()
         {
-            var model = new SectionCreateViewModel(_context);
-            return View(model);
+            try
+            {
+                var model = new SectionCreateViewModel(_context);
+                return View(model);
+            }
+            catch (Exception e)
+            {
+                _historyService.LogError(e, HistoryErrorType.UI);
+                this.AddNotification("خطا در اتصال به پایگاه داده", NotificationType.Error);
+                return RedirectToAction("ErrorPage","Home");
+            }
+
         }
 
         // POST: Admin/Sections/Create
@@ -101,15 +132,15 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
                     }
                     await _context.SaveChangesAsync();
                     this.AddNotification("دوره با موفقیت ایجاد شد.", NotificationType.Success);
-                    return RedirectToAction(nameof(Details),new {id=dbSection.Id});
+                    return RedirectToAction(nameof(Details), new { id = dbSection.Id });
                 }
                 return View(section);
             }
             catch (Exception e)
             {
-                _history.LogError(e, HistoryErrorType.Middle);
-                this.AddNotification("خطایی در ایجاد دوره رخ داده است.", NotificationType.Error);
-                throw;
+                _historyService.LogError(e, HistoryErrorType.UI);
+                this.AddNotification("خطا در اتصال به پایگاه داده", NotificationType.Error);
+                return RedirectToAction("ErrorPage","Home");
             }
 
         }
@@ -130,7 +161,7 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
                     {
                         return RedirectToAction(nameof(Details), new { Id = present.SectionId });
                     }
-                    _history.LogError(new Exception("addSchedul in section has error"),HistoryErrorType.Middle );
+                    _historyService.LogError(new Exception("addSchedul in section has error"), HistoryErrorType.Middle);
                     return RedirectToAction(nameof(Index));
 
                 }
@@ -139,9 +170,9 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
             }
             catch (Exception e)
             {
-                _history.LogError(e, HistoryErrorType.Middle);
-                this.AddNotification("خطایی در ایجاد روز رخ داده است.", NotificationType.Error);
-                throw;
+                _historyService.LogError(e, HistoryErrorType.UI);
+                this.AddNotification("خطا در اتصال به پایگاه داده", NotificationType.Error);
+                return RedirectToAction("ErrorPage","Home");
             }
 
         }
@@ -154,7 +185,7 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var p=new Present(){SectionId = present.SectionId};
+                    var p = new Present() { SectionId = present.SectionId };
                     _context.Presents.Add(p);
                     await _context.SaveChangesAsync();
 
@@ -167,7 +198,7 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
                     }
                     await _context.SaveChangesAsync();
                     this.AddNotification("برنامه با موفقیت به دوره افزوده شد.", NotificationType.Success);
-                    return RedirectToAction(nameof(Details),new {id=present.SectionId});
+                    return RedirectToAction(nameof(Details), new { id = present.SectionId });
 
                 }
                 this.AddNotification("خطایی در ایجاد روز رخ داده است.", NotificationType.Error);
@@ -175,28 +206,38 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
             }
             catch (Exception e)
             {
-                _history.LogError(e, HistoryErrorType.Middle);
-                this.AddNotification("خطایی در ایجاد روز رخ داده است.", NotificationType.Error);
-                throw;
+                _historyService.LogError(e, HistoryErrorType.UI);
+                this.AddNotification("خطا در اتصال به پایگاه داده", NotificationType.Error);
+                return RedirectToAction("ErrorPage","Home");
             }
 
         }
         // GET: Admin/Sections/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
-            }
 
-            var section = await _context.Sections.SingleOrDefaultAsync(m => m.Id == id);
-            if (section == null)
-            {
-                return NotFound();
+                if (id == null)
+                {
+                    return NotFound();
+                }
+
+                var section = await _context.Sections.SingleOrDefaultAsync(m => m.Id == id);
+                if (section == null)
+                {
+                    return NotFound();
+                }
+                var model = _mapper.Map<SectionEditViewModel>(section);
+                model.IsEdit(_context);
+                return View(model);
             }
-            var model = _mapper.Map<SectionEditViewModel>(section);
-            model.IsEdit(_context);
-            return View(model);
+            catch (Exception e)
+            {
+                _historyService.LogError(e, HistoryErrorType.UI);
+                this.AddNotification("خطا در اتصال به پایگاه داده", NotificationType.Error);
+                return RedirectToAction("ErrorPage","Home");
+            }
         }
 
         // POST: Admin/Sections/Edit/5
@@ -206,51 +247,71 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, SectionEditViewModel section)
         {
-            if (id != section.Id)
+            try
             {
-                return NotFound();
-            }
 
-            if (ModelState.IsValid)
-            {
-                try
+                if (id != section.Id)
                 {
-                    var dbSection = _mapper.Map<Section>(section);
-                    _context.Update(dbSection);
-                    await _context.SaveChangesAsync();
+                    return NotFound();
                 }
-                catch (DbUpdateConcurrencyException)
+
+                if (ModelState.IsValid)
                 {
-                    if (!SectionExists(section.Id))
+                    try
                     {
-                        return NotFound();
+                        var dbSection = _mapper.Map<Section>(section);
+                        _context.Update(dbSection);
+                        await _context.SaveChangesAsync();
                     }
-                    else
+                    catch (DbUpdateConcurrencyException)
                     {
-                        throw;
+                        if (!SectionExists(section.Id))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
                     }
+                    return RedirectToAction(nameof(Index));
                 }
-                return RedirectToAction(nameof(Index));
+                return View(section);
             }
-            return View(section);
+            catch (Exception e)
+            {
+                _historyService.LogError(e, HistoryErrorType.UI);
+                this.AddNotification("خطا در اتصال به پایگاه داده", NotificationType.Error);
+                return RedirectToAction("ErrorPage","Home");
+            }
         }
 
         // GET: Admin/Sections/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
+                if (id == null)
+                {
+                    return NotFound();
+                }
+
+                var section = await _context.Sections
+                    .SingleOrDefaultAsync(m => m.Id == id);
+                if (section == null)
+                {
+                    return NotFound();
+                }
+
+                return View(section);
+            }
+            catch (Exception e)
+            {
+                _historyService.LogError(e, HistoryErrorType.UI);
+                this.AddNotification("خطا در اتصال به پایگاه داده", NotificationType.Error);
+                return RedirectToAction("ErrorPage","Home");
             }
 
-            var section = await _context.Sections
-                .SingleOrDefaultAsync(m => m.Id == id);
-            if (section == null)
-            {
-                return NotFound();
-            }
-
-            return View(section);
         }
 
         // POST: Admin/Sections/Delete/5
@@ -258,10 +319,20 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var section = await _context.Sections.SingleOrDefaultAsync(m => m.Id == id);
-            _context.Sections.Remove(section);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+
+                var section = await _context.Sections.SingleOrDefaultAsync(m => m.Id == id);
+                _context.Sections.Remove(section);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception e)
+            {
+                _historyService.LogError(e, HistoryErrorType.UI);
+                this.AddNotification("خطا در اتصال به پایگاه داده", NotificationType.Error);
+                return RedirectToAction("ErrorPage","Home");
+            }
         }
 
         // POST: Admin/Sections/DeleteSchedul/5
@@ -281,13 +352,14 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
                 {
                     return RedirectToAction(nameof(Details), new { Id = present.SectionId });
                 }
-                _history.LogError(new Exception("addSchedul in section has error"), HistoryErrorType.Middle);
+                _historyService.LogError(new Exception("addSchedul in section has error"), HistoryErrorType.Middle);
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception e)
             {
-                _history.LogError(e, HistoryErrorType.Middle);
-                throw;
+                _historyService.LogError(e, HistoryErrorType.UI);
+                this.AddNotification("خطا در اتصال به پایگاه داده", NotificationType.Error);
+                return RedirectToAction("ErrorPage","Home");
             }
 
         }
@@ -299,7 +371,7 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
         {
             try
             {
-                var present = await _context.Presents.Include(p=>p.Section).SingleOrDefaultAsync(m => m.Id == presentid);
+                var present = await _context.Presents.Include(p => p.Section).SingleOrDefaultAsync(m => m.Id == presentid);
                 var sectionid = present.SectionId;
                 _context.Presents.Remove(present);
                 await _context.SaveChangesAsync();
@@ -308,15 +380,25 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
             }
             catch (Exception e)
             {
-                _history.LogError(e, HistoryErrorType.Middle);
-                throw;
+                _historyService.LogError(e, HistoryErrorType.UI);
+                this.AddNotification("خطا در اتصال به پایگاه داده", NotificationType.Error);
+                return RedirectToAction("ErrorPage","Home");
             }
 
         }
 
         private bool SectionExists(int id)
         {
-            return _context.Sections.Any(e => e.Id == id);
+            try
+            {
+
+                return _context.Sections.Any(e => e.Id == id);
+            }
+            catch (Exception e)
+            {
+                _historyService.LogError(e, HistoryErrorType.UI);
+                return false;
+            }
         }
     }
 }

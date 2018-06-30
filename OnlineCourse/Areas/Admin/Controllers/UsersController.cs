@@ -1,15 +1,11 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Server.Kestrel;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.Web.CodeGeneration.Utils;
 using OnlineCourse.Core;
 using OnlineCourse.Core.Extentions;
 using OnlineCourse.Core.Services;
@@ -27,7 +23,7 @@ using AutoMapper;
 namespace OnlineCourse.Panel.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles ="10")]
+    [Authorize(Roles = "10")]
     public class UsersController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -84,24 +80,44 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
         // GET: Admin/Users/Details/5
         public IActionResult Details(int? id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
-            }
 
-            var chef = _unitOfWork.Users.Get(id.Value);
-            if (chef == null)
+                if (id == null)
+                {
+                    return NotFound();
+                }
+
+                var chef = _unitOfWork.Users.Get(id.Value);
+                if (chef == null)
+                {
+                    return NotFound();
+                }
+
+                return View(chef);
+            }
+            catch (Exception e)
             {
-                return NotFound();
+                _historyService.LogError(e, HistoryErrorType.UI);
+                this.AddNotification("خطا در اتصال به پایگاه داده", NotificationType.Error);
+                return RedirectToAction("ErrorPage", "Home");
             }
-
-            return View(chef);
         }
 
         // GET: Admin/Users/Create
         public IActionResult Create()
         {
-            return View();
+            try
+            {
+                return View();
+
+            }
+            catch (Exception e)
+            {
+                _historyService.LogError(e, HistoryErrorType.UI);
+                this.AddNotification("خطا در اتصال به پایگاه داده", NotificationType.Error);
+                return RedirectToAction("ErrorPage", "Home");
+            }
         }
 
         // POST: Admin/Users/Create
@@ -111,99 +127,119 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(CreateUserViewModel user)
         {
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    var userr = _mapper.Map<User>(user);
-                    var Reg = new UserRegistration(_provider, _msgSender, _historyService);
-                    var res = (RegisterUserMessage)Reg.Register(userr);
 
-                    if (res == RegisterUserMessage.Success)
+                if (ModelState.IsValid)
+                {
+                    try
                     {
-                        if (user.Image != null)
+                        var userr = _mapper.Map<User>(user);
+                        var Reg = new UserRegistration(_provider, _msgSender, _historyService);
+                        var res = (RegisterUserMessage)Reg.Register(userr);
+
+                        if (res == RegisterUserMessage.Success)
                         {
-                            var gal = new Gallery()
+                            if (user.Image != null)
                             {
-                                Kind = (byte)GalleryKind.UserProfile,
-                                PublicId = user.Id,
-                                State = (byte)GeneralState.Disable,
-                                Title = user.FullName,
-                                Ext = Path.GetExtension(user.Image.FileName),
-                            };
-                            _unitOfWork.Galleries.Add(gal);
-                            var count = _unitOfWork.Complete();
-                            if (count > 0)
-                            {
+                                var gal = new Gallery()
+                                {
+                                    Kind = (byte)GalleryKind.UserProfile,
+                                    PublicId = user.Id,
+                                    State = (byte)GeneralState.Disable,
+                                    Title = user.FullName,
+                                    Ext = Path.GetExtension(user.Image.FileName),
+                                };
+                                _unitOfWork.Galleries.Add(gal);
+                                var count = _unitOfWork.Complete();
+                                if (count > 0)
+                                {
 
-                                var filePath = new Uploder(_hostingEnvironment, _historyService).UploadGallery(
-                                    EncryptDecrypt.GetUrlHash(gal.Id.ToString() + gal.PublicId + gal.Kind), user.Image);
-                                if (!string.IsNullOrEmpty(filePath))
-                                    this.AddNotification("خطا درآپلود تصویر پروفایل.", NotificationType.Error);
+                                    var filePath = new Uploder(_hostingEnvironment, _historyService).UploadGallery(
+                                        EncryptDecrypt.GetUrlHash(gal.Id.ToString() + gal.PublicId + gal.Kind), user.Image);
+                                    if (!string.IsNullOrEmpty(filePath))
+                                        this.AddNotification("خطا درآپلود تصویر پروفایل.", NotificationType.Error);
 
-                                //var uploadsRootFolder = Path.Combine(_hostingEnvironment.WebRootPath,
-                                //    Path.Combine("uploads", "galleries"));
+                                    //var uploadsRootFolder = Path.Combine(_hostingEnvironment.WebRootPath,
+                                    //    Path.Combine("uploads", "galleries"));
 
-                                //var filenameandpath = Path.Combine(uploadsRootFolder, Encryption.GetUrlHash(user.Id.ToString() + gal.PublicId + gal.Kind)) + gal.Ext;
+                                    //var filenameandpath = Path.Combine(uploadsRootFolder, Encryption.GetUrlHash(user.Id.ToString() + gal.PublicId + gal.Kind)) + gal.Ext;
 
-                                //if (!Directory.Exists(uploadsRootFolder))
-                                //{
-                                //    Directory.CreateDirectory(uploadsRootFolder);
-                                //}
+                                    //if (!Directory.Exists(uploadsRootFolder))
+                                    //{
+                                    //    Directory.CreateDirectory(uploadsRootFolder);
+                                    //}
 
-                                //if (Image.Length > 0)
-                                //{
-                                //    using (var stream = new FileStream(filenameandpath, FileMode.Create))
-                                //    {
-                                //        Image.CopyTo(stream);
-                                //    }
-                                //}
+                                    //if (Image.Length > 0)
+                                    //{
+                                    //    using (var stream = new FileStream(filenameandpath, FileMode.Create))
+                                    //    {
+                                    //        Image.CopyTo(stream);
+                                    //    }
+                                    //}
+                                }
                             }
+                            this.AddNotification(EnumExtention.GetDescription(res),
+                                NotificationType.Success);
+                            return RedirectToAction("Index");
                         }
-                        this.AddNotification(EnumExtention.GetDescription(res),
-                            NotificationType.Success);
-                        return RedirectToAction("Index");
+                        else
+                        {
+                            this.AddNotification(EnumExtention.GetDescription(res),
+                                NotificationType.Error);
+                            return View(user);
+                        }
                     }
-                    else
+                    catch (Exception e)
                     {
-                        this.AddNotification(EnumExtention.GetDescription(res),
-                            NotificationType.Error);
-                        return View(user);
+                        _historyService.LogError(e, HistoryErrorType.Middle);
+                        this.AddNotification(e.Message, NotificationType.Error);
+                        return View();
                     }
                 }
-                catch (Exception e)
-                {
-                    _historyService.LogError(e, HistoryErrorType.Middle);
-                    this.AddNotification(e.Message, NotificationType.Error);
-                    return View();
-                }
+                return View(user);
             }
-            return View(user);
+            catch (Exception e)
+            {
+                _historyService.LogError(e, HistoryErrorType.UI);
+                this.AddNotification("خطا در اتصال به پایگاه داده", NotificationType.Error);
+                return RedirectToAction("ErrorPage", "Home");
+            }
         }
 
         // GET: Admin/Users/Edit/5
         public IActionResult Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
             try
             {
-                var user = _unitOfWork.Users.Get(id.Value);
-                if (user == null)
+                if (id == null)
                 {
                     return NotFound();
                 }
-                var viewModel = _mapper.Map<CreateUserViewModel>(user);
-                return View(viewModel);
+                try
+                {
+                    var user = _unitOfWork.Users.Get(id.Value);
+                    if (user == null)
+                    {
+                        return NotFound();
+                    }
+                    var viewModel = _mapper.Map<CreateUserViewModel>(user);
+                    return View(viewModel);
+                }
+                catch (Exception e)
+                {
+                    this.AddNotification(e.Message, NotificationType.Error);
+                    _historyService.LogError(e, HistoryErrorType.Middle);
+                    return View();
+                }
             }
             catch (Exception e)
             {
-                this.AddNotification(e.Message, NotificationType.Error);
-                _historyService.LogError(e, HistoryErrorType.Middle);
-                return View();
+                _historyService.LogError(e, HistoryErrorType.UI);
+                this.AddNotification("خطا در اتصال به پایگاه داده", NotificationType.Error);
+                return RedirectToAction("ErrorPage", "Home");
             }
+
 
         }
 
@@ -214,99 +250,119 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, CreateUserViewModel user)
         {
-            if (id != user.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var orgUser = _mapper.Map<User>(user);
-                    using (var res = new UserUpdate(_provider, _msgSender, _historyService))
-                    {
-                        var msg = (UpdateUserMessage)res.Update(orgUser);
-                        if (msg == UpdateUserMessage.Success)
-                        {
-                            this.AddNotification(EnumExtention.GetDescription(msg), NotificationType.Success);
-                            if (user.Image != null)
-                            {
-
-                                Gallery gal;
-                                var dbgal = _unitOfWork.Galleries.GetGallery(orgUser.Id, (byte)GalleryKind.UserProfile);
-                                int count = 0;
-                                if (dbgal != null && dbgal.Any())
-                                {
-                                    gal = dbgal.FirstOrDefault();
-                                    if (gal != null)
-                                    {
-                                        gal.POrder = 1;
-                                        gal.Ext = Path.GetExtension(user.Image.FileName);
-                                        _unitOfWork.Galleries.Update(gal);
-                                    }
-                                    count = _unitOfWork.Complete();
-                                }
-                                else
-                                {
-                                    gal = new Gallery()
-                                    {
-                                        Kind = (byte)GalleryKind.UserProfile,
-                                        PublicId = orgUser.Id,
-                                        State = (byte)GeneralState.Disable,
-                                        Title = orgUser.FullName,
-                                        Ext = Path.GetExtension(user.Image.FileName),
-                                        POrder = 1
-                                    };
-                                    _unitOfWork.Galleries.Add(gal);
-                                    count = _unitOfWork.Complete();
-                                }
-                                if (count > 0)
-                                {
-                                    var filePath = new Uploder(_hostingEnvironment, _historyService).UploadGallery(EncryptDecrypt.GetUrlHash(gal.Id.ToString() + gal.PublicId + gal.Kind), user.Image);
-
-                                    if (string.IsNullOrEmpty(filePath))
-                                        this.AddNotification("خطا در آپلود تصویر پروفایل.", NotificationType.Error);
-                                }
-                                return RedirectToAction("Index");
-                            }
-                        }
-                        return RedirectToAction("Index");
-                    }
-                }
-                catch (DbUpdateConcurrencyException e)
-                {
-                    _historyService.LogError(e, HistoryErrorType.Middle);
-                    this.AddNotification(e.Message, NotificationType.Error);
-                    return View();
-                }
-            }
-            return View(user);
-        }
-
-        // GET: Admin/Users/Delete/5
-        public IActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
             try
             {
-                var user = _mapper.Map<CreateUserViewModel>(_unitOfWork.Users.Get(id.Value));
-
-                if (user == null)
+                if (id != user.Id)
                 {
                     return NotFound();
+                }
+
+                if (ModelState.IsValid)
+                {
+                    try
+                    {
+                        var orgUser = _mapper.Map<User>(user);
+                        using (var res = new UserUpdate(_provider, _msgSender, _historyService))
+                        {
+                            var msg = (UpdateUserMessage)res.Update(orgUser);
+                            if (msg == UpdateUserMessage.Success)
+                            {
+                                this.AddNotification(EnumExtention.GetDescription(msg), NotificationType.Success);
+                                if (user.Image != null)
+                                {
+
+                                    Gallery gal;
+                                    var dbgal = _unitOfWork.Galleries.GetGallery(orgUser.Id, (byte)GalleryKind.UserProfile);
+                                    int count = 0;
+                                    if (dbgal != null && dbgal.Any())
+                                    {
+                                        gal = dbgal.FirstOrDefault();
+                                        if (gal != null)
+                                        {
+                                            gal.POrder = 1;
+                                            gal.Ext = Path.GetExtension(user.Image.FileName);
+                                            _unitOfWork.Galleries.Update(gal);
+                                        }
+                                        count = _unitOfWork.Complete();
+                                    }
+                                    else
+                                    {
+                                        gal = new Gallery()
+                                        {
+                                            Kind = (byte)GalleryKind.UserProfile,
+                                            PublicId = orgUser.Id,
+                                            State = (byte)GeneralState.Disable,
+                                            Title = orgUser.FullName,
+                                            Ext = Path.GetExtension(user.Image.FileName),
+                                            POrder = 1
+                                        };
+                                        _unitOfWork.Galleries.Add(gal);
+                                        count = _unitOfWork.Complete();
+                                    }
+                                    if (count > 0)
+                                    {
+                                        var filePath = new Uploder(_hostingEnvironment, _historyService).UploadGallery(EncryptDecrypt.GetUrlHash(gal.Id.ToString() + gal.PublicId + gal.Kind), user.Image);
+
+                                        if (string.IsNullOrEmpty(filePath))
+                                            this.AddNotification("خطا در آپلود تصویر پروفایل.", NotificationType.Error);
+                                    }
+                                    return RedirectToAction("Index");
+                                }
+                            }
+                            return RedirectToAction("Index");
+                        }
+                    }
+                    catch (DbUpdateConcurrencyException e)
+                    {
+                        _historyService.LogError(e, HistoryErrorType.Middle);
+                        this.AddNotification(e.Message, NotificationType.Error);
+                        return View();
+                    }
                 }
                 return View(user);
             }
             catch (Exception e)
             {
-                this.AddNotification(e.Message, NotificationType.Error);
-                _historyService.LogError(e, HistoryErrorType.Middle);
-                return RedirectToAction("Index");
+                _historyService.LogError(e, HistoryErrorType.UI);
+                this.AddNotification("خطا در اتصال به پایگاه داده", NotificationType.Error);
+                return RedirectToAction("ErrorPage", "Home");
             }
+
+        }
+
+        // GET: Admin/Users/Delete/5
+        public IActionResult Delete(int? id)
+        {
+            try
+            {
+                if (id == null)
+                {
+                    return NotFound();
+                }
+                try
+                {
+                    var user = _mapper.Map<CreateUserViewModel>(_unitOfWork.Users.Get(id.Value));
+
+                    if (user == null)
+                    {
+                        return NotFound();
+                    }
+                    return View(user);
+                }
+                catch (Exception e)
+                {
+                    this.AddNotification(e.Message, NotificationType.Error);
+                    _historyService.LogError(e, HistoryErrorType.Middle);
+                    return RedirectToAction("Index");
+                }
+            }
+            catch (Exception e)
+            {
+                _historyService.LogError(e, HistoryErrorType.UI);
+                this.AddNotification("خطا در اتصال به پایگاه داده", NotificationType.Error);
+                return RedirectToAction("ErrorPage", "Home");
+            }
+
 
         }
 
@@ -337,51 +393,70 @@ namespace OnlineCourse.Panel.Areas.Admin.Controllers
 
         private bool ChefExists(int id)
         {
-            return _unitOfWork.Users.IsExist(id);
+            try
+            {
+                return _unitOfWork.Users.IsExist(id);
+            }
+            catch (Exception e)
+            {
+                _historyService.LogError(e, HistoryErrorType.UI);
+                this.AddNotification("خطا در اتصال به پایگاه داده", NotificationType.Error);
+                return false;
+            }
         }
 
         [HttpPost]
         public IActionResult ChangePassword(ChangePasswordViewModel model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                try
+                if (ModelState.IsValid)
                 {
-                    var dbUser = _unitOfWork.Users.Get(model.UserId);
-                    if (dbUser != null)
+                    try
                     {
-                        var req = new UserChangePassword(_provider, _msgSender, _historyService).CahngePassword(new ChangePasswordDto() { UserName = dbUser.UserName, NewPassword = model.NewPass, ConfirmNewPassword = model.ConfirmNewPass, Ip = WebHelper.GetRemoteIP, IsAdmin = true });
-                        //if (req == (byte)ChangePasswordUserMessage.Success)
-                        //{
-
-                        this.AddNotification(EnumExtention.GetDescription((ChangePasswordUserMessage)req), NotificationType.Success);
-                        //var returnUrl = Url.Action("Edit", "Users", new { area = "Admin", id = model.UserId });
-                        //await _cuser.LogOutAsync();
-                        //return RedirectToAction("Login", "Account", new { area = "", returnUrl = returnUrl /* , LoginViewModel = new LoginViewModel() { Email = _cUser.GetEmail() }*/});
-                        //}
-                        //this.AddNotification(_localizer[EnumExtention.GetDescription((ChangePasswordUserMessage)req)].Value.ToString(), NotificationType.Error);
-                        return RedirectToAction(nameof(Edit), new
+                        var dbUser = _unitOfWork.Users.Get(model.UserId);
+                        if (dbUser != null)
                         {
-                            id = model.UserId
-                        });
+                            var req = new UserChangePassword(_provider, _msgSender, _historyService).CahngePassword(new ChangePasswordDto() { UserName = dbUser.UserName, NewPassword = model.NewPass, ConfirmNewPassword = model.ConfirmNewPass, Ip = WebHelper.GetRemoteIP, IsAdmin = true });
+                            //if (req == (byte)ChangePasswordUserMessage.Success)
+                            //{
+
+                            this.AddNotification(EnumExtention.GetDescription((ChangePasswordUserMessage)req), NotificationType.Success);
+                            //var returnUrl = Url.Action("Edit", "Users", new { area = "Admin", id = model.UserId });
+                            //await _cuser.LogOutAsync();
+                            //return RedirectToAction("Login", "Account", new { area = "", returnUrl = returnUrl /* , LoginViewModel = new LoginViewModel() { Email = _cUser.GetEmail() }*/});
+                            //}
+                            //this.AddNotification(_localizer[EnumExtention.GetDescription((ChangePasswordUserMessage)req)].Value.ToString(), NotificationType.Error);
+                            return RedirectToAction(nameof(Edit), new
+                            {
+                                id = model.UserId
+                            });
+                        }
+
+                        this.AddNotification("کاربر مورد نظر یافت نشد.", NotificationType.Error);
+                        return RedirectToAction(nameof(Index));
+
                     }
-
-                    this.AddNotification("کاربر مورد نظر یافت نشد.", NotificationType.Error);
-                    return RedirectToAction(nameof(Index));
-
+                    catch (Exception e)
+                    {
+                        this.AddNotification(e.Message, NotificationType.Error);
+                        _historyService.LogError(e, HistoryErrorType.Middle);
+                        return RedirectToAction("ErrorPage", "Home");
+                    }
                 }
-                catch (Exception e)
+                this.AddNotification("خطا در تغییر رمز عبور.", NotificationType.Error);
+                return RedirectToAction(nameof(Edit), new
                 {
-                    this.AddNotification(e.Message, NotificationType.Error);
-                    _historyService.LogError(e, HistoryErrorType.Middle);
-                    return RedirectToAction("ErrorPage", "Home");
-                }
+                    id = model.UserId
+                });
             }
-            this.AddNotification("خطا در تغییر رمز عبور.",NotificationType.Error);
-            return RedirectToAction(nameof(Edit), new
+            catch (Exception e)
             {
-                id = model.UserId
-            });
+                _historyService.LogError(e, HistoryErrorType.UI);
+                this.AddNotification("خطا در اتصال به پایگاه داده", NotificationType.Error);
+                return RedirectToAction("ErrorPage", "Home");
+            }
+
         }
     }
 }

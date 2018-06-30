@@ -23,7 +23,7 @@ namespace OnlineCourse.Panel.Areas.Student.Controllers
     public class CheckOutController : BaseController
     {
         private readonly int _userId;
-        public CheckOutController(ApplicationDbContext context, CurrentUser user, HistoryService historyService, IServiceProvider provider, IHostingEnvironment hostingEnvironment, IHttpContextAccessor httpContextAccessor, PublicConfig config) : base(context, user, historyService, provider, hostingEnvironment, httpContextAccessor, config)
+        public CheckOutController(ApplicationDbContext context, CurrentUser user, HistoryService _historyService, IServiceProvider provider, IHostingEnvironment hostingEnvironment, IHttpContextAccessor httpContextAccessor, PublicConfig config) : base(context, user, _historyService, provider, hostingEnvironment, httpContextAccessor, config)
         {
             _userId = _user.GetUserId().Result;
         }
@@ -32,58 +32,70 @@ namespace OnlineCourse.Panel.Areas.Student.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var shoppingCartCookie = _httpContextAccessor.HttpContext.Request.Cookies["Cart"];
-
-            if (!string.IsNullOrEmpty(shoppingCartCookie))
+            try
             {
-                byte[] decodedBytes = Convert.FromBase64String(shoppingCartCookie);
-                var decodedTxt = System.Text.Encoding.UTF8.GetString(decodedBytes);
-                if (string.IsNullOrEmpty(decodedTxt))
-                {
-                    return Redirect("/");
-                }
-                var invoiceModel = JsonConvert.DeserializeObject<List<OrderDetail>>(decodedTxt);
+                var shoppingCartCookie = _httpContextAccessor.HttpContext.Request.Cookies["Cart"];
 
-                var degree = _user.GetUserDegree().Result;
-                if (degree == null)
+                if (!string.IsNullOrEmpty(shoppingCartCookie))
                 {
-                    this.AddNotification("لطفا مقطع تحصیلی خود را وارد کنید و مجددا تلاش کنید.", NotificationType.Error);
-                    return RedirectToAction("Index", "Profile");
-                }
-                if (invoiceModel != null || invoiceModel.Any())
-                {
-                    var viewModel = new List<OrderDetailViewModel>();
-                    foreach (var detail in invoiceModel)
+                    byte[] decodedBytes = Convert.FromBase64String(shoppingCartCookie);
+                    var decodedTxt = System.Text.Encoding.UTF8.GetString(decodedBytes);
+                    if (string.IsNullOrEmpty(decodedTxt))
                     {
-                        var model = await _context.Presents.Include(p => p.Section).ThenInclude(p => p.Course)
-                            .Include(p => p.Section).ThenInclude(p => p.Teacher)
-                            .Include(p => p.Schedules).SingleOrDefaultAsync(p => p.Id == detail.id);
-
-                        if (model != null)
-                        {
-                            var od = new OrderDetailViewModel()
-                            {
-                                id = detail.id,
-                                amount = detail.amount,
-                                coursename = model.Section.Course.CourseName,
-                                teachername = model.Section.Teacher.FullName,
-                                totalcost = model.Section.HourlyPrice * model.Section.TotalTime,
-                            };
-                            od.remincost = od.totalcost - od.amount;
-                            viewModel.Add(od);
-                        }
+                        return Redirect("/");
                     }
-                    return View(viewModel);
+                    var invoiceModel = JsonConvert.DeserializeObject<List<OrderDetail>>(decodedTxt);
+
+                    var degree = _user.GetUserDegree().Result;
+                    if (degree == null)
+                    {
+                        this.AddNotification("لطفا مقطع تحصیلی خود را وارد کنید و مجددا تلاش کنید.", NotificationType.Error);
+                        return RedirectToAction("Index", "Profile");
+                    }
+                    if (invoiceModel != null || invoiceModel.Any())
+                    {
+                        var viewModel = new List<OrderDetailViewModel>();
+                        foreach (var detail in invoiceModel)
+                        {
+                            var model = await _context.Presents.Include(p => p.Section).ThenInclude(p => p.Course)
+                                .Include(p => p.Section).ThenInclude(p => p.Teacher)
+                                .Include(p => p.Schedules).SingleOrDefaultAsync(p => p.Id == detail.id);
+
+                            if (model != null)
+                            {
+                                var od = new OrderDetailViewModel()
+                                {
+                                    id = detail.id,
+                                    amount = detail.amount,
+                                    coursename = model.Section.Course.CourseName,
+                                    teachername = model.Section.Teacher.FullName,
+                                    totalcost = model.Section.HourlyPrice * model.Section.TotalTime,
+                                };
+                                od.remincost = od.totalcost - od.amount;
+                                viewModel.Add(od);
+                            }
+                        }
+                        return View(viewModel);
+                    }
                 }
+                this.AddNotification("صورت حسابی وجود ندارد.", NotificationType.Error);
+                return RedirectToAction("SelectCourse", "Enrollments");
             }
-            this.AddNotification("صورت حسابی وجود ندارد.", NotificationType.Error);
-            return RedirectToAction("SelectCourse", "Enrollments");
+            catch (Exception e)
+            {
+                _historyService.LogError(e, HistoryErrorType.UI);
+                this.AddNotification("خطا در اتصال به پایگاه داده", NotificationType.Error);
+                return RedirectToAction("ErrorPage");
+            }
+            
         }
 
         // Post: Student/Enrollments/Create
         [HttpPost]
         public async Task<IActionResult> CreateInvoice(PayType payType = PayType.Online, BankId bankId = BankId.Mellat)
         {
+            try
+            {
 
             var shoppingCartCookie = _httpContextAccessor.HttpContext.Request.Cookies["Cart"];
             if (!string.IsNullOrEmpty(shoppingCartCookie))
@@ -151,12 +163,21 @@ namespace OnlineCourse.Panel.Areas.Student.Controllers
             }
             this.AddNotification("صورت حسابی وجود ندارد.", NotificationType.Error);
             return RedirectToAction("SelectCourse", "Enrollments");
+            }
+            catch (Exception e)
+            {
+                _historyService.LogError(e, HistoryErrorType.UI);
+                this.AddNotification("خطا در اتصال به پایگاه داده", NotificationType.Error);
+                return RedirectToAction("ErrorPage");
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> Payment(int invoiceId)
         {
-            //var invoice =await _context.Invoices.Include(i=>i.Enrollments).ThenInclude(e=>e.Present).ThenInclude(p=>p.Section).FirstOrDefaultAsync(i => i.Id == invoiceId);
+            try
+            {
+//var invoice =await _context.Invoices.Include(i=>i.Enrollments).ThenInclude(e=>e.Present).ThenInclude(p=>p.Section).FirstOrDefaultAsync(i => i.Id == invoiceId);
 
             decimal sumOfPrice = 0;
 
@@ -181,63 +202,84 @@ namespace OnlineCourse.Panel.Areas.Student.Controllers
             }
             //todo call bank gateway to payment action
             return RedirectToAction(nameof(Callback), new { invoiceId = invoiceId, transactionId = "sadflellskdl23lkj23kjlklasl312lk", state = 1 });
-        }
+        
+            }
+            catch (Exception e)
+            {
+                _historyService.LogError(e, HistoryErrorType.UI);
+                this.AddNotification("خطا در اتصال به پایگاه داده", NotificationType.Error);
+                return RedirectToAction("ErrorPage");
+            }
+            }
 
         [HttpGet]
         public IActionResult Callback(int invoiceId, string transactionId, PayState state)
         {
-            var invoice = _context.Invoices.FirstOrDefault(i => i.Id == invoiceId);
-            if (invoice != null)
+            try
             {
-                //todo check payment gatewaye to confirm payment
-
-                invoice.TransactionId = transactionId;
-                invoice.PayState = state;
-                _context.Update(invoice);
-                _context.SaveChanges();
-
-                var shoppingCartCookie = _httpContextAccessor.HttpContext.Request.Cookies["Cart"];
-
-                if (string.IsNullOrEmpty(shoppingCartCookie))
+                var invoice = _context.Invoices.FirstOrDefault(i => i.Id == invoiceId);
+                if (invoice != null)
                 {
-                    this.AddNotification("خطایی در پرداخت رخ داده است.",NotificationType.Error);
-                    return RedirectToAction(nameof(Result), new { invoiceid = invoiceId });
-                }
+                    //todo check payment gatewaye to confirm payment
 
-                byte[] decodedBytes = Convert.FromBase64String(shoppingCartCookie);
-                var decodedTxt = System.Text.Encoding.UTF8.GetString(decodedBytes);
-                if (string.IsNullOrEmpty(decodedTxt))
-                {
-                    return Redirect("/");
-                }
-                var invoiceModel = JsonConvert.DeserializeObject<List<OrderDetail>>(decodedTxt);
-                if (invoiceModel != null)
-                {
-                    foreach (var detail in invoiceModel)
+                    invoice.TransactionId = transactionId;
+                    invoice.PayState = state;
+                    _context.Update(invoice);
+                    _context.SaveChanges();
+
+                    var shoppingCartCookie = _httpContextAccessor.HttpContext.Request.Cookies["Cart"];
+
+                    if (string.IsNullOrEmpty(shoppingCartCookie))
                     {
-                        var enrollment = _context.Enrollments.SingleOrDefault(e =>e.StudentId==_userId && e.PresentId == detail.id);
+                        this.AddNotification("خطایی در پرداخت رخ داده است.", NotificationType.Error);
+                        return RedirectToAction(nameof(Result), new {invoiceid = invoiceId});
+                    }
 
-                        if (enrollment != null)
+                    byte[] decodedBytes = Convert.FromBase64String(shoppingCartCookie);
+                    var decodedTxt = System.Text.Encoding.UTF8.GetString(decodedBytes);
+                    if (string.IsNullOrEmpty(decodedTxt))
+                    {
+                        return Redirect("/");
+                    }
+                    var invoiceModel = JsonConvert.DeserializeObject<List<OrderDetail>>(decodedTxt);
+                    if (invoiceModel != null)
+                    {
+                        foreach (var detail in invoiceModel)
                         {
-                            var payment = new Payment()
+                            var enrollment =
+                                _context.Enrollments.SingleOrDefault(
+                                    e => e.StudentId == _userId && e.PresentId == detail.id);
+
+                            if (enrollment != null)
                             {
-                                Amount = detail.amount,
-                                EnrollmentId = enrollment.Id,
-                                InvoiceId = invoiceId
-                            };
-                            _context.Payments.Add(payment);
-                            _context.SaveChanges();
+                                var payment = new Payment()
+                                {
+                                    Amount = detail.amount,
+                                    EnrollmentId = enrollment.Id,
+                                    InvoiceId = invoiceId
+                                };
+                                _context.Payments.Add(payment);
+                                _context.SaveChanges();
+                            }
                         }
                     }
                 }
+                return RedirectToAction(nameof(Result), new {invoiceid = invoiceId});
             }
-            return RedirectToAction(nameof(Result), new { invoiceid = invoiceId });
+            catch (Exception e)
+            {
+                _historyService.LogError(e, HistoryErrorType.UI);
+                this.AddNotification("خطا در اتصال به پایگاه داده", NotificationType.Error);
+                return RedirectToAction("ErrorPage");
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> Result(int? invoiceId)
         {
-            var invoice = await _context.Invoices.Include(e => e.Payments).ThenInclude(i => i.Enrollment)/*ThenInclude(e => e.Present).ThenInclude(p => p.Section)*/.FirstOrDefaultAsync(i => i.Id == invoiceId);
+            try
+            {
+ var invoice = await _context.Invoices.Include(e => e.Payments).ThenInclude(i => i.Enrollment)/*ThenInclude(e => e.Present).ThenInclude(p => p.Section)*/.FirstOrDefaultAsync(i => i.Id == invoiceId);
             if (invoice.PayState == PayState.Approved)
             {
                 this.AddNotification("پرداخت با موفقیت انجام شد.", NotificationType.Success);
@@ -248,6 +290,14 @@ namespace OnlineCourse.Panel.Areas.Student.Controllers
                 this.AddNotification("خطایی در پرداخت رخ داده است , در صورتی که مبلغ از حساب شما کسر شده و تا مدت 72 ساعت به حساب شما باز گردانده نشد با پشتیبانی تماس بگیرید. ", NotificationType.Error);
             }
             return View(invoice);
+            }
+            catch (Exception e)
+            {
+                _historyService.LogError(e, HistoryErrorType.UI);
+                this.AddNotification("خطا در اتصال به پایگاه داده", NotificationType.Error);
+                return RedirectToAction("ErrorPage");
+            }
+           
         }
 
 

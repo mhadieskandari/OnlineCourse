@@ -1,25 +1,15 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OnlineCourse.Core;
-using OnlineCourse.Core.Dtos;
-using OnlineCourse.Core.Extentions;
 using OnlineCourse.Core.Services;
-using OnlineCourse.Core.WorkFlows;
 using OnlineCourse.Entity;
-using OnlineCourse.Entity.Models;
-using OnlineCourse.Panel.Utils;
 using OnlineCourse.Panel.Utils.Extentions;
-using OnlineCourse.Panel.Utils.ViewModels.AccountViewModels;
-using SQLitePCL;
 
 namespace OnlineCourse.Panel.Areas.Teacher.Controllers
 {
