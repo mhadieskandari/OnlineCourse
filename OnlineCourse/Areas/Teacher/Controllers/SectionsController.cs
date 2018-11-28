@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OnlineCourse.Entity;
 using OnlineCourse.Entity.Models;
@@ -14,12 +11,9 @@ using BigBlueButton;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Extensions;
 using OnlineCourse.Core.Services;
 using OnlineCourse.Panel.Utils.Extentions;
-using Microsoft.Extensions.Configuration;
 using OnlineCourse.Core;
-using OnlineCourse.Core.Extentions;
 
 namespace OnlineCourse.Panel.Areas.Teacher.Controllers
 {
@@ -35,41 +29,66 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
         // GET: Admin/Sections
         public async Task<IActionResult> Index(int? termId, int? courseId, ActiveState? activity)
         {
-            var model = _context.Sections.Include(t => t.Term).Include(c => c.Course).Include(u => u.Teacher).Include(s=>s.Presents)
-                .Where(s => s.TeacherId == _userid);
-            if (termId.HasValue)
-                model = model.Where(s => s.TermId == termId);
-            if (courseId.HasValue)
-                model = model.Where(s => s.CourseId == courseId);
-            if (activity.HasValue)
-                model = model.Where(s => s.Activity == activity);
-            return View(await model.ToListAsync());
+            try
+            {
+                var model = _context.Sections.Include(t => t.Term).Include(c => c.Course).Include(u => u.Teacher).Include(s => s.Presents)
+                    .Where(s => s.TeacherId == _userid);
+                if (termId.HasValue)
+                    model = model.Where(s => s.TermId == termId);
+                if (courseId.HasValue)
+                    model = model.Where(s => s.CourseId == courseId);
+                if (activity.HasValue)
+                    model = model.Where(s => s.Activity == activity);
+                return View(await model.ToListAsync());
+            }
+            catch (Exception e)
+            {
+                _history.LogError(e, HistoryErrorType.UI);
+                this.AddNotification("خطایی در ایجاد دوره رخ داده است.", NotificationType.Error);
+                return RedirectToAction("ErrorPage", "Home");
+            }
         }
 
         // GET: Admin/Sections/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
+                if (id == null)
+                {
+                    return NotFound();
+                }
+                var section = await _context.Sections.Include(s => s.Presents).ThenInclude(p => p.Schedules).Include(s => s.Course).Include(s => s.Teacher).Include(s => s.Term)
+                    .SingleOrDefaultAsync(m => m.Id == id);
+                if (section == null || section.TeacherId != _userid)
+                {
+                    return NotFound();
+                }
+                return View(section);
             }
-
-            var section = await _context.Sections.Include(s => s.Presents).ThenInclude(p => p.Schedules).Include(s => s.Course).Include(s => s.Teacher).Include(s => s.Term)
-                .SingleOrDefaultAsync(m => m.Id == id);
-            if (section == null || section.TeacherId != _userid)
+            catch (Exception e)
             {
-                return NotFound();
+                _history.LogError(e, HistoryErrorType.UI);
+                this.AddNotification("خطایی در ایجاد دوره رخ داده است.", NotificationType.Error);
+                return RedirectToAction("ErrorPage", "Home");
             }
-
-            return View(section);
         }
 
         // GET: Admin/Sections/Create
         public IActionResult Create()
         {
-            var model = new SectionCreateViewModel(_context);
-            model.TeacherId = _userid;
-            return View(model);
+            try
+            {
+                var model = new SectionCreateViewModel(_context);
+                model.TeacherId = _userid;
+                return View(model);
+            }
+            catch (Exception e)
+            {
+                _history.LogError(e, HistoryErrorType.UI);
+                this.AddNotification("خطایی در ایجاد دوره رخ داده است.", NotificationType.Error);
+                return RedirectToAction("ErrorPage", "Home");
+            }
         }
 
         // POST: Admin/Sections/Create
@@ -87,28 +106,20 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
                     {
                         return NotFound();
                     }
-
                     var dbSection = _mapper.Map<Section>(section);
-
-
                     var existSecrion = _context.Sections.FirstOrDefault(s => s.CourseId == dbSection.CourseId &&
                                                     s.TeacherId == dbSection.TeacherId &&
                                                     s.TermId == dbSection.TermId);
-
                     if (existSecrion != null)
                     {
                         this.AddNotification("این دوره با id =" + existSecrion.Id + " وجود دارد و امکان ایجاد ندارد.", NotificationType.Info);
                         section.IsEdit(_context);
                         return View(section);
                     }
-
-
                     _context.Add(dbSection);
-
                     await _context.SaveChangesAsync();
                     var present = new Present() { SectionId = dbSection.Id };
                     _context.Presents.Add(present);
-
                     await _context.SaveChangesAsync();
                     var scheduls = section.WorkDays.Split(",");
                     var startTime = TimeSpan.Parse(section.StartTime);
@@ -127,11 +138,10 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
             }
             catch (Exception e)
             {
-                _history.LogError(e, HistoryErrorType.Middle);
+                _history.LogError(e, HistoryErrorType.UI);
                 this.AddNotification("خطایی در ایجاد دوره رخ داده است.", NotificationType.Error);
                 return RedirectToAction("Error", "Home");
             }
-
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -161,11 +171,10 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
             }
             catch (Exception e)
             {
-                _history.LogError(e, HistoryErrorType.Middle);
-                this.AddNotification("خطایی در ایجاد روز رخ داده است.", NotificationType.Error);
-                return RedirectToAction("Error", "Home");
+                _history.LogError(e, HistoryErrorType.UI);
+                this.AddNotification("خطایی در ایجاد دوره رخ داده است.", NotificationType.Error);
+                return RedirectToAction("ErrorPage", "Home");
             }
-
         }
 
         [HttpPost]
@@ -197,28 +206,37 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
             }
             catch (Exception e)
             {
-                _history.LogError(e, HistoryErrorType.Middle);
-                this.AddNotification("خطایی در ایجاد برنامه رخ داده است.", NotificationType.Error);
-                throw;
+                _history.LogError(e, HistoryErrorType.UI);
+                this.AddNotification("خطایی در ایجاد دوره رخ داده است.", NotificationType.Error);
+                return RedirectToAction("ErrorPage", "Home");
             }
 
         }
         // GET: Admin/Sections/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var section = await _context.Sections.SingleOrDefaultAsync(m => m.Id == id);
-            if (section == null)
-            {
-                return NotFound();
+                var section = await _context.Sections.SingleOrDefaultAsync(m => m.Id == id);
+                if (section == null)
+                {
+                    return NotFound();
+                }
+                var model = _mapper.Map<SectionEditViewModel>(section);
+                model.IsEdit(_context);
+                return View(model);
             }
-            var model = _mapper.Map<SectionEditViewModel>(section);
-            model.IsEdit(_context);
-            return View(model);
+            catch (Exception e)
+            {
+                _history.LogError(e, HistoryErrorType.UI);
+                this.AddNotification("خطایی در ایجاد دوره رخ داده است.", NotificationType.Error);
+                return RedirectToAction("ErrorPage", "Home");
+            }
         }
 
         // POST: Admin/Sections/Edit/5
@@ -228,33 +246,42 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, SectionEditViewModel section)
         {
-            if (id != section.Id)
+            try
             {
-                return NotFound();
-            }
+                if (id != section.Id)
+                {
+                    return NotFound();
+                }
 
-            if (ModelState.IsValid)
-            {
-                try
+                if (ModelState.IsValid)
                 {
-                    var dbSection = _mapper.Map<Section>(section);
-                    _context.Update(dbSection);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!SectionExists(section.Id))
+                    try
                     {
-                        return NotFound();
+                        var dbSection = _mapper.Map<Section>(section);
+                        _context.Update(dbSection);
+                        await _context.SaveChangesAsync();
                     }
-                    else
+                    catch (DbUpdateConcurrencyException)
                     {
-                        throw;
+                        if (!SectionExists(section.Id))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
                     }
+                    return RedirectToAction(nameof(Index));
                 }
-                return RedirectToAction(nameof(Index));
+                return View(section);
             }
-            return View(section);
+            catch (Exception e)
+            {
+                _history.LogError(e, HistoryErrorType.UI);
+                this.AddNotification("خطایی در ایجاد دوره رخ داده است.", NotificationType.Error);
+                return RedirectToAction("ErrorPage", "Home");
+            }
         }
 
         // GET: Admin/Sections/Delete/5
@@ -262,25 +289,23 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
         {
             try
             {
-
                 if (id == null)
                 {
                     return NotFound();
                 }
-
                 var section = await _context.Sections
                     .SingleOrDefaultAsync(m => m.Id == id);
                 if (section == null)
                 {
                     return NotFound();
                 }
-
                 return View(section);
             }
             catch (Exception e)
             {
-                _history.LogError(e, HistoryErrorType.Middle);
-                return RedirectToAction("Error", "Home");
+                _history.LogError(e, HistoryErrorType.UI);
+                this.AddNotification("خطایی در ایجاد دوره رخ داده است.", NotificationType.Error);
+                return RedirectToAction("ErrorPage", "Home");
             }
         }
 
@@ -298,10 +323,10 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
             }
             catch (Exception e)
             {
-                _history.LogError(e, HistoryErrorType.Middle);
-                return RedirectToAction("Error", "Home");
+                _history.LogError(e, HistoryErrorType.UI);
+                this.AddNotification("خطایی در ایجاد دوره رخ داده است.", NotificationType.Error);
+                return RedirectToAction("ErrorPage", "Home");
             }
-
         }
 
         // POST: Admin/Sections/DeleteSchedul/5
@@ -326,10 +351,10 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
             }
             catch (Exception e)
             {
-                _history.LogError(e, HistoryErrorType.Middle);
-                return RedirectToAction("Error", "Home");
+                _history.LogError(e, HistoryErrorType.UI);
+                this.AddNotification("خطایی در ایجاد دوره رخ داده است.", NotificationType.Error);
+                return RedirectToAction("ErrorPage", "Home");
             }
-
         }
 
         // POST: Admin/Sections/DeleteSchedul/5
@@ -348,13 +373,11 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
             }
             catch (Exception e)
             {
-                _history.LogError(e, HistoryErrorType.Middle);
-                return RedirectToAction("Error", "Home");
+                _history.LogError(e, HistoryErrorType.UI);
+                this.AddNotification("خطایی در ایجاد دوره رخ داده است.", NotificationType.Error);
+                return RedirectToAction("ErrorPage", "Home");
             }
-
         }
-
-
 
         private bool SectionExists(int id)
         {
@@ -366,15 +389,15 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
             try
             {
                 var classRooms = _context.ClassRooms.Where(c => c.PresentId == presentId && c.Present.Section.TeacherId == _userid).OrderByDescending(c => c.Id).ToList();
-               
+
                 return View(classRooms);
             }
             catch (Exception e)
             {
-                _history.LogError(e, HistoryErrorType.Middle);
-                return RedirectToAction("Error", "Home");
+                _history.LogError(e, HistoryErrorType.UI);
+                this.AddNotification("خطایی در ایجاد دوره رخ داده است.", NotificationType.Error);
+                return RedirectToAction("ErrorPage", "Home");
             }
-
         }
 
 
@@ -401,13 +424,13 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
                 _context.SaveChanges();
 
 
-                return RedirectToAction(nameof(PresentDetails),new {presentId});
+                return RedirectToAction(nameof(PresentDetails), new { presentId });
             }
             catch (Exception e)
             {
-                _history.LogError(e, HistoryErrorType.Middle);
-                this.AddNotification("خطا در ایجاد جلسه", NotificationType.Error);
-                return RedirectToAction(nameof(Index));
+                _history.LogError(e, HistoryErrorType.UI);
+                this.AddNotification("خطایی در ایجاد دوره رخ داده است.", NotificationType.Error);
+                return RedirectToAction("ErrorPage", "Home");
             }
         }
 
@@ -439,7 +462,7 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
                 uriBuilder.Path = "Teacher/Sections/PresentDetails";
                 uriBuilder.Query = "presentId=" + classroom.PresentId;
 
-                var createResult = bbb.CreateMeeting( classroom.Present.Section.Course.CourseName,classroom.Id.ToString(), attendePwd, moderatorPwd, uriBuilder.ToString(),"خوش آمدید").Rows[0];
+                var createResult = bbb.CreateMeeting(classroom.Present.Section.Course.CourseName, classroom.Id.ToString(), attendePwd, moderatorPwd, uriBuilder.ToString(), "خوش آمدید").Rows[0];
 
                 if (createResult != null && string.Equals(createResult[0].ToString(), "SUCCESS"))
                 {
@@ -455,51 +478,29 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
                     return Redirect(url);
                 }
                 this.AddErrorNotification("خطا در ایجاد جلسه");
-                return RedirectToAction(nameof(PresentDetails),new {presentid= classroom.PresentId });
+                return RedirectToAction(nameof(PresentDetails), new { presentid = classroom.PresentId });
             }
             catch (Exception e)
             {
-                _history.LogError(e, HistoryErrorType.Middle);
-                //this.AddNotification("خطا در ایجاد جلسه", NotificationType.Error);
-                this.AddNotification(e.Message, NotificationType.Error);
-                return RedirectToAction(nameof(Index));
+                _history.LogError(e, HistoryErrorType.UI);
+                this.AddNotification("خطایی در ایجاد دوره رخ داده است.", NotificationType.Error);
+                return RedirectToAction("ErrorPage", "Home");
             }
         }
-        //public IActionResult CreateHook(string callbackurl)
-        //{
-        //    try
-        //    {
-
-        //        var bbb = new BBB();
-        //        var hooksResponse = bbb.CreateHooks(callbackurl);
-
-
-        //        return Redirect(hooksResponse);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        _history.LogError(e, HistoryErrorType.Middle);
-        //        this.AddNotification("خطا در ایجاد جلسه", NotificationType.Error);
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //}
 
         public IActionResult HookList()
         {
             try
             {
-
-                var bbb = new BBB(_config.BbbGetServerIpAddress(),_config.BbbGetServerId());
+                var bbb = new BBB(_config.BbbGetServerIpAddress(), _config.BbbGetServerId());
                 var hooksResponse = bbb.HooksList();
-
-
                 return Redirect(hooksResponse);
             }
             catch (Exception e)
             {
-                _history.LogError(e, HistoryErrorType.Middle);
-                this.AddNotification("خطا در ایجاد جلسه", NotificationType.Error);
-                return RedirectToAction(nameof(Index));
+                _history.LogError(e, HistoryErrorType.UI);
+                this.AddNotification("خطایی در ایجاد دوره رخ داده است.", NotificationType.Error);
+                return RedirectToAction("ErrorPage", "Home");
             }
         }
     }

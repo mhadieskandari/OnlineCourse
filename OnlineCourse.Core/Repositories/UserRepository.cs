@@ -271,16 +271,7 @@ namespace OnlineCourse.Core.Repositories
             try
             {
                 var user = await GetByEmailAsync(username);
-                bool isValid = false;
-                if (user != null)
-                {
-                    isValid = user.SecuritySpan.Equals(lastChanged);
-                }
-                else
-                {
-                    isValid = false;
-                }
-
+                var isValid = user != null && user.SecuritySpan.Equals(lastChanged);
                 return isValid;
             }
             catch (Exception e)

@@ -8,7 +8,7 @@ namespace OnlineCourse.Core.Services
     public class MessageService : IEmailSender, ISmsSender
     {
         private string VerificationTemplate = "NegarFoodVer";
-        private readonly KavenegarApi api = new KavenegarApi("33697A3278307456414E336A435A787A5471636147773D3D");
+        private readonly KavenegarApi api = new KavenegarApi("7A30616A677942394A6667694E36466C2B77356D32327631746F694657797A33");
         public Task SendEmailAsync(string email, string subject, string message)
         {
             // Plug in your email service here to send an email.
