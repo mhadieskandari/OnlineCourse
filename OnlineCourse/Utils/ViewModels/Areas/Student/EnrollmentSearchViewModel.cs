@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using OnlineCourse.Core.Services;
 using OnlineCourse.Entity;
 
@@ -13,7 +14,7 @@ namespace OnlineCourse.Panel.Utils.ViewModels.Areas.Student
     {
         public EnrollmentSearchViewModel(ApplicationDbContext context,CurrentUser user)
         {
-            Courses = new SelectList(context.Courses.Where(c=>c.Level==user.GetUserDegree().Result.Value).ToList(), "Id", "CourseName");
+            Courses = new SelectList(context.Courses.ToList(), "Id", "CourseName");
             Teachers = new SelectList(context.Users.Where(u => u.AccessLevel == UserAccessLevel.Teacher).ToList(), "Id", "FullName");
             Terms = new SelectList(context.Terms.ToList(), "Id", "Title");
         }
