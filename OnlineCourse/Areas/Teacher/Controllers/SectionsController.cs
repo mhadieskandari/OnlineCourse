@@ -473,7 +473,15 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
                     uriBuilder.Query = "meetingid=" + classroom.Id;
 
                     var callbackurl = uriBuilder.ToString();
-                    var hookres = bbb.CreateHooks(callbackurl/*, classroom.Id.ToString()*/).Rows[0];
+                    try
+                    {
+                        var hookres = bbb.CreateHooks(callbackurl/*, classroom.Id.ToString()*/).Rows[0];
+                    }
+                    catch (Exception e)
+                    {
+                        _history.LogError(e, HistoryErrorType.UI);
+                    }
+
                     var url = bbb.JoinMeeting(_user.GetFullName().Result, classroom.Id.ToString(), moderatorPwd, true);
                     return Redirect(url);
                 }
