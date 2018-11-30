@@ -440,6 +440,7 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
         {
             try
             {
+
                 var classroom = _context.ClassRooms.Include(c => c.Present).ThenInclude(p => p.Section).ThenInclude(s => s.Course).AsNoTracking().SingleOrDefault(c => c.Id == classid && c.Present.Section.TeacherId == _userid);
 
                 if (classroom == null)
