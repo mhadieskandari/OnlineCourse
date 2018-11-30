@@ -32,7 +32,6 @@
     <Folder Include="Areas\Api\Models\" />
     <Folder Include="Areas\Api\Views\" />
     <Folder Include="Properties\PublishProfiles\" />
-    <Folder Include="published\" />
   </ItemGroup>
 
   <ItemGroup>
