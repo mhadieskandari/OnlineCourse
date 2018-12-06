@@ -3,9 +3,7 @@ using Microsoft.AspNetCore.Http;
 using OnlineCourse.Core.Services;
 using OnlineCourse.Entity;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace OnlineCourse.Panel.Utils

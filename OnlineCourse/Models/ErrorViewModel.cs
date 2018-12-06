@@ -1,5 +1,3 @@
-using System;
-
 namespace OnlineCourse.Models
 {
     public class ErrorViewModel

@@ -1,10 +1,6 @@
 ﻿using AutoMapper;
 using OnlineCourse.Entity.Models;
 using OnlineCourse.Panel.Utils.ViewModels.Areas.Admin;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace OnlineCourse.Panel.Utils
 {

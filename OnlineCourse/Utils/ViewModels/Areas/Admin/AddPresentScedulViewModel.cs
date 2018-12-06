@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using OnlineCourse.Entity;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace OnlineCourse.Panel.Utils.ViewModels.Areas.Admin
 {

@@ -9,7 +9,6 @@ using Newtonsoft.Json;
 using OnlineCourse.Core;
 using OnlineCourse.Core.Services;
 using OnlineCourse.Entity;
-using OnlineCourse.Panel.Utils.Extentions;
 
 namespace OnlineCourse.Panel.Areas.Api.Controllers
 {

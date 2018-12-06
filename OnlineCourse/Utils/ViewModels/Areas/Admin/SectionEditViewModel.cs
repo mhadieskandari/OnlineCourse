@@ -1,13 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using OnlineCourse.Entity;
-using OnlineCourse.Entity.Models;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Threading.Tasks;
-using OnlineCourse.Panel.Utils.CustomValidationAttribute;
 
 namespace OnlineCourse.Panel.Utils.ViewModels.Areas.Admin
 {

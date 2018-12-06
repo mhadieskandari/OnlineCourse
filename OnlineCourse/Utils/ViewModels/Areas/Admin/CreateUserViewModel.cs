@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using OnlineCourse.Panel.Utils.HtmlHelper;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 using OnlineCourse.Entity;
 
 namespace OnlineCourse.Panel.Utils.ViewModels.Areas.Admin

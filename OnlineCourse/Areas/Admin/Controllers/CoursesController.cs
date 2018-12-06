@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OnlineCourse.Entity;
 using OnlineCourse.Entity.Models;
@@ -12,7 +10,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using OnlineCourse.Core;
 using OnlineCourse.Core.Services;
-using OnlineCourse.Panel.Areas.Student.Controllers;
 using OnlineCourse.Panel.Utils.Extentions;
 
 namespace OnlineCourse.Panel.Areas.Admin.Controllers
