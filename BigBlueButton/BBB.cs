@@ -167,7 +167,7 @@ namespace BigBlueButton
         /// E-mail me at godwin@gloriatech.com for any support on this code or even support on BigBlueButton.
         /// </summary>
 
-        #region "JoinMeeting"
+        #region "JoinMeeting
         /// <summary>
         /// To Join in the Existing Meeting
         /// </summary>
@@ -175,14 +175,15 @@ namespace BigBlueButton
         /// <param name="meetingId">To Join in the ExistingMeeting with the Specified MeetingId</param>
         /// <param name="password">To Join in the ExistingMeeting with the Specified ModeratorPW/AttendeePW</param>
         /// <param name="showInBrowser">If its true,will Show the Meeting UI in the Browser </param>
+        /// <param name="showViaHtml"></param>
         /// <returns></returns>
-        public string JoinMeeting(string meetingName, string meetingId, string password, bool showInBrowser)
+        public string JoinMeeting(string meetingName, string meetingId, string password, bool showInBrowser, bool showViaHtml = false)
         {
             try
             {
                 var strServerIpAddress = GetServerIpAddress();// _serverIpAddress;
                 var strSalt = GetSalt(); //_serverId;
-                var strParameters = "fullName=" + WebUtility.UrlEncode(meetingName) + "&meetingID=" + WebUtility.UrlEncode(meetingId) + "&password=" + WebUtility.UrlEncode(password);
+                var strParameters = "fullName=" + WebUtility.UrlEncode(meetingName) + "&meetingID=" + WebUtility.UrlEncode(meetingId) + "&password=" + WebUtility.UrlEncode(password) + "&joinViaHtml5=" + WebUtility.UrlEncode(showViaHtml.ToString());
                 var strSha1CheckSum = Sha1.GetSha1("join" + strParameters + strSalt);
                 if (!showInBrowser)
                 {

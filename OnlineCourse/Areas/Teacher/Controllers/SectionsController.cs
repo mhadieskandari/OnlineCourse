@@ -483,7 +483,7 @@ namespace OnlineCourse.Panel.Areas.Teacher.Controllers
                         _history.LogError(e, HistoryErrorType.UI);
                     }
 
-                    var url = bbb.JoinMeeting(_user.GetFullName().Result, classroom.Id.ToString(), moderatorPwd, true);
+                    var url = bbb.JoinMeeting(_user.GetFullName().Result, classroom.Id.ToString(), moderatorPwd, true,true);
                     return Redirect(url);
                 }
                 this.AddErrorNotification("خطا در ایجاد جلسه");

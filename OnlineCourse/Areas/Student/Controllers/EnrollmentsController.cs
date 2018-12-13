@@ -111,7 +111,7 @@ namespace OnlineCourse.Panel.Areas.Student.Controllers
 
             if (createResult != null && createResult[0].ToString().ToLower() == "success" /*&& bool.Parse(createResult[1].ToString())*/)
             {
-                var url = bbb.JoinMeeting(/*classroom.Present.Section.Course.CourseName*/ _user.GetEmail(), classRoom.Id.ToString(), attendePwd, true);
+                var url = bbb.JoinMeeting(/*classroom.Present.Section.Course.CourseName*/ _user.GetEmail(), classRoom.Id.ToString(), attendePwd, true,true);
                 return Redirect(url);
             }
 
