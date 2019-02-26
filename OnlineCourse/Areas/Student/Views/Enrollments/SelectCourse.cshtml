@@ -64,13 +64,13 @@
                                 }
                                 @foreach (var item in Model)
                                 {
-                                    decimal payed = 0;
-                                    if (item.Enrollments.Any())
-                                    {
-                                        payed= item.Enrollments.Select(e => e.Payments.Select(p => p.Amount).Sum()).SingleOrDefault();
-                                    }
+                                    //decimal payed = 0;
+                                    //if (item.Enrollments.Any())
+                                    //{
+                                    //    payed= item.Enrollments.Select(e => e.Payments.Select(p => p.Amount).Sum()).SingleOrDefault();
+                                    //}
 
-                                    <tr class="@(item.Enrollments.Any()?"success":"")" data-id="@item.Id" data-tc="@((item.Section.TotalTime*item.Section.HourlyPrice).ToString("0"))" data-payed="@payed.ToString("0")">
+                                    <tr class="@(item.Enrollments.Any()?"success":"")" data-id="@item.Id" data-tc="@((item.Section.TotalTime*item.Section.HourlyPrice).ToString("0"))" data-payed="@*@payed.ToString("0")*@">
                                         <td class="PresentId">
                                             @item.Id
                                         </td>
@@ -109,10 +109,10 @@
                                             <input class="paymentAmount" type="number" name="paymentAmount[@indx]" />
                                         </td>
                                         <td class="payed">
-                                            @payed.ToString("N0")
+                                           @* @payed.ToString("N0")*@
                                         </td>
                                         <td class="remain">
-                                            @((item.Section.TotalTime * item.Section.HourlyPrice -payed).ToString("N0"))
+                                           @* @((item.Section.TotalTime * item.Section.HourlyPrice -payed).ToString("N0"))*@
                                         </td>
                                         <td>
                                             <input class="selectedCourse" type="checkbox" name="selected[@indx]" />

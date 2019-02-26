@@ -45,13 +45,13 @@ namespace OnlineCourse.Panel.Areas.Student.Controllers
             //ViewData["StudentId"] = new SelectList(_context.Users, "Id", "Id");
 
 
-            var degree = await _user.GetUserDegree();
-            if (degree == null)
-            {
-                this.AddNotification("لطفا مقطع تحصیلی خود را وارد کنید و مجددا تلاش کنید.", NotificationType.Error);
-                return RedirectToAction("Index", "Profile");
-            }
-            var model = _context.Presents.Where(p => p.Section.Course.Level == degree /*&& !_context.Enrollments.Any(e => e.PresentId == p.Id && e.Present.Section.Activity==ActiveState.Active)*/)
+            //var degree = await _user.GetUserDegree();
+            //if (degree == null)
+            //{
+            //    this.AddNotification("لطفا مقطع تحصیلی خود را وارد کنید و مجددا تلاش کنید.", NotificationType.Error);
+            //    return RedirectToAction("Index", "Profile");
+            //}
+            var model = _context.Presents/*.Where(p => p.Section.Course.Level == degree && !_context.Enrollments.Any(e => e.PresentId == p.Id && e.Present.Section.Activity==ActiveState.Active))*/
                                                      .Include(p => p.Section).ThenInclude(p => p.Course)
                                                      .Include(p => p.Section).ThenInclude(p => p.Teacher)
                                                      .Include(p => p.Schedules)

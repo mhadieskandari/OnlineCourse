@@ -46,12 +46,12 @@ namespace OnlineCourse.Panel.Areas.Student.Controllers
                     }
                     var invoiceModel = JsonConvert.DeserializeObject<List<OrderDetail>>(decodedTxt);
 
-                    var degree = _user.GetUserDegree().Result;
-                    if (degree == null)
-                    {
-                        this.AddNotification("لطفا مقطع تحصیلی خود را وارد کنید و مجددا تلاش کنید.", NotificationType.Error);
-                        return RedirectToAction("Index", "Profile");
-                    }
+                    //var degree = _user.GetUserDegree().Result;
+                    //if (degree == null)
+                    //{
+                    //    this.AddNotification("لطفا مقطع تحصیلی خود را وارد کنید و مجددا تلاش کنید.", NotificationType.Error);
+                    //    return RedirectToAction("Index", "Profile");
+                    //}
                     if (invoiceModel != null || invoiceModel.Any())
                     {
                         var viewModel = new List<OrderDetailViewModel>();
